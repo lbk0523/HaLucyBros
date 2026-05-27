@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://halucy.local/schemas/agent_profile.schema.json",
+  "title": "Halucy Agent Profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "role",
+    "mission",
+    "owns",
+    "inputs",
+    "outputs",
+    "tools",
+    "decision_rights",
+    "forbidden_scope",
+    "handoff_to",
+    "review_required",
+    "learning_capture",
+    "success_criteria"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^AGENT-(research|art|implementation|qa|learning_librarian)$"
+    },
+    "role": {
+      "$ref": "#/$defs/agent_role"
+    },
+    "mission": {
+      "$ref": "#/$defs/non_empty_string"
+    },
+    "owns": {
+      "$ref": "#/$defs/string_list"
+    },
+    "inputs": {
+      "$ref": "#/$defs/string_list"
+    },
+    "outputs": {
+      "$ref": "#/$defs/string_list"
+    },
+    "tools": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/tool"
+      }
+    },
+    "decision_rights": {
+      "$ref": "#/$defs/string_list"
+    },
+    "forbidden_scope": {
+      "$ref": "#/$defs/string_list"
+    },
+    "handoff_to": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/handoff_role"
+      }
+    },
+    "review_required": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agent_reviews",
+        "human_decisions"
+      ],
+      "properties": {
+        "agent_reviews": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/agent_role"
+          }
+        },
+        "human_decisions": {
+          "$ref": "#/$defs/string_list"
+        }
+      }
+    },
+    "learning_capture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "may_create_candidate_cards",
+        "expected_card_types",
+        "capture_triggers"
+      ],
+      "properties": {
+        "may_create_candidate_cards": {
+          "type": "boolean"
+        },
+        "expected_card_types": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/learning_card_type"
+          }
+        },
+        "capture_triggers": {
+          "$ref": "#/$defs/string_list"
+        }
+      }
+    },
+    "success_criteria": {
+      "$ref": "#/$defs/string_list"
+    }
+  },
+  "$defs": {
+    "agent_role": {
+      "type": "string",
+      "enum": [
+        "research",
+        "art",
+        "implementation",
+        "qa",
+        "learning_librarian"
+      ]
+    },
+    "handoff_role": {
+      "type": "string",
+      "enum": [
+        "research",
+        "art",
+        "implementation",
+        "qa",
+        "learning_librarian",
+        "human_creative_owner"
+      ]
+    },
+    "learning_card_type": {
+      "type": "string",
+      "enum": [
+        "concept",
+        "production",
+        "technical",
+        "market",
+        "failure",
+        "prompt"
+      ]
+    },
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "string_list": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/non_empty_string"
+      }
+    },
+    "tool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "type",
+        "purpose",
+        "required",
+        "selection_status",
+        "candidate_tools",
+        "adapter_contract"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "model",
+            "engine",
+            "repository",
+            "research",
+            "art",
+            "validation",
+            "learning"
+          ]
+        },
+        "purpose": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "selection_status": {
+          "type": "string",
+          "enum": [
+            "selected",
+            "undecided",
+            "pending_setup"
+          ]
+        },
+        "candidate_tools": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          }
+        },
+        "adapter_contract": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "inputs",
+            "outputs",
+            "evidence"
+          ],
+          "properties": {
+            "inputs": {
+              "$ref": "#/$defs/string_list"
+            },
+            "outputs": {
+              "$ref": "#/$defs/string_list"
+            },
+            "evidence": {
+              "$ref": "#/$defs/string_list"
+            }
+          }
+        }
+      }
+    }
+  }
+}

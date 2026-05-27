@@ -1,0 +1,346 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://halucy.local/schemas/work_package.schema.json",
+  "title": "Halucy Work Package",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "type",
+    "status",
+    "goal",
+    "owner_agent",
+    "inputs",
+    "targets",
+    "forbidden_changes",
+    "outputs",
+    "verify",
+    "handoff_to",
+    "human_decision_required",
+    "acceptance_criteria",
+    "created_at"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^WP-[0-9]{4}W[0-9]{2}-[0-9]{3}$"
+    },
+    "type": {
+      "$ref": "#/$defs/work_package_type"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "backlog",
+        "active",
+        "done",
+        "blocked",
+        "cancelled"
+      ]
+    },
+    "goal": {
+      "$ref": "#/$defs/non_empty_string"
+    },
+    "owner_agent": {
+      "$ref": "#/$defs/agent_role"
+    },
+    "inputs": {
+      "$ref": "#/$defs/reference_list"
+    },
+    "targets": {
+      "$ref": "#/$defs/reference_list"
+    },
+    "forbidden_changes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/non_empty_string"
+      }
+    },
+    "outputs": {
+      "$ref": "#/$defs/reference_list"
+    },
+    "verify": {
+      "$ref": "#/$defs/verification_list"
+    },
+    "handoff_to": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/handoff_role"
+      }
+    },
+    "human_decision_required": {
+      "type": "boolean"
+    },
+    "human_decision_reason": {
+      "$ref": "#/$defs/non_empty_string"
+    },
+    "acceptance_criteria": {
+      "$ref": "#/$defs/string_list"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "human_decision_required": {
+            "const": true
+          }
+        },
+        "required": [
+          "human_decision_required"
+        ]
+      },
+      "then": {
+        "required": [
+          "human_decision_reason"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "research"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "owner_agent": {
+            "const": "research"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "art"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "owner_agent": {
+            "const": "art"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "implementation"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "owner_agent": {
+            "const": "implementation"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "qa"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "owner_agent": {
+            "const": "qa"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "learning"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "owner_agent": {
+            "const": "learning_librarian"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "agent_role": {
+      "type": "string",
+      "enum": [
+        "research",
+        "art",
+        "implementation",
+        "qa",
+        "learning_librarian"
+      ]
+    },
+    "handoff_role": {
+      "type": "string",
+      "enum": [
+        "research",
+        "art",
+        "implementation",
+        "qa",
+        "learning_librarian",
+        "human_creative_owner"
+      ]
+    },
+    "work_package_type": {
+      "type": "string",
+      "enum": [
+        "research",
+        "art",
+        "implementation",
+        "qa",
+        "learning"
+      ]
+    },
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "string_list": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/non_empty_string"
+      }
+    },
+    "reference_list": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/non_empty_string"
+      }
+    },
+    "verification_list": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "method"
+        ],
+        "properties": {
+          "name": {
+            "$ref": "#/$defs/non_empty_string"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "command",
+              "manual_check",
+              "artifact_check"
+            ]
+          },
+          "command": {
+            "$ref": "#/$defs/non_empty_string"
+          },
+          "expected_artifact": {
+            "$ref": "#/$defs/non_empty_string"
+          },
+          "description": {
+            "$ref": "#/$defs/non_empty_string"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "method": {
+                  "const": "command"
+                }
+              },
+              "required": [
+                "method"
+              ]
+            },
+            "then": {
+              "required": [
+                "command"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "method": {
+                  "const": "artifact_check"
+                }
+              },
+              "required": [
+                "method"
+              ]
+            },
+            "then": {
+              "required": [
+                "expected_artifact"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "method": {
+                  "const": "manual_check"
+                }
+              },
+              "required": [
+                "method"
+              ]
+            },
+            "then": {
+              "required": [
+                "description"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

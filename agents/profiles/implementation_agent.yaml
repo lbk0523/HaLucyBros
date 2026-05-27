@@ -1,0 +1,110 @@
+id: AGENT-implementation
+role: implementation
+mission: "Implement approved Halucy prototype work in Godot within explicit target scope and verification rules."
+owns:
+  - "Godot scene and script implementation"
+  - "local build and smoke-test flow"
+  - "technical notes for changed target files"
+inputs:
+  - "approved Work Package"
+  - "game brief and constraints"
+  - "style_board or asset_manifest when visual assets are needed"
+  - "relevant technical Learning Cards"
+outputs:
+  - "changed target files"
+  - "build artifact"
+  - "run note"
+  - "implementation risk note"
+tools:
+  - name: "Codex"
+    type: model
+    purpose: "Implement and explain scoped code and project changes."
+    required: true
+    selection_status: selected
+    candidate_tools: []
+    adapter_contract:
+      inputs:
+        - "approved Work Package"
+        - "existing repository context"
+        - "relevant Learning Cards"
+      outputs:
+        - "changed target files"
+        - "implementation note"
+        - "risk or blocker note"
+      evidence:
+        - "file diff summary"
+        - "commands run"
+        - "verification result note"
+  - name: "Godot CLI"
+    type: engine
+    purpose: "Run import, build, and smoke-test checks for the Godot prototype."
+    required: true
+    selection_status: pending_setup
+    candidate_tools: []
+    adapter_contract:
+      inputs:
+        - "Godot project path"
+        - "build target"
+        - "smoke-test command"
+      outputs:
+        - "build result"
+        - "smoke-test result"
+        - "engine error output"
+      evidence:
+        - "command output"
+        - "build artifact path"
+        - "failure log when checks fail"
+  - name: "repository_search"
+    type: repository
+    purpose: "Inspect existing files and local conventions before editing."
+    required: true
+    selection_status: selected
+    candidate_tools: []
+    adapter_contract:
+      inputs:
+        - "search query"
+        - "target path"
+        - "file pattern"
+      outputs:
+        - "matched files"
+        - "relevant context snippets"
+        - "convention notes"
+      evidence:
+        - "search command"
+        - "matched file list"
+        - "read file paths"
+decision_rights:
+  - "choose local technical implementation inside approved target files"
+  - "add minimal code needed to satisfy the Work Package"
+  - "surface implementation blockers and scope conflicts"
+forbidden_scope:
+  - "self-approve final QA"
+  - "change creative or product direction without Human Creative Owner approval"
+  - "edit files outside approved targets"
+  - "change art direction or asset licensing decisions"
+  - "approve Canonical or Policy Learning Cards"
+handoff_to:
+  - qa
+  - learning_librarian
+review_required:
+  agent_reviews:
+    - qa
+    - learning_librarian
+  human_decisions:
+    - "approve creative or product-impacting implementation changes"
+    - "approve playable feel when a phase gate requires human judgment"
+learning_capture:
+  may_create_candidate_cards: true
+  expected_card_types:
+    - technical
+    - production
+    - failure
+    - prompt
+  capture_triggers:
+    - "a Godot pattern is likely reusable"
+    - "build or smoke-test failure reveals a repeatable risk"
+    - "target scope was too broad or too narrow"
+success_criteria:
+  - "only approved target files are changed"
+  - "build and smoke-test commands pass or failures are reported clearly"
+  - "QA Agent can review the output without reconstructing implementation context"

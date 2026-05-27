@@ -1,0 +1,240 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://halucy.local/schemas/review.schema.json",
+  "title": "Halucy Review",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "review_id",
+    "run_id",
+    "work_package_id",
+    "reviewer_agent",
+    "review_type",
+    "started_at",
+    "ended_at",
+    "checks",
+    "scope_findings",
+    "issues",
+    "decision",
+    "human_decision_required",
+    "notes"
+  ],
+  "properties": {
+    "review_id": {
+      "type": "string",
+      "pattern": "^RV-[0-9]{8}-[0-9]{3}$"
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^RUN-[0-9]{8}-[0-9]{3}$"
+    },
+    "work_package_id": {
+      "type": "string",
+      "pattern": "^WP-[0-9]{4}W[0-9]{2}-[0-9]{3}$"
+    },
+    "reviewer_agent": {
+      "$ref": "#/$defs/reviewer_agent"
+    },
+    "review_type": {
+      "type": "string",
+      "enum": [
+        "qa",
+        "scope",
+        "creative",
+        "learning_readiness"
+      ]
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ended_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/check"
+      }
+    },
+    "scope_findings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target_violations",
+        "forbidden_change_violations"
+      ],
+      "properties": {
+        "target_violations": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          }
+        },
+        "forbidden_change_violations": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/non_empty_string"
+          }
+        }
+      }
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/issue"
+      }
+    },
+    "decision": {
+      "type": "string",
+      "enum": [
+        "pass",
+        "rework",
+        "blocked"
+      ]
+    },
+    "human_decision_required": {
+      "type": "boolean"
+    },
+    "human_decision_reason": {
+      "$ref": "#/$defs/non_empty_string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "decision": {
+            "enum": [
+              "rework",
+              "blocked"
+            ]
+          }
+        },
+        "required": [
+          "decision"
+        ]
+      },
+      "then": {
+        "properties": {
+          "issues": {
+            "type": "array",
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "human_decision_required": {
+            "const": true
+          }
+        },
+        "required": [
+          "human_decision_required"
+        ]
+      },
+      "then": {
+        "required": [
+          "human_decision_reason"
+        ]
+      }
+    }
+  ],
+  "$defs": {
+    "reviewer_agent": {
+      "type": "string",
+      "enum": [
+        "qa",
+        "learning_librarian"
+      ]
+    },
+    "agent_role": {
+      "type": "string",
+      "enum": [
+        "research",
+        "art",
+        "implementation",
+        "qa",
+        "learning_librarian"
+      ]
+    },
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "status",
+        "evidence",
+        "notes"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pass",
+            "fail",
+            "not_applicable"
+          ]
+        },
+        "evidence": {
+          "$ref": "#/$defs/string_list"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "severity",
+        "description",
+        "suggested_owner"
+      ],
+      "properties": {
+        "severity": {
+          "type": "string",
+          "enum": [
+            "blocker",
+            "major",
+            "minor"
+          ]
+        },
+        "description": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "suggested_owner": {
+          "$ref": "#/$defs/agent_role"
+        }
+      }
+    },
+    "string_list": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/non_empty_string"
+      }
+    }
+  }
+}

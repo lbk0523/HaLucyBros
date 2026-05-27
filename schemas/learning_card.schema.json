@@ -1,0 +1,235 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://halucy.local/schemas/learning_card.schema.json",
+  "title": "Halucy Learning Card",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "type",
+    "status",
+    "claim",
+    "context",
+    "evidence",
+    "scope",
+    "reuse_rule",
+    "confidence",
+    "created_by",
+    "created_at",
+    "related_cards"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^LC-[0-9]{8}-[0-9]{3}$"
+    },
+    "type": {
+      "$ref": "#/$defs/learning_card_type"
+    },
+    "status": {
+      "$ref": "#/$defs/learning_card_status"
+    },
+    "claim": {
+      "$ref": "#/$defs/non_empty_string"
+    },
+    "context": {
+      "$ref": "#/$defs/non_empty_string"
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/evidence_item"
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "applies_when",
+        "does_not_apply_when"
+      ],
+      "properties": {
+        "applies_when": {
+          "$ref": "#/$defs/string_list"
+        },
+        "does_not_apply_when": {
+          "$ref": "#/$defs/string_list"
+        }
+      }
+    },
+    "reuse_rule": {
+      "$ref": "#/$defs/non_empty_string"
+    },
+    "confidence": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "created_by": {
+      "$ref": "#/$defs/creator"
+    },
+    "authority_basis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "deciding_authority",
+        "decision_ref",
+        "notes"
+      ],
+      "properties": {
+        "deciding_authority": {
+          "type": "string",
+          "enum": [
+            "human_creative_owner",
+            "strong_review_protocol"
+          ]
+        },
+        "decision_ref": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "notes": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "related_cards": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^LC-[0-9]{8}-[0-9]{3}$"
+      }
+    },
+    "promotion_note": {
+      "$ref": "#/$defs/non_empty_string"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": [
+              "canonical",
+              "policy"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "required": [
+          "authority_basis"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "policy"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "authority_basis": {
+            "properties": {
+              "deciding_authority": {
+                "const": "human_creative_owner"
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "learning_card_type": {
+      "type": "string",
+      "enum": [
+        "concept",
+        "production",
+        "technical",
+        "market",
+        "failure",
+        "prompt"
+      ]
+    },
+    "learning_card_status": {
+      "type": "string",
+      "enum": [
+        "candidate",
+        "working",
+        "canonical",
+        "policy"
+      ]
+    },
+    "creator": {
+      "type": "string",
+      "enum": [
+        "research",
+        "art",
+        "implementation",
+        "qa",
+        "learning_librarian",
+        "human_creative_owner"
+      ]
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "work_package",
+        "run",
+        "review",
+        "human_decision",
+        "external_source"
+      ]
+    },
+    "evidence_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_type",
+        "source_ref",
+        "summary"
+      ],
+      "properties": {
+        "source_type": {
+          "$ref": "#/$defs/source_type"
+        },
+        "source_ref": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "summary": {
+          "$ref": "#/$defs/non_empty_string"
+        }
+      }
+    },
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "string_list": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/non_empty_string"
+      }
+    }
+  }
+}
