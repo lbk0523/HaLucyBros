@@ -1,0 +1,97 @@
+{
+  "id": "WP-2026W22-002",
+  "type": "implementation",
+  "status": "active",
+  "goal": "Create a tiny Godot 4.x desktop runnable slice that proves Phase 1 implementation can start from a Work Package and hand off to independent QA.",
+  "owner_agent": "implementation",
+  "inputs": [
+    "HALUCY_FOUNDATION.md",
+    "GODOT_TARGET.md",
+    "agents/profiles/implementation_agent.yaml",
+    "agents/HANDOFF_MAP.md",
+    "work_packages/done/WP-2026W22-001.json"
+  ],
+  "targets": [
+    "game/project.godot",
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd",
+    "scripts/build_game.sh",
+    "scripts/smoke_test.sh",
+    "runs/RUN-20260527-002.json"
+  ],
+  "forbidden_changes": [
+    "HALUCY_FOUNDATION.md",
+    "CONTEXT.md",
+    "PHASE0_CLOSEOUT.md",
+    "GODOT_TARGET.md",
+    "GITHUB_SYNC_PREP.md",
+    "Halucy Codex 구현 계획.md",
+    "schemas/**",
+    "agents/**",
+    "templates/**",
+    "learning_cards/**",
+    ".github/**",
+    "adapters/**",
+    "tests/**",
+    "Makefile",
+    "export_presets.cfg"
+  ],
+  "outputs": [
+    "game/project.godot",
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd",
+    "scripts/build_game.sh",
+    "scripts/smoke_test.sh",
+    "runs/RUN-20260527-002.json"
+  ],
+  "verify": [
+    {
+      "name": "Godot project file exists",
+      "method": "artifact_check",
+      "expected_artifact": "game/project.godot"
+    },
+    {
+      "name": "Tiny main scene exists",
+      "method": "artifact_check",
+      "expected_artifact": "game/scenes/main.tscn"
+    },
+    {
+      "name": "Player script exists",
+      "method": "artifact_check",
+      "expected_artifact": "game/scripts/player.gd"
+    },
+    {
+      "name": "Build command is present",
+      "method": "artifact_check",
+      "expected_artifact": "scripts/build_game.sh"
+    },
+    {
+      "name": "Smoke-test command is present",
+      "method": "artifact_check",
+      "expected_artifact": "scripts/smoke_test.sh"
+    },
+    {
+      "name": "Smoke test runs locally or records blocked Godot CLI evidence",
+      "method": "command",
+      "command": "scripts/smoke_test.sh"
+    },
+    {
+      "name": "Implementation Run record validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260527-002.json"
+    }
+  ],
+  "handoff_to": [
+    "qa",
+    "learning_librarian"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "The implementation creates only the authorized Godot project, tiny main scene, player script, build script, smoke-test script, and Run record.",
+    "The tiny slice is desktop-first and uses placeholder visuals only; it does not choose a game concept or final art direction.",
+    "If Godot CLI is unavailable, the Run is recorded as blocked with clear evidence instead of being reported as completed.",
+    "The implementation hands off to QA for an independent Review before any Phase 1 pass claim."
+  ],
+  "created_at": "2026-05-27",
+  "notes": "This Work Package authorizes Slice 3 implementation only. It intentionally excludes web export, CI, automation, adapters, model routing, external assets, concept selection, and vertical-slice scope."
+}

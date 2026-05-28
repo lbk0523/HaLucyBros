@@ -1,0 +1,85 @@
+{
+  "run_id": "RUN-20260527-001",
+  "work_package_id": "WP-2026W22-001",
+  "agent": "implementation",
+  "agent_profile": "agents/profiles/implementation_agent.yaml",
+  "started_at": "2026-05-27T00:00:00+09:00",
+  "ended_at": "2026-05-27T00:00:00+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "Codex apply_patch",
+      "purpose": "Create the minimum Phase 1 record surface and bootstrap records.",
+      "inputs": [
+        "HALUCY_FOUNDATION.md",
+        "GODOT_TARGET.md",
+        "schemas/work_package.schema.json",
+        "schemas/run.schema.json",
+        "schemas/review.schema.json",
+        "agents/HANDOFF_MAP.md"
+      ],
+      "outputs": [
+        ".gitignore",
+        "work_packages/backlog/.gitkeep",
+        "work_packages/active/.gitkeep",
+        "work_packages/done/WP-2026W22-001.json",
+        "runs/RUN-20260527-001.json",
+        "reviews/RV-20260527-001.json",
+        "game/.gitkeep",
+        "scripts/.gitkeep"
+      ],
+      "evidence": [
+        "WP-2026W22-001 acceptance criteria",
+        "npx ajv-cli validation output",
+        "test ! -e game/project.godot"
+      ]
+    }
+  ],
+  "artifacts": [
+    ".gitignore",
+    "work_packages/backlog/.gitkeep",
+    "work_packages/active/.gitkeep",
+    "work_packages/done/WP-2026W22-001.json",
+    "runs/RUN-20260527-001.json",
+    "reviews/RV-20260527-001.json",
+    "game/.gitkeep",
+    "scripts/.gitkeep"
+  ],
+  "commands": [
+    {
+      "command": "mkdir -p work_packages/backlog work_packages/active work_packages/done runs reviews game scripts",
+      "exit_code": 0,
+      "notes": "Created the empty repository surfaces required before applying tracked placeholder files."
+    },
+    {
+      "command": "python3 - <<'PY'\nimport json\nfrom pathlib import Path\nfrom jsonschema import Draft202012Validator\npairs = [\n  ('schemas/work_package.schema.json', 'work_packages/done/WP-2026W22-001.json'),\n  ('schemas/run.schema.json', 'runs/RUN-20260527-001.json'),\n  ('schemas/review.schema.json', 'reviews/RV-20260527-001.json'),\n]\nfor schema_path, data_path in pairs:\n    schema = json.loads(Path(schema_path).read_text())\n    data = json.loads(Path(data_path).read_text())\n    Draft202012Validator(schema).validate(data)\n    print(f'valid {data_path}')\nPY",
+      "exit_code": 1,
+      "notes": "Blocked because this environment does not have the Python jsonschema module installed."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/done/WP-2026W22-001.json && npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260527-001.json && npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/review.schema.json -d reviews/RV-20260527-001.json",
+      "exit_code": 0,
+      "notes": "All three bootstrap records validated. AJV warned that date and date-time formats were ignored because no format plugin was loaded."
+    },
+    {
+      "command": "test ! -e game/project.godot",
+      "exit_code": 0,
+      "notes": "Confirmed that Slice 1 did not create a Godot project."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      ".gitignore",
+      "work_packages/backlog/.gitkeep",
+      "work_packages/active/.gitkeep",
+      "work_packages/done/WP-2026W22-001.json",
+      "runs/RUN-20260527-001.json",
+      "reviews/RV-20260527-001.json",
+      "game/.gitkeep",
+      "scripts/.gitkeep"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "No Godot project, build script, smoke-test script, CI, adapter, model router, or web export artifact was created. Schema validation passed through AJV; Python jsonschema validation was unavailable in this environment."
+}

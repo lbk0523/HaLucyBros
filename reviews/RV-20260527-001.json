@@ -1,0 +1,58 @@
+{
+  "review_id": "RV-20260527-001",
+  "run_id": "RUN-20260527-001",
+  "work_package_id": "WP-2026W22-001",
+  "reviewer_agent": "qa",
+  "review_type": "qa",
+  "started_at": "2026-05-27T00:00:00+09:00",
+  "ended_at": "2026-05-27T00:00:00+09:00",
+  "checks": [
+    {
+      "name": "Record surface exists",
+      "status": "pass",
+      "evidence": [
+        "work_packages/backlog/.gitkeep",
+        "work_packages/active/.gitkeep",
+        "work_packages/done/WP-2026W22-001.json",
+        "runs/RUN-20260527-001.json",
+        "reviews/RV-20260527-001.json"
+      ],
+      "notes": "The repository now has the minimum Work Package, Run, and Review storage surfaces."
+    },
+    {
+      "name": "No Godot implementation created",
+      "status": "pass",
+      "evidence": [
+        "game/.gitkeep",
+        "scripts/.gitkeep"
+      ],
+      "notes": "The bootstrap added placeholder directories only."
+    },
+    {
+      "name": "Bootstrap records validate",
+      "status": "pass",
+      "evidence": [
+        "work_packages/done/WP-2026W22-001.json valid",
+        "runs/RUN-20260527-001.json valid",
+        "reviews/RV-20260527-001.json valid"
+      ],
+      "notes": "Validated with npx ajv-cli using --spec=draft2020 --strict=false. AJV ignored date and date-time format assertions because the existing schemas do not bundle a format plugin."
+    },
+    {
+      "name": "Scope remained inside Slice 1",
+      "status": "pass",
+      "evidence": [
+        "RUN-20260527-001 scope_report"
+      ],
+      "notes": "No Phase 0 architecture docs, schemas, agent profiles, learning card files, Godot project, build script, or smoke-test script were changed."
+    }
+  ],
+  "scope_findings": {
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "issues": [],
+  "decision": "pass",
+  "human_decision_required": false,
+  "notes": "Slice 1 passes as a record-surface bootstrap. Slice 2 should author the first Godot implementation Work Package before any Godot files are created."
+}

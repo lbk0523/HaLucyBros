@@ -1,0 +1,52 @@
+{
+  "id": "LC-20260528-001",
+  "type": "production",
+  "status": "candidate",
+  "claim": "When a required local tool is missing during a Phase 1 dry run, record the Run and QA Review as blocked instead of changing scope or claiming success, then close the blocker with a separate verification Run after the tool is available.",
+  "context": "During the first Halucy Phase 1 Godot tiny-slice dry run, the Implementation Agent created the authorized Godot files but could not verify desktop runnable behavior because Godot CLI was missing. QA accepted scope discipline but blocked the phase gate. After Godot 4.6.3 was installed, a separate verification Run and Review closed the blocker without modifying implementation files.",
+  "evidence": [
+    {
+      "source_type": "work_package",
+      "source_ref": "work_packages/active/WP-2026W22-002.json",
+      "summary": "The Work Package required smoke-test execution or blocked Godot CLI evidence and handed off to QA and Learning Librarian."
+    },
+    {
+      "source_type": "run",
+      "source_ref": "runs/RUN-20260527-002.json",
+      "summary": "The Implementation Run produced authorized artifacts but recorded status=blocked because Godot CLI was unavailable."
+    },
+    {
+      "source_type": "review",
+      "source_ref": "reviews/RV-20260527-002.json",
+      "summary": "QA marked the slice blocked, accepted the scope discipline, and did not treat missing local tooling as a successful runnable slice."
+    },
+    {
+      "source_type": "run",
+      "source_ref": "runs/RUN-20260528-001.json",
+      "summary": "After Godot 4.6.3 became available, a separate verification Run completed the smoke test without changing game files."
+    },
+    {
+      "source_type": "review",
+      "source_ref": "reviews/RV-20260528-001.json",
+      "summary": "QA passed the recheck and identified the prior blocker as local Godot CLI availability, not implementation scope or artifact absence."
+    }
+  ],
+  "scope": {
+    "applies_when": [
+      "A Phase-gated Halucy production task depends on a local tool, CLI, or environment prerequisite.",
+      "The authorized files can be created but the deterministic verification command cannot run because the prerequisite is missing.",
+      "A later setup change resolves the prerequisite and the same verification can be rerun without implementation changes."
+    ],
+    "does_not_apply_when": [
+      "The verification fails because of an implementation defect rather than a missing environment prerequisite.",
+      "The task requires creative/product judgment from the Human Creative Owner.",
+      "The proposed fix would expand scope into automation, CI, web export, or platform work."
+    ]
+  },
+  "reuse_rule": "For future dry runs, treat missing required tooling as a blocked Run with explicit command evidence, require independent QA to preserve the blocker, and unblock only with a later verification Run/Review after the tool is available.",
+  "confidence": "medium",
+  "created_by": "learning_librarian",
+  "created_at": "2026-05-28",
+  "related_cards": [],
+  "promotion_note": "Candidate only. Promotion would require repeated evidence from more than one production loop or a stronger review protocol."
+}

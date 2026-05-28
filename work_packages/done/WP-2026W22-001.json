@@ -1,0 +1,69 @@
+{
+  "id": "WP-2026W22-001",
+  "type": "implementation",
+  "status": "done",
+  "goal": "Create the minimum Phase 1 repository record surface before any Godot implementation begins.",
+  "owner_agent": "implementation",
+  "inputs": [
+    "HALUCY_FOUNDATION.md",
+    "GODOT_TARGET.md",
+    "schemas/work_package.schema.json",
+    "schemas/run.schema.json",
+    "schemas/review.schema.json",
+    "agents/HANDOFF_MAP.md"
+  ],
+  "targets": [
+    ".gitignore",
+    "work_packages/backlog/.gitkeep",
+    "work_packages/active/.gitkeep",
+    "work_packages/done/WP-2026W22-001.json",
+    "runs/RUN-20260527-001.json",
+    "reviews/RV-20260527-001.json",
+    "game/.gitkeep",
+    "scripts/.gitkeep"
+  ],
+  "forbidden_changes": [
+    "game/project.godot",
+    "scripts/build_game.sh",
+    "scripts/smoke_test.sh",
+    "schemas/**",
+    "agents/**",
+    "learning_cards/**",
+    "templates/**",
+    "HALUCY_FOUNDATION.md",
+    "CONTEXT.md",
+    "PHASE0_CLOSEOUT.md",
+    "GODOT_TARGET.md",
+    "GITHUB_SYNC_PREP.md",
+    "Halucy Codex 구현 계획.md"
+  ],
+  "outputs": [
+    "work_packages/done/WP-2026W22-001.json",
+    "runs/RUN-20260527-001.json",
+    "reviews/RV-20260527-001.json"
+  ],
+  "verify": [
+    {
+      "name": "Bootstrap records validate against existing schemas",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/done/WP-2026W22-001.json && npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260527-001.json && npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/review.schema.json -d reviews/RV-20260527-001.json"
+    },
+    {
+      "name": "Godot project remains absent",
+      "method": "command",
+      "command": "test ! -e game/project.godot"
+    }
+  ],
+  "handoff_to": [
+    "qa",
+    "learning_librarian"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "The repository has work_packages, runs, reviews, game, and scripts surfaces.",
+    "The bootstrap Work Package, Run, and Review records validate against their schemas.",
+    "No Godot project, build script, smoke-test script, CI, adapter, model router, or web export artifact is created."
+  ],
+  "created_at": "2026-05-27",
+  "notes": "Bootstrap exception: this Work Package is created with the record surface it authorizes because the record directories did not exist before Slice 1. AJV validation uses --strict=false because the existing schemas declare date and date-time formats without bundling an AJV format plugin."
+}
