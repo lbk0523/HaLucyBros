@@ -1,0 +1,87 @@
+{
+  "id": "WP-2026W22-004",
+  "type": "art",
+  "status": "active",
+  "goal": "Produce one tiny placeholder visual/readability note for the current movement toy using the Research Agent note, without creating assets, selecting final art direction, or modifying Godot files.",
+  "owner_agent": "art",
+  "inputs": [
+    "agents/HANDOFF_MAP.md",
+    "agents/profiles/art_agent.yaml",
+    "work_packages/active/WP-2026W22-003.json",
+    "research_notes/RN-2026W22-001-placeholder-movement-toy.md",
+    "runs/RUN-20260528-002.json"
+  ],
+  "targets": [
+    "art_notes/AN-2026W22-001-placeholder-readability.md",
+    "runs/RUN-20260528-003.json"
+  ],
+  "forbidden_changes": [
+    "/Users/byung/Documents/halucy bros/**",
+    "game/**",
+    "scripts/**",
+    "schemas/**",
+    "agents/**",
+    "templates/**",
+    "learning_cards/**",
+    "research_notes/**",
+    "actual asset generation or committed image/audio files",
+    "final game concept selection",
+    "final prototype art direction approval",
+    "Godot project, scene, script, build, or smoke-test edits",
+    "market report, audience report, store analysis, or opportunity-space acceptance",
+    "Working, Canonical, or Policy Learning Card promotion"
+  ],
+  "outputs": [
+    "art_notes/AN-2026W22-001-placeholder-readability.md",
+    "runs/RUN-20260528-003.json"
+  ],
+  "verify": [
+    {
+      "name": "Art note artifact exists",
+      "method": "artifact_check",
+      "expected_artifact": "art_notes/AN-2026W22-001-placeholder-readability.md"
+    },
+    {
+      "name": "Art Run record exists",
+      "method": "artifact_check",
+      "expected_artifact": "runs/RUN-20260528-003.json"
+    },
+    {
+      "name": "Art note remains placeholder-only",
+      "method": "manual_check",
+      "description": "Confirm the note contains only player silhouette, heading/facing cue, ground/motion reference cue, contrast constraints, Implementation handoff, and BK review criteria."
+    },
+    {
+      "name": "No forbidden art expansion is made",
+      "method": "manual_check",
+      "description": "Confirm the note does not select a final game concept, approve final art direction, create or commit assets, modify Godot files, produce market research, or promote Learning Cards."
+    },
+    {
+      "name": "Art Run record validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260528-003.json"
+    },
+    {
+      "name": "Only authorized art artifacts changed",
+      "method": "command",
+      "command": "bash -lc 'extra=$(git status --porcelain=v1 -uall | sed \"s/^...//\" | grep -Ev \"^(art_notes/AN-2026W22-001-placeholder-readability.md|research_notes/RN-2026W22-001-placeholder-movement-toy.md|runs/RUN-20260528-002.json|runs/RUN-20260528-003.json|work_packages/active/WP-2026W22-003.json|work_packages/active/WP-2026W22-004.json)$\" || true); test -z \"$extra\"'"
+    }
+  ],
+  "handoff_to": [
+    "implementation",
+    "qa",
+    "learning_librarian",
+    "human_creative_owner"
+  ],
+  "human_decision_required": true,
+  "human_decision_reason": "BK/Human Creative Owner must accept or reject the placeholder visual/readability quality gate before Implementation Agent uses the Art note for a Godot change.",
+  "acceptance_criteria": [
+    "The Work Package authorizes exactly one Art Agent placeholder/readability note and one Art Run record.",
+    "The art note is constrained to player silhouette, heading/facing cue, ground/motion reference cue, and contrast constraints.",
+    "The art note contains concrete BK review criteria for placeholder quality, but does not claim BK approval.",
+    "No actual assets are generated or committed, and no Godot, schema, agent profile, research note, or Learning Card files are modified.",
+    "The handoff targets match the Art Agent handoff paths allowed by agents/HANDOFF_MAP.md."
+  ],
+  "created_at": "2026-05-28",
+  "notes": "This Work Package tests the Research -> Art handoff only. It intentionally leaves Art -> Implementation execution blocked until BK completes the placeholder quality gate."
+}

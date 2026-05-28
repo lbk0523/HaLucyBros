@@ -1,0 +1,47 @@
+{
+  "id": "LC-20260528-003",
+  "type": "production",
+  "status": "candidate",
+  "claim": "When BK/Human Creative Owner must approve a production decision, the owner-facing brief must be in Korean and contain the full decision context instead of requiring BK to inspect English agent-facing Markdown artifacts.",
+  "context": "During the Research -> Art -> Implementation handoff, the first owner review brief was in Korean but still pointed BK at English Research and Art Markdown artifacts as required review inputs. BK flagged that this failed the intended owner-review rule. The artifacts were revised so the Research note, Art note, and owner brief were Korean, and the owner brief summarized the necessary Work Package and evidence context before BK approval.",
+  "evidence": [
+    {
+      "source_type": "human_decision",
+      "source_ref": "owner_reviews/OR-2026W22-001-placeholder-readability-KR.md",
+      "summary": "BK approved the placeholder readability gate after the owner-facing review surface provided the relevant context in Korean."
+    },
+    {
+      "source_type": "work_package",
+      "source_ref": "work_packages/active/WP-2026W22-004.json",
+      "summary": "The Art Work Package required BK/Human Creative Owner approval before Implementation Agent could use the Art note for a Godot change."
+    },
+    {
+      "source_type": "review",
+      "source_ref": "reviews/RV-20260528-002.json",
+      "summary": "QA passed the implementation and confirmed the owner approval boundary was present before Godot changes."
+    },
+    {
+      "source_type": "human_decision",
+      "source_ref": "owner_reviews/OWNER_REVIEW_BRIEF_RULES_KR.md",
+      "summary": "The owner review rule artifact states that Korean wrapper text is not enough; BK's required context, evidence, and criteria must be complete in Korean."
+    }
+  ],
+  "scope": {
+    "applies_when": [
+      "BK/Human Creative Owner must approve, reject, redirect, or judge production quality, scope, creative direction, or promotion readiness.",
+      "Agent-facing artifacts are in English or structured formats but BK's decision depends on understanding their content.",
+      "The decision should be traceable without making BK perform routine artifact interpretation work."
+    ],
+    "does_not_apply_when": [
+      "The artifact is purely agent-internal and does not require BK judgment.",
+      "BK explicitly asks to inspect the original English artifact as the review surface.",
+      "A JSON/schema artifact remains machine-facing and the owner brief already summarizes the relevant decision content in Korean."
+    ]
+  },
+  "reuse_rule": "Before requesting BK owner approval, create or update a Korean owner review brief that fully summarizes the decision context, evidence, non-decisions, approval criteria, rejection criteria, and next-agent permissions.",
+  "confidence": "medium",
+  "created_by": "learning_librarian",
+  "created_at": "2026-05-28",
+  "related_cards": [],
+  "promotion_note": "Candidate only. Promotion should wait until Phase 1 closeout discussion decides whether this becomes a broader owner-review operating rule."
+}

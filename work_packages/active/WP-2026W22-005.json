@@ -1,0 +1,108 @@
+{
+  "id": "WP-2026W22-005",
+  "type": "implementation",
+  "status": "active",
+  "goal": "Add a tiny placeholder readability cue to the current Godot movement toy using the approved Research, Art, and Owner Review artifacts, without expanding concept, art direction, assets, or gameplay scope.",
+  "owner_agent": "implementation",
+  "inputs": [
+    "work_packages/active/WP-2026W22-003.json",
+    "research_notes/RN-2026W22-001-placeholder-movement-toy.md",
+    "runs/RUN-20260528-002.json",
+    "work_packages/active/WP-2026W22-004.json",
+    "art_notes/AN-2026W22-001-placeholder-readability.md",
+    "runs/RUN-20260528-003.json",
+    "owner_reviews/OR-2026W22-001-placeholder-readability-KR.md",
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd"
+  ],
+  "targets": [
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd",
+    "runs/RUN-20260528-004.json"
+  ],
+  "forbidden_changes": [
+    "/Users/byung/Documents/halucy bros/**",
+    "schemas/**",
+    "agents/**",
+    "templates/**",
+    "learning_cards/**",
+    "research_notes/**",
+    "art_notes/**",
+    "owner_reviews/**",
+    "scripts/**",
+    "actual asset generation or committed image/audio files",
+    "imported assets, textures, sprites, fonts, or audio",
+    "final game concept selection",
+    "final art direction expansion",
+    "character, world, genre, brand, or story decisions",
+    "animation system, gameplay mechanic, collision, gravity, jump, camera, export, CI, or web target changes",
+    "market report, audience report, store analysis, or opportunity-space acceptance",
+    "Working, Canonical, or Policy Learning Card promotion"
+  ],
+  "outputs": [
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd",
+    "runs/RUN-20260528-004.json"
+  ],
+  "verify": [
+    {
+      "name": "Main scene remains present",
+      "method": "artifact_check",
+      "expected_artifact": "game/scenes/main.tscn"
+    },
+    {
+      "name": "Player script remains present",
+      "method": "artifact_check",
+      "expected_artifact": "game/scripts/player.gd"
+    },
+    {
+      "name": "Implementation Run record exists",
+      "method": "artifact_check",
+      "expected_artifact": "runs/RUN-20260528-004.json"
+    },
+    {
+      "name": "Readability cue stays placeholder-grade",
+      "method": "manual_check",
+      "description": "Confirm the implementation adds only placeholder geometry or simple built-in nodes for player readability, heading/facing cue, and minimal motion/reference cue; no imported assets or final art style are introduced."
+    },
+    {
+      "name": "No concept or gameplay expansion is made",
+      "method": "manual_check",
+      "description": "Confirm the implementation does not add final concept, character/world/genre decisions, collision, gravity, jump, camera, animation system, new gameplay mechanics, export, CI, market report, or Learning Card promotion."
+    },
+    {
+      "name": "Owner approval is recorded",
+      "method": "command",
+      "command": "rg -n \"Decision: approve\" owner_reviews/OR-2026W22-001-placeholder-readability-KR.md"
+    },
+    {
+      "name": "Godot smoke test passes or records blocked evidence",
+      "method": "command",
+      "command": "scripts/smoke_test.sh"
+    },
+    {
+      "name": "Implementation Run record validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260528-004.json"
+    },
+    {
+      "name": "Only expected Phase 1 and implementation artifacts changed",
+      "method": "command",
+      "command": "bash -lc 'extra=$(git status --porcelain=v1 -uall | sed \"s/^...//\" | grep -Ev \"^(art_notes/AN-2026W22-001-placeholder-readability.md|owner_reviews/OR-2026W22-001-placeholder-readability-KR.md|owner_reviews/OWNER_REVIEW_BRIEF_RULES_KR.md|research_notes/RN-2026W22-001-placeholder-movement-toy.md|runs/RUN-20260528-002.json|runs/RUN-20260528-003.json|runs/RUN-20260528-004.json|work_packages/active/WP-2026W22-003.json|work_packages/active/WP-2026W22-004.json|work_packages/active/WP-2026W22-005.json|game/scenes/main.tscn|game/scripts/player.gd)$\" || true); test -z \"$extra\"'"
+    }
+  ],
+  "handoff_to": [
+    "qa",
+    "learning_librarian"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "The implementation uses the approved owner review decision in owner_reviews/OR-2026W22-001-placeholder-readability-KR.md as its creative boundary.",
+    "The implementation modifies only the current tiny Godot movement toy scene/script and creates one Implementation Run record.",
+    "The player remains placeholder geometry and gains only a minimal readability cue such as heading/facing and movement/reference context.",
+    "No imported assets, final sprites, final art direction, concept expansion, gameplay mechanic expansion, export, CI, schema, agent profile, research note, art note, owner review, or Learning Card files are changed.",
+    "The implementation hands off to QA for independent review before any Phase 1 research/art-informed slice pass claim."
+  ],
+  "created_at": "2026-05-28",
+  "notes": "This Work Package authorizes the first Art-approved implementation slice only. It intentionally does not authorize final art, final concept, real assets, or broader movement mechanics."
+}

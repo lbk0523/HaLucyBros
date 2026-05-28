@@ -1,0 +1,87 @@
+{
+  "id": "WP-2026W22-003",
+  "type": "research",
+  "status": "active",
+  "goal": "Produce one tiny reference note for a placeholder movement toy that can inform Art Agent placeholder styling and Implementation Agent movement-tuning context without selecting a final game concept.",
+  "owner_agent": "research",
+  "inputs": [
+    "PHASE1_TINY_DRY_RUN_CLOSEOUT.md",
+    "agents/HANDOFF_MAP.md",
+    "agents/profiles/research_agent.yaml",
+    "work_packages/active/WP-2026W22-002.json"
+  ],
+  "targets": [
+    "research_notes/RN-2026W22-001-placeholder-movement-toy.md",
+    "runs/RUN-20260528-002.json"
+  ],
+  "forbidden_changes": [
+    "/Users/byung/Documents/halucy bros/**",
+    "game/**",
+    "scripts/**",
+    "schemas/**",
+    "agents/**",
+    "templates/**",
+    "learning_cards/**",
+    "HALUCY_FOUNDATION.md",
+    "CONTEXT.md",
+    "PHASE0_CLOSEOUT.md",
+    "GODOT_TARGET.md",
+    "GITHUB_SYNC_PREP.md",
+    "Halucy Codex 구현 계획.md",
+    "final game concept selection",
+    "Godot project, scene, script, build, or smoke-test edits",
+    "market report, audience report, store analysis, or opportunity-space acceptance",
+    "Working, Canonical, or Policy Learning Card promotion"
+  ],
+  "outputs": [
+    "research_notes/RN-2026W22-001-placeholder-movement-toy.md",
+    "runs/RUN-20260528-002.json"
+  ],
+  "verify": [
+    {
+      "name": "Research note artifact exists",
+      "method": "artifact_check",
+      "expected_artifact": "research_notes/RN-2026W22-001-placeholder-movement-toy.md"
+    },
+    {
+      "name": "Research Run record exists",
+      "method": "artifact_check",
+      "expected_artifact": "runs/RUN-20260528-002.json"
+    },
+    {
+      "name": "Research note remains narrow",
+      "method": "manual_check",
+      "description": "Confirm the note contains only a tiny placeholder movement-toy reference: research question, 2-4 reference observations, movement-facing implication, uncertainty or source/rationale notes, and handoff summary."
+    },
+    {
+      "name": "No final concept or market report claim is made",
+      "method": "manual_check",
+      "description": "Confirm the note does not choose a final game concept, accept an opportunity space, promote learning cards, or expand into market, audience, store, or positioning analysis."
+    },
+    {
+      "name": "Research Run record validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260528-002.json"
+    },
+    {
+      "name": "Only authorized research artifacts changed",
+      "method": "command",
+      "command": "bash -lc 'extra=$(git diff --name-only HEAD -- | grep -Ev \"^(research_notes/RN-2026W22-001-placeholder-movement-toy.md|runs/RUN-20260528-002.json|work_packages/active/WP-2026W22-003.json)$\" || true); test -z \"$extra\"'"
+    }
+  ],
+  "handoff_to": [
+    "art",
+    "implementation",
+    "learning_librarian"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "The Work Package authorizes exactly one tiny research note and one Research Run record.",
+    "The research note gives Art Agent and Implementation Agent usable movement-toy reference context without requiring either agent to re-research the same question.",
+    "The note states source links or explicit rationale, and marks uncertainty instead of overstating evidence.",
+    "The note does not select a final game concept, modify Godot files, produce a market report, or promote any Learning Card beyond Candidate authority.",
+    "The handoff targets are limited to Art Agent, Implementation Agent, and Learning Librarian Agent as allowed by agents/HANDOFF_MAP.md."
+  ],
+  "created_at": "2026-05-28",
+  "notes": "This Work Package closes only the next missing Research Agent handoff gap from the Phase 1 tiny dry-run closeout. If the research implies a concept, audience, or opportunity-space decision, stop and request Human Creative Owner judgment instead of deciding inside this package."
+}

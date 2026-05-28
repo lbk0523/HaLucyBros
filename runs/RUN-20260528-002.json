@@ -1,0 +1,94 @@
+{
+  "run_id": "RUN-20260528-002",
+  "work_package_id": "WP-2026W22-003",
+  "agent": "research",
+  "agent_profile": "agents/profiles/research_agent.yaml",
+  "started_at": "2026-05-28T11:22:09+09:00",
+  "ended_at": "2026-05-28T11:22:09+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "Codex shell",
+      "purpose": "Confirm repository sync state, inspect authorized inputs, and read the current movement toy implementation before producing the research note.",
+      "inputs": [
+        "PHASE1_TINY_DRY_RUN_CLOSEOUT.md",
+        "agents/HANDOFF_MAP.md",
+        "agents/profiles/research_agent.yaml",
+        "work_packages/active/WP-2026W22-003.json",
+        "game/scripts/player.gd"
+      ],
+      "outputs": [
+        "research_notes/RN-2026W22-001-placeholder-movement-toy.md",
+        "runs/RUN-20260528-002.json"
+      ],
+      "evidence": [
+        "git fetch origin --prune completed",
+        "HEAD, main, and origin/main were c5b3739430fa4ed5982945f764b530fc26c76711 before the research artifacts were created",
+        "Only the expected untracked WP-2026W22-003 file was present before execution"
+      ]
+    },
+    {
+      "tool_name": "External web research",
+      "purpose": "Check narrow technical and tiny-constraint references without producing market, audience, store, or concept-selection research.",
+      "inputs": [
+        "Godot 4 CharacterBody2D movement documentation",
+        "PICO-8 tiny visual constraint reference"
+      ],
+      "outputs": [
+        "Godot movement reference note",
+        "PICO-8 constrained-expression reference note"
+      ],
+      "evidence": [
+        "https://docs.godotengine.org/en/4.0/classes/class_characterbody2d.html",
+        "https://www.lexaloffle.com/pico-8.php"
+      ]
+    }
+  ],
+  "artifacts": [
+    "work_packages/active/WP-2026W22-003.json",
+    "research_notes/RN-2026W22-001-placeholder-movement-toy.md",
+    "runs/RUN-20260528-002.json"
+  ],
+  "commands": [
+    {
+      "command": "git fetch origin --prune && git status --short --branch && git remote -v && git rev-parse HEAD main origin/main && git log -1 --format=%H origin/main",
+      "exit_code": 0,
+      "notes": "Remote was https://github.com/lbk0523/HaLucyBros.git; main and origin/main were synchronized at c5b3739430fa4ed5982945f764b530fc26c76711."
+    },
+    {
+      "command": "sed -n '1,220p' game/scripts/player.gd",
+      "exit_code": 0,
+      "notes": "Read-only inspection showed the current toy is direct ColorRect position movement using Input.get_vector."
+    },
+    {
+      "command": "mkdir -p research_notes",
+      "exit_code": 0,
+      "notes": "Created the authorized research note directory for the WP-2026W22-003 target artifact."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-003.json",
+      "exit_code": 0,
+      "notes": "WP-2026W22-003 validated against the Work Package schema. AJV ignored the date format because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260528-002.json",
+      "exit_code": 0,
+      "notes": "RUN-20260528-002 validated against the Run schema. AJV ignored date-time formats because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "git status --porcelain=v1 -uall",
+      "exit_code": 0,
+      "notes": "Changed paths were limited to research_notes/RN-2026W22-001-placeholder-movement-toy.md, runs/RUN-20260528-002.json, and work_packages/active/WP-2026W22-003.json."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "research_notes/RN-2026W22-001-placeholder-movement-toy.md",
+      "runs/RUN-20260528-002.json",
+      "work_packages/active/WP-2026W22-003.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "Research Agent produced one tiny placeholder movement toy reference note. The note intentionally avoids final concept selection, Godot edits, market reporting, and Learning Card promotion. WP-2026W22-003 was validated as the canonical work package for this run but was not committed or pushed by this run."
+}

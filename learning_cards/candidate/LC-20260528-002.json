@@ -1,0 +1,44 @@
+{
+  "id": "LC-20260528-002",
+  "type": "technical",
+  "status": "candidate",
+  "claim": "For Godot smoke tests, a zero exit code is not enough evidence of success; the smoke-test output must also be checked for engine or script error lines.",
+  "context": "During the WP-2026W22-005 Implementation Run, the first smoke test returned exit code 0 while printing a GDScript parse error. The implementation treated that output as failed evidence, fixed the typed variable issue, and then verified a clean smoke-test output with no SCRIPT ERROR or ERROR lines. QA independently repeated the output-cleanliness check before passing the run.",
+  "evidence": [
+    {
+      "source_type": "work_package",
+      "source_ref": "work_packages/active/WP-2026W22-005.json",
+      "summary": "The implementation Work Package required the Godot smoke test to pass or record blocked evidence and handed the result to QA."
+    },
+    {
+      "source_type": "run",
+      "source_ref": "runs/RUN-20260528-004.json",
+      "summary": "The Run records that the initial smoke command returned exit code 0 while printing a parse error, then a later output-cleanliness command verified no SCRIPT ERROR or ERROR lines."
+    },
+    {
+      "source_type": "review",
+      "source_ref": "reviews/RV-20260528-002.json",
+      "summary": "QA explicitly checked smoke-test output cleanliness instead of relying only on the smoke-test exit code."
+    }
+  ],
+  "scope": {
+    "applies_when": [
+      "A Godot CLI smoke test is used as verification evidence.",
+      "The command can return exit code 0 even though engine or script errors appear in stdout or stderr.",
+      "A Phase gate or QA review depends on treating the smoke run as clean."
+    ],
+    "does_not_apply_when": [
+      "The verification command is known to fail nonzero on all relevant engine errors.",
+      "The task is unrelated to Godot or engine-output verification.",
+      "The output is unavailable and the run must be recorded as blocked instead."
+    ]
+  },
+  "reuse_rule": "When using Godot smoke tests, capture or inspect combined output and require no SCRIPT ERROR or ERROR lines before claiming the smoke evidence is clean.",
+  "confidence": "medium",
+  "created_by": "learning_librarian",
+  "created_at": "2026-05-28",
+  "related_cards": [
+    "LC-20260528-001"
+  ],
+  "promotion_note": "Candidate only. Promotion would require repeated evidence across another Godot verification loop or a hardened smoke_test.sh implementation."
+}

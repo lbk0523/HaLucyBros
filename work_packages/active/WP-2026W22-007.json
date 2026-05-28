@@ -1,0 +1,88 @@
+{
+  "id": "WP-2026W22-007",
+  "type": "learning",
+  "status": "active",
+  "goal": "Evaluate the QA handoff from RV-20260528-002 and create only low-authority Candidate Learning Cards for reusable Phase 1 lessons, without promoting any card or changing production artifacts.",
+  "owner_agent": "learning_librarian",
+  "inputs": [
+    "reviews/RV-20260528-002.json",
+    "runs/RUN-20260528-004.json",
+    "owner_reviews/OWNER_REVIEW_BRIEF_RULES_KR.md",
+    "owner_reviews/OR-2026W22-001-placeholder-readability-KR.md",
+    "learning_cards/candidate/LC-20260528-001.json",
+    "agents/profiles/learning_librarian_agent.yaml"
+  ],
+  "targets": [
+    "learning_cards/candidate/LC-20260528-002.json",
+    "learning_cards/candidate/LC-20260528-003.json"
+  ],
+  "forbidden_changes": [
+    "/Users/byung/Documents/halucy bros/**",
+    "game/**",
+    "scripts/**",
+    "schemas/**",
+    "agents/**",
+    "templates/**",
+    "research_notes/**",
+    "art_notes/**",
+    "owner_reviews/**",
+    "runs/**",
+    "reviews/**",
+    "work_packages/active/WP-2026W22-001.json",
+    "work_packages/active/WP-2026W22-002.json",
+    "work_packages/active/WP-2026W22-003.json",
+    "work_packages/active/WP-2026W22-004.json",
+    "work_packages/active/WP-2026W22-005.json",
+    "work_packages/active/WP-2026W22-006.json",
+    "learning_cards/working/**",
+    "learning_cards/canonical/**",
+    "learning_cards/policy/**",
+    "Working, Canonical, or Policy Learning Card promotion",
+    "owner review process redesign beyond Candidate card capture",
+    "Godot, QA, Art, Research, schema, or agent profile edits"
+  ],
+  "outputs": [
+    "learning_cards/candidate/LC-20260528-002.json",
+    "learning_cards/candidate/LC-20260528-003.json"
+  ],
+  "verify": [
+    {
+      "name": "Smoke-output Candidate card exists",
+      "method": "artifact_check",
+      "expected_artifact": "learning_cards/candidate/LC-20260528-002.json"
+    },
+    {
+      "name": "Owner-review Candidate card exists",
+      "method": "artifact_check",
+      "expected_artifact": "learning_cards/candidate/LC-20260528-003.json"
+    },
+    {
+      "name": "Candidate cards validate",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/learning_card.schema.json -d learning_cards/candidate/LC-20260528-002.json && npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/learning_card.schema.json -d learning_cards/candidate/LC-20260528-003.json"
+    },
+    {
+      "name": "No higher-authority learning cards changed",
+      "method": "command",
+      "command": "test -z \"$(git status --porcelain=v1 -uall learning_cards/working learning_cards/canonical learning_cards/policy)\""
+    },
+    {
+      "name": "Only expected Phase 1 and learning artifacts changed",
+      "method": "command",
+      "command": "bash -lc 'extra=$(git status --porcelain=v1 -uall | sed \"s/^...//\" | grep -Ev \"^(art_notes/AN-2026W22-001-placeholder-readability.md|game/scenes/main.tscn|game/scripts/player.gd|learning_cards/candidate/LC-20260528-002.json|learning_cards/candidate/LC-20260528-003.json|owner_reviews/OR-2026W22-001-placeholder-readability-KR.md|owner_reviews/OWNER_REVIEW_BRIEF_RULES_KR.md|research_notes/RN-2026W22-001-placeholder-movement-toy.md|reviews/RV-20260528-002.json|runs/RUN-20260528-002.json|runs/RUN-20260528-003.json|runs/RUN-20260528-004.json|work_packages/active/WP-2026W22-003.json|work_packages/active/WP-2026W22-004.json|work_packages/active/WP-2026W22-005.json|work_packages/active/WP-2026W22-006.json|work_packages/active/WP-2026W22-007.json)$\" || true); test -z \"$extra\"'"
+    }
+  ],
+  "handoff_to": [
+    "human_creative_owner"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "Each Candidate Learning Card contains exactly one reusable lesson.",
+    "The cards cite concrete Work Package, Run, Review, or Human Decision evidence from the Phase 1 handoff loop.",
+    "No Working, Canonical, or Policy promotion is attempted.",
+    "No Godot, schema, agent profile, research, art, owner review, run, review, or prior work package files are modified by this Learning Librarian task.",
+    "Any broader owner-review process redesign is deferred until Phase 1 closeout."
+  ],
+  "created_at": "2026-05-28",
+  "notes": "This Work Package authorizes Candidate capture only. It does not authorize changing operating rules beyond the already-created owner review rule artifact, and does not close Phase 1."
+}

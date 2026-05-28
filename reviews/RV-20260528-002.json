@@ -1,0 +1,88 @@
+{
+  "review_id": "RV-20260528-002",
+  "run_id": "RUN-20260528-004",
+  "work_package_id": "WP-2026W22-005",
+  "reviewer_agent": "qa",
+  "review_type": "qa",
+  "started_at": "2026-05-28T15:48:11+09:00",
+  "ended_at": "2026-05-28T15:48:11+09:00",
+  "checks": [
+    {
+      "name": "Owner approval boundary is present",
+      "status": "pass",
+      "evidence": [
+        "owner_reviews/OR-2026W22-001-placeholder-readability-KR.md contains Decision: approve",
+        "WP-2026W22-005 acceptance criteria require using OR-2026W22-001 as creative boundary"
+      ],
+      "notes": "The Implementation Run had the required BK owner approval before Godot changes."
+    },
+    {
+      "name": "Placeholder readability cues are present",
+      "status": "pass",
+      "evidence": [
+        "game/scenes/main.tscn contains ReferenceLineH and ReferenceLineV ColorRect nodes",
+        "game/scenes/main.tscn contains HeadingCue ColorRect child under Player",
+        "game/scripts/player.gd updates HeadingCue toward the latest non-zero movement direction"
+      ],
+      "notes": "The implementation adds a minimal motion/reference cue and heading cue consistent with AN-2026W22-001."
+    },
+    {
+      "name": "Placeholder scope is preserved",
+      "status": "pass",
+      "evidence": [
+        "Diff changes are limited to built-in ColorRect nodes and small player.gd cue positioning logic",
+        "No imported assets, textures, sprites, fonts, audio, animation system, collision, gravity, jump, camera, export, CI, or gameplay mechanic expansion appear in the changed files"
+      ],
+      "notes": "The player remains placeholder geometry and the scene remains a tiny movement toy."
+    },
+    {
+      "name": "Smoke-test output is clean",
+      "status": "pass",
+      "evidence": [
+        "bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"' exit code 0",
+        "Final smoke output printed only the Godot 4.6.3 version banner"
+      ],
+      "notes": "QA independently checked output cleanliness, not just the smoke-test exit code."
+    },
+    {
+      "name": "Implementation Run record validates",
+      "status": "pass",
+      "evidence": [
+        "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260528-004.json -> valid"
+      ],
+      "notes": "AJV date-time format warnings are consistent with existing project validation practice."
+    },
+    {
+      "name": "QA Review record validates",
+      "status": "pass",
+      "evidence": [
+        "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/review.schema.json -d reviews/RV-20260528-002.json -> valid"
+      ],
+      "notes": "The QA Review artifact validates against the current review schema."
+    },
+    {
+      "name": "QA Work Package validates",
+      "status": "pass",
+      "evidence": [
+        "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-006.json -> valid"
+      ],
+      "notes": "The QA Work Package artifact validates against the current work package schema."
+    },
+    {
+      "name": "Changed path set is expected",
+      "status": "pass",
+      "evidence": [
+        "Scope command allowed only expected Phase 1 research, art, owner review, implementation, QA review, run, and work package artifacts"
+      ],
+      "notes": "QA did not modify implementation files under review."
+    }
+  ],
+  "scope_findings": {
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "issues": [],
+  "decision": "pass",
+  "human_decision_required": false,
+  "notes": "QA passes RUN-20260528-004. The implementation preserves placeholder scope, improves movement readability through minimal built-in cues, and has clean smoke-test output after the earlier parse-error fix. Handoff to Learning Librarian is recommended to evaluate whether the smoke-test output blind spot and owner-review Korean-brief rule should become Candidate Learning Cards; this review does not request Working, Canonical, or Policy promotion."
+}
