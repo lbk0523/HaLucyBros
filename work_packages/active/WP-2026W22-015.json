@@ -1,0 +1,69 @@
+{
+  "id": "WP-2026W22-015",
+  "type": "implementation",
+  "status": "active",
+  "goal": "Remove the unrelated Godot script UID sidecar from the Phase 2 closeout worktree so final scope checks are not polluted.",
+  "owner_agent": "implementation",
+  "inputs": [
+    "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+    "PHASE1_CLOSEOUT.md",
+    "work_packages/active/WP-2026W22-012.json",
+    "runs/RUN-20260529-001.json",
+    "reviews/RV-20260529-001.json"
+  ],
+  "targets": [
+    "game/scripts/player.gd.uid",
+    "work_packages/active/WP-2026W22-015.json",
+    "runs/RUN-20260529-004.json"
+  ],
+  "forbidden_changes": [
+    "game/project.godot",
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd",
+    "game/assets/**",
+    "scripts/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "research_notes/**",
+    "art_notes/**",
+    "owner_reviews/**",
+    "reviews/**",
+    "learning_cards/**",
+    "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+    "Halucy Codex 구현 계획.md",
+    "Godot implementation behavior changes",
+    "Godot .uid tracking or ignore policy decision"
+  ],
+  "outputs": [
+    "runs/RUN-20260529-004.json"
+  ],
+  "verify": [
+    {
+      "name": "Godot UID sidecar is absent",
+      "method": "command",
+      "command": "test ! -e game/scripts/player.gd.uid"
+    },
+    {
+      "name": "Cleanup Work Package validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-015.json"
+    },
+    {
+      "name": "Cleanup Run validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260529-004.json"
+    }
+  ],
+  "handoff_to": [
+    "qa"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "The untracked game/scripts/player.gd.uid sidecar is removed.",
+    "No Godot project, scene, script, asset, schema, agent, review, owner review, or learning files are changed.",
+    "The cleanup does not decide the long-term Godot .uid tracking or ignore policy; that policy remains deferred."
+  ],
+  "created_at": "2026-05-29",
+  "notes": "This is a closeout hygiene cleanup only. Phase 1 and Phase 2 evidence show Godot can recreate script UID sidecars; this Work Package removes the current untracked sidecar before final verification without deciding future policy."
+}

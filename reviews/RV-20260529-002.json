@@ -1,0 +1,77 @@
+{
+  "review_id": "RV-20260529-002",
+  "run_id": "RUN-20260529-005",
+  "work_package_id": "WP-2026W22-016",
+  "reviewer_agent": "qa",
+  "review_type": "scope",
+  "started_at": "2026-05-29T16:29:33+09:00",
+  "ended_at": "2026-05-29T16:31:00+09:00",
+  "checks": [
+    {
+      "name": "Smoke-test output is clean",
+      "status": "pass",
+      "evidence": [
+        "bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"' exit code 0",
+        "Smoke output printed only the Godot 4.6.3 version banner"
+      ],
+      "notes": "The final closeout smoke check passed and emitted no engine/script error lines."
+    },
+    {
+      "name": "Main scene runs headlessly",
+      "status": "pass",
+      "evidence": [
+        "godot --headless --path game --scene res://scenes/main.tscn --quit-after 3 exit code 0"
+      ],
+      "notes": "The implemented scene still loads and runs after Learning Capture and UID cleanup."
+    },
+    {
+      "name": "Phase 2 Work Package schemas validate",
+      "status": "pass",
+      "evidence": [
+        "WP-2026W22-008 through WP-2026W22-015 validated against schemas/work_package.schema.json before this review was written"
+      ],
+      "notes": "WP-2026W22-016 is validated by the follow-up verification recorded in RUN-20260529-005."
+    },
+    {
+      "name": "Phase 2 Run schemas validate",
+      "status": "pass",
+      "evidence": [
+        "RUN-20260528-005 through RUN-20260529-004 validated against schemas/run.schema.json before this review was written"
+      ],
+      "notes": "RUN-20260529-005 is validated by the follow-up verification recorded in its own command list."
+    },
+    {
+      "name": "Phase 2 Review and Learning schemas validate",
+      "status": "pass",
+      "evidence": [
+        "reviews/RV-20260529-001.json validated against schemas/review.schema.json",
+        "learning_cards/candidate/LC-20260529-001.json validated against schemas/learning_card.schema.json"
+      ],
+      "notes": "Final verification covers QA review and Candidate Learning Card evidence."
+    },
+    {
+      "name": "Godot UID sidecar is absent",
+      "status": "pass",
+      "evidence": [
+        "test ! -e game/scripts/player.gd.uid passed during final scope check"
+      ],
+      "notes": "The final smoke/headless checks did not recreate the sidecar."
+    },
+    {
+      "name": "Final dirty scope is expected",
+      "status": "pass",
+      "evidence": [
+        "Final scope command allowed only expected Phase 2 artifacts and implementation target files"
+      ],
+      "notes": "No unrelated dirty paths remained after UID cleanup."
+    }
+  ],
+  "scope_findings": {
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "issues": [],
+  "decision": "pass",
+  "human_decision_required": false,
+  "notes": "Final Phase 2 closeout verification passed. The remaining work is to write PHASE2_CLOSEOUT.md and decide commit/staging boundaries."
+}

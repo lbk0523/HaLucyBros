@@ -1,0 +1,101 @@
+{
+  "id": "WP-2026W22-013",
+  "type": "qa",
+  "status": "active",
+  "goal": "Independently review the Phase 2 platformer greybox implementation for reachability, collision, fixed-height single jump, movement feel, timer/goal readability, and scope preservation.",
+  "owner_agent": "qa",
+  "inputs": [
+    "work_packages/active/WP-2026W22-012.json",
+    "runs/RUN-20260529-001.json",
+    "context/game_brief.md",
+    "research_notes/RN-2026W22-002-platformer-greybox-reference.md",
+    "art_notes/AN-2026W22-002-platformer-greybox-readability.md",
+    "owner_reviews/OR-2026W22-002-platformer-greybox-KR.md",
+    "agents/profiles/qa_agent.yaml",
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd",
+    "scripts/smoke_test.sh"
+  ],
+  "targets": [
+    "reviews/RV-20260529-001.json",
+    "work_packages/active/WP-2026W22-013.json",
+    "runs/RUN-20260529-002.json"
+  ],
+  "forbidden_changes": [
+    "game/**",
+    "scripts/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "research_notes/**",
+    "art_notes/**",
+    "owner_reviews/**",
+    "learning_cards/**",
+    "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+    "Halucy Codex 구현 계획.md",
+    "implementation code changes or rework fixes",
+    "final art, enemy, item, scoring, camera polish, web export, double jump, wall jump, or dash decisions",
+    "Working, Canonical, or Policy Learning Card promotion"
+  ],
+  "outputs": [
+    "reviews/RV-20260529-001.json",
+    "runs/RUN-20260529-002.json"
+  ],
+  "verify": [
+    {
+      "name": "QA Review artifact exists",
+      "method": "artifact_check",
+      "expected_artifact": "reviews/RV-20260529-001.json"
+    },
+    {
+      "name": "QA Run record exists",
+      "method": "artifact_check",
+      "expected_artifact": "runs/RUN-20260529-002.json"
+    },
+    {
+      "name": "QA Work Package validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-013.json"
+    },
+    {
+      "name": "QA Review validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/review.schema.json -d reviews/RV-20260529-001.json"
+    },
+    {
+      "name": "QA Run validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260529-002.json"
+    },
+    {
+      "name": "Smoke test output is clean",
+      "method": "command",
+      "command": "bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"'"
+    },
+    {
+      "name": "Main scene runs headlessly",
+      "method": "command",
+      "command": "godot --headless --path game --scene res://scenes/main.tscn --quit-after 3"
+    },
+    {
+      "name": "Only authorized QA artifacts changed",
+      "method": "command",
+      "command": "bash -lc 'extra=$(git status --short --untracked-files=all | sed \"s/^...//\" | grep -Ev \"^(PHASE2_PLATFORMER_GREYBOX_PLAN.md|context/game_brief.md|work_packages/active/WP-2026W22-008.json|runs/RUN-20260528-005.json|research_notes/RN-2026W22-002-platformer-greybox-reference.md|work_packages/active/WP-2026W22-009.json|runs/RUN-20260528-006.json|art_notes/AN-2026W22-002-platformer-greybox-readability.md|work_packages/active/WP-2026W22-010.json|runs/RUN-20260528-007.json|owner_reviews/OR-2026W22-002-platformer-greybox-KR.md|work_packages/active/WP-2026W22-011.json|runs/RUN-20260528-008.json|work_packages/active/WP-2026W22-012.json|game/scenes/main.tscn|game/scripts/player.gd|runs/RUN-20260529-001.json|work_packages/active/WP-2026W22-013.json|reviews/RV-20260529-001.json|runs/RUN-20260529-002.json)$\" || true); test -z \"$extra\"'"
+    }
+  ],
+  "handoff_to": [
+    "learning_librarian",
+    "human_creative_owner",
+    "implementation"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "QA independently reviews the implementation Run and changed target files without modifying implementation files.",
+    "QA checks reachability, gravity/floor collision, obstacle collision, fixed-height single jump, acceleration/friction feel, timer/goal readability, and excluded-scope preservation.",
+    "QA records pass, rework, or blocked in reviews/RV-20260529-001.json with actionable issues if needed.",
+    "QA verifies smoke-test cleanliness, scene runtime load, review schema, run schema, work-package schema, and changed-file scope.",
+    "QA does not claim final human playable-feel approval or Learning Card promotion."
+  ],
+  "created_at": "2026-05-29",
+  "notes": "This Work Package authorizes QA review only. If QA finds implementation defects, it must record rework issues instead of editing Godot files."
+}

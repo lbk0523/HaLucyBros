@@ -1,0 +1,135 @@
+{
+  "run_id": "RUN-20260529-002",
+  "work_package_id": "WP-2026W22-013",
+  "agent": "qa",
+  "agent_profile": "agents/profiles/qa_agent.yaml",
+  "started_at": "2026-05-29T08:44:56+09:00",
+  "ended_at": "2026-05-29T08:47:14+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "Codex shell",
+      "purpose": "Inspect QA schema, prior QA review convention, QA profile, implementation Run evidence, changed target files, and worktree baseline before producing QA artifacts.",
+      "inputs": [
+        "schemas/review.schema.json",
+        "reviews/RV-20260528-002.json",
+        "agents/profiles/qa_agent.yaml",
+        "runs/RUN-20260529-001.json",
+        "game/scenes/main.tscn",
+        "game/scripts/player.gd"
+      ],
+      "outputs": [
+        "work_packages/active/WP-2026W22-013.json",
+        "reviews/RV-20260529-001.json",
+        "runs/RUN-20260529-002.json"
+      ],
+      "evidence": [
+        "QA profile forbids modifying implementation files under review.",
+        "RUN-20260529-001 records the implementation output and verification evidence.",
+        "Pre-QA status showed the implementation files as modified and prior Phase 2 artifacts as untracked."
+      ]
+    },
+    {
+      "tool_name": "Codex shell",
+      "purpose": "Run independent QA verification commands and static scope/readability checks without editing implementation files.",
+      "inputs": [
+        "scripts/smoke_test.sh",
+        "game/scenes/main.tscn",
+        "game/scripts/player.gd",
+        "schemas/run.schema.json",
+        "schemas/review.schema.json",
+        "schemas/work_package.schema.json"
+      ],
+      "outputs": [
+        "verification results for RV-20260529-001"
+      ],
+      "evidence": [
+        "scripts/smoke_test.sh exit code 0",
+        "clean smoke-test output check exit code 0",
+        "godot --headless --path game --scene res://scenes/main.tscn --quit-after 3 exit code 0",
+        "rg checks found platformer controller constants and excluded-scope absence evidence"
+      ]
+    },
+    {
+      "tool_name": "apply_patch",
+      "purpose": "Create the QA Work Package, QA Review, and QA Run artifacts only.",
+      "inputs": [
+        "work_packages/active/WP-2026W22-012.json",
+        "runs/RUN-20260529-001.json",
+        "game/scenes/main.tscn",
+        "game/scripts/player.gd"
+      ],
+      "outputs": [
+        "work_packages/active/WP-2026W22-013.json",
+        "reviews/RV-20260529-001.json",
+        "runs/RUN-20260529-002.json"
+      ],
+      "evidence": [
+        "QA Review decision is pass with human_decision_required true for BK playable-feel judgment.",
+        "No implementation files were patched by QA."
+      ]
+    }
+  ],
+  "artifacts": [
+    "work_packages/active/WP-2026W22-013.json",
+    "reviews/RV-20260529-001.json",
+    "runs/RUN-20260529-002.json"
+  ],
+  "commands": [
+    {
+      "command": "date '+%Y-%m-%dT%H:%M:%S%z' && git status --short --untracked-files=all",
+      "exit_code": 0,
+      "notes": "Recorded QA start timestamp as 2026-05-29T08:44:56+0900 and captured the pre-QA worktree baseline."
+    },
+    {
+      "command": "scripts/smoke_test.sh",
+      "exit_code": 0,
+      "notes": "Godot headless project smoke test passed."
+    },
+    {
+      "command": "bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"'",
+      "exit_code": 0,
+      "notes": "Smoke-test output contained no SCRIPT ERROR or ERROR lines."
+    },
+    {
+      "command": "godot --headless --path game --scene res://scenes/main.tscn --quit-after 3",
+      "exit_code": 0,
+      "notes": "Main scene ran headlessly for three iterations without runtime load errors."
+    },
+    {
+      "command": "rg -n \"MAX_SPEED|ACCELERATION|FRICTION|GRAVITY|JUMP_VELOCITY|TIME_LIMIT|is_on_floor|ui_accept|ui_up|double|dash|wall|coyote|buffer|GoalArea|Blocker|Platform|TimerLabel|StatusLabel|CharacterBody2D|StaticBody2D|Area2D\" game/scripts/player.gd game/scenes/main.tscn",
+      "exit_code": 0,
+      "notes": "Static inspection found platformer movement constants, floor-gated jump, scene collision/goal/timer nodes, and no excluded feature implementation."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-013.json",
+      "exit_code": 0,
+      "notes": "WP-2026W22-013 validated against the Work Package schema. AJV ignored the date format because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/review.schema.json -d reviews/RV-20260529-001.json",
+      "exit_code": 0,
+      "notes": "RV-20260529-001 validated against the Review schema. AJV ignored date-time formats because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260529-002.json",
+      "exit_code": 0,
+      "notes": "RUN-20260529-002 validated against the Run schema before this evidence update. AJV ignored date-time formats because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "bash -lc 'extra=$(git status --short --untracked-files=all | sed \"s/^...//\" | grep -Ev \"^(PHASE2_PLATFORMER_GREYBOX_PLAN.md|context/game_brief.md|work_packages/active/WP-2026W22-008.json|runs/RUN-20260528-005.json|research_notes/RN-2026W22-002-platformer-greybox-reference.md|work_packages/active/WP-2026W22-009.json|runs/RUN-20260528-006.json|art_notes/AN-2026W22-002-platformer-greybox-readability.md|work_packages/active/WP-2026W22-010.json|runs/RUN-20260528-007.json|owner_reviews/OR-2026W22-002-platformer-greybox-KR.md|work_packages/active/WP-2026W22-011.json|runs/RUN-20260528-008.json|work_packages/active/WP-2026W22-012.json|game/scenes/main.tscn|game/scripts/player.gd|runs/RUN-20260529-001.json|work_packages/active/WP-2026W22-013.json|reviews/RV-20260529-001.json|runs/RUN-20260529-002.json)$\" || true); if test -n \"$extra\"; then printf \"%s\\n\" \"$extra\"; exit 1; fi'",
+      "exit_code": 0,
+      "notes": "Scope check passed. The worktree contained only pre-existing Phase 2 artifacts, implementation artifacts, and this QA run's authorized artifacts."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "work_packages/active/WP-2026W22-013.json",
+      "reviews/RV-20260529-001.json",
+      "runs/RUN-20260529-002.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "QA passed the Phase 2 platformer greybox implementation for technical/scope review and recorded that BK/Human Creative Owner still needs playable-feel judgment. QA did not modify implementation files."
+}

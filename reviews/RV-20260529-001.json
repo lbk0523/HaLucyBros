@@ -1,0 +1,133 @@
+{
+  "review_id": "RV-20260529-001",
+  "run_id": "RUN-20260529-001",
+  "work_package_id": "WP-2026W22-012",
+  "reviewer_agent": "qa",
+  "review_type": "qa",
+  "started_at": "2026-05-29T08:44:56+09:00",
+  "ended_at": "2026-05-29T08:45:20+09:00",
+  "checks": [
+    {
+      "name": "Owner approval and implementation boundary are present",
+      "status": "pass",
+      "evidence": [
+        "owner_reviews/OR-2026W22-002-platformer-greybox-KR.md records Decision: approve",
+        "work_packages/active/WP-2026W22-012.json targets game/scenes/main.tscn, game/scripts/player.gd, and runs/RUN-20260529-001.json"
+      ],
+      "notes": "Implementation had the required owner approval and separate Work Package boundary before Godot changes."
+    },
+    {
+      "name": "Smoke-test output is clean",
+      "status": "pass",
+      "evidence": [
+        "scripts/smoke_test.sh exit code 0",
+        "bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"' exit code 0",
+        "Smoke output printed only the Godot 4.6.3 version banner"
+      ],
+      "notes": "QA checked output cleanliness, not only process exit code."
+    },
+    {
+      "name": "Main scene runs headlessly",
+      "status": "pass",
+      "evidence": [
+        "godot --headless --path game --scene res://scenes/main.tscn --quit-after 3 exit code 0"
+      ],
+      "notes": "The implemented scene and player script load and run for a few frames without runtime errors."
+    },
+    {
+      "name": "Platformer controller requirements are represented",
+      "status": "pass",
+      "evidence": [
+        "game/scripts/player.gd extends CharacterBody2D",
+        "game/scripts/player.gd defines GRAVITY, MAX_SPEED, ACCELERATION, FRICTION, JUMP_VELOCITY, and TIME_LIMIT",
+        "game/scripts/player.gd uses move_and_slide() in _physics_process(delta)"
+      ],
+      "notes": "The implementation moved from direct ColorRect position updates to collision-aware platformer movement."
+    },
+    {
+      "name": "Fixed-height single jump scope is preserved",
+      "status": "pass",
+      "evidence": [
+        "game/scripts/player.gd gates jump with is_on_floor()",
+        "game/scripts/player.gd applies one fixed JUMP_VELOCITY value",
+        "rg found no double jump, wall jump, dash, coyote, jump buffer, or variable jump-height implementation in game/scripts/player.gd or game/scenes/main.tscn"
+      ],
+      "notes": "Jump behavior matches the approved first-slice constraint."
+    },
+    {
+      "name": "Gravity, floor collision, and obstacle collision are represented",
+      "status": "pass",
+      "evidence": [
+        "game/scripts/player.gd applies GRAVITY when not on floor",
+        "game/scenes/main.tscn contains Ground, Blocker, and Platform StaticBody2D nodes",
+        "game/scenes/main.tscn contains CollisionShape2D nodes for Ground, Blocker, Platform, Player, and GoalArea"
+      ],
+      "notes": "The scene includes solid greybox surfaces and the controller uses floor state for jump gating."
+    },
+    {
+      "name": "Reachability is plausible within approved constraints",
+      "status": "pass",
+      "evidence": [
+        "Player starts at Vector2(72, 320) and GoalCollision is centered at Vector2(604, 288)",
+        "TIME_LIMIT is 24.0 and MAX_SPEED is 190.0, giving enough time to traverse the approximately 532 px horizontal distance under ordinary movement",
+        "JUMP_VELOCITY -420.0 with GRAVITY 980.0 gives about 90 px theoretical jump height; Blocker top is y=264 from a floor/player-bottom baseline of y=320, requiring about 56 px clearance"
+      ],
+      "notes": "QA did not perform a human manual play session, but static geometry and controller values support reachability for the first greybox review."
+    },
+    {
+      "name": "Goal and timer readability are present",
+      "status": "pass",
+      "evidence": [
+        "game/scenes/main.tscn contains GoalArea Area2D with green GoalVisual ColorRect at the right side",
+        "game/scenes/main.tscn contains HUD/TimerLabel initialized as TIME 24.0",
+        "game/scripts/player.gd updates TimerLabel and StatusLabel and checks goal_area.overlaps_body(self)"
+      ],
+      "notes": "The goal/timer are placeholder-grade but visible and functionally wired."
+    },
+    {
+      "name": "Excluded scope is preserved",
+      "status": "pass",
+      "evidence": [
+        "No game/project.godot change appears in git status",
+        "No game/assets path appears in git status",
+        "rg found no enemy, item, collectible, scoring, camera, web export, dash, double jump, wall jump, coyote time, or jump buffer implementation in the changed target files"
+      ],
+      "notes": "The implementation stayed within the owner-approved greybox scope."
+    },
+    {
+      "name": "Implementation Run record validates",
+      "status": "pass",
+      "evidence": [
+        "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260529-001.json -> valid"
+      ],
+      "notes": "AJV date-time warnings are expected in this repo because the format plugin is not bundled."
+    },
+    {
+      "name": "QA Review and QA Work Package validate",
+      "status": "pass",
+      "evidence": [
+        "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-013.json -> valid",
+        "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/review.schema.json -d reviews/RV-20260529-001.json -> valid"
+      ],
+      "notes": "QA artifacts validate against current schemas."
+    },
+    {
+      "name": "QA did not mutate implementation files",
+      "status": "pass",
+      "evidence": [
+        "QA scope check allowed implementation artifacts already produced by RUN-20260529-001 and QA artifacts produced by this run",
+        "QA did not apply patches to game/scenes/main.tscn or game/scripts/player.gd"
+      ],
+      "notes": "Implementation and QA remained separated."
+    }
+  ],
+  "scope_findings": {
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "issues": [],
+  "decision": "pass",
+  "human_decision_required": true,
+  "human_decision_reason": "QA can pass technical/scope review, but BK/Human Creative Owner still needs to judge actual playable feel for the Phase 2 gate after direct execution or review.",
+  "notes": "QA passes RUN-20260529-001 for technical correctness, scope preservation, and first greybox readiness. Residual risk: QA did not perform a human interactive play session; reachability was assessed through scene/controller inspection and headless runtime checks. Handoff to BK/Human Creative Owner is recommended for playable-feel judgment, and handoff to Learning Librarian is recommended to evaluate whether any reusable Phase 2 production lesson should become a Candidate Learning Card."
+}

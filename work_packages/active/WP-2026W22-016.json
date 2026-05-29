@@ -1,0 +1,101 @@
+{
+  "id": "WP-2026W22-016",
+  "type": "qa",
+  "status": "active",
+  "goal": "Run the final Phase 2 closeout verification sweep after Learning Capture and Godot UID sidecar cleanup.",
+  "owner_agent": "qa",
+  "inputs": [
+    "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+    "context/game_brief.md",
+    "research_notes/RN-2026W22-002-platformer-greybox-reference.md",
+    "art_notes/AN-2026W22-002-platformer-greybox-readability.md",
+    "owner_reviews/OR-2026W22-002-platformer-greybox-KR.md",
+    "work_packages/active/WP-2026W22-008.json",
+    "work_packages/active/WP-2026W22-009.json",
+    "work_packages/active/WP-2026W22-010.json",
+    "work_packages/active/WP-2026W22-011.json",
+    "work_packages/active/WP-2026W22-012.json",
+    "work_packages/active/WP-2026W22-013.json",
+    "work_packages/active/WP-2026W22-014.json",
+    "work_packages/active/WP-2026W22-015.json",
+    "runs/RUN-20260528-005.json",
+    "runs/RUN-20260528-006.json",
+    "runs/RUN-20260528-007.json",
+    "runs/RUN-20260528-008.json",
+    "runs/RUN-20260529-001.json",
+    "runs/RUN-20260529-002.json",
+    "runs/RUN-20260529-003.json",
+    "runs/RUN-20260529-004.json",
+    "reviews/RV-20260529-001.json",
+    "learning_cards/candidate/LC-20260529-001.json"
+  ],
+  "targets": [
+    "reviews/RV-20260529-002.json",
+    "work_packages/active/WP-2026W22-016.json",
+    "runs/RUN-20260529-005.json"
+  ],
+  "forbidden_changes": [
+    "game/**",
+    "scripts/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "research_notes/**",
+    "art_notes/**",
+    "owner_reviews/**",
+    "learning_cards/**",
+    "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+    "Halucy Codex 구현 계획.md",
+    "implementation changes",
+    "Learning Card promotion"
+  ],
+  "outputs": [
+    "reviews/RV-20260529-002.json",
+    "runs/RUN-20260529-005.json"
+  ],
+  "verify": [
+    {
+      "name": "Final verification review exists",
+      "method": "artifact_check",
+      "expected_artifact": "reviews/RV-20260529-002.json"
+    },
+    {
+      "name": "Smoke output is clean",
+      "method": "command",
+      "command": "bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"'"
+    },
+    {
+      "name": "Main scene runs headlessly",
+      "method": "command",
+      "command": "godot --headless --path game --scene res://scenes/main.tscn --quit-after 3"
+    },
+    {
+      "name": "Phase 2 schema validations pass",
+      "method": "manual_check",
+      "description": "Confirm WP-2026W22-008 through 016, RUN-20260528-005 through RUN-20260529-005, RV-20260529-001 and 002, and LC-20260529-001 validate against their schemas."
+    },
+    {
+      "name": "Godot UID sidecar remains absent",
+      "method": "command",
+      "command": "test ! -e game/scripts/player.gd.uid"
+    },
+    {
+      "name": "Final verification scope is clean",
+      "method": "manual_check",
+      "description": "Confirm dirty paths are limited to expected Phase 2 artifacts and the implementation target files."
+    }
+  ],
+  "handoff_to": [
+    "human_creative_owner",
+    "learning_librarian"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "Final smoke and headless scene checks pass with clean output.",
+    "All Phase 2 Work Package, Run, Review, and Learning Card artifacts validate.",
+    "The Godot script UID sidecar is absent after verification.",
+    "No implementation, owner review, learning, schema, agent, or planning files are modified by this verification sweep except the authorized QA artifacts."
+  ],
+  "created_at": "2026-05-29",
+  "notes": "This is the final verification sweep before PHASE2_CLOSEOUT.md. It does not perform implementation rework."
+}

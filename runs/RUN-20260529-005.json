@@ -1,0 +1,99 @@
+{
+  "run_id": "RUN-20260529-005",
+  "work_package_id": "WP-2026W22-016",
+  "agent": "qa",
+  "agent_profile": "agents/profiles/qa_agent.yaml",
+  "started_at": "2026-05-29T16:29:33+09:00",
+  "ended_at": "2026-05-29T16:31:00+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "Codex shell",
+      "purpose": "Run final Phase 2 closeout verification after Learning Capture and Godot UID sidecar cleanup.",
+      "inputs": [
+        "scripts/smoke_test.sh",
+        "game/scenes/main.tscn",
+        "schemas/work_package.schema.json",
+        "schemas/run.schema.json",
+        "schemas/review.schema.json",
+        "schemas/learning_card.schema.json",
+        "Phase 2 artifacts"
+      ],
+      "outputs": [
+        "reviews/RV-20260529-002.json",
+        "work_packages/active/WP-2026W22-016.json",
+        "runs/RUN-20260529-005.json"
+      ],
+      "evidence": [
+        "Clean smoke output passed.",
+        "Headless main scene run passed.",
+        "Phase 2 Work Package, Run, Review, and Learning Card schemas validated.",
+        "game/scripts/player.gd.uid remained absent after verification.",
+        "Final scope check passed."
+      ]
+    },
+    {
+      "tool_name": "apply_patch",
+      "purpose": "Create final verification Work Package, Review, and Run records.",
+      "inputs": [
+        "final verification command outputs"
+      ],
+      "outputs": [
+        "work_packages/active/WP-2026W22-016.json",
+        "reviews/RV-20260529-002.json",
+        "runs/RUN-20260529-005.json"
+      ],
+      "evidence": [
+        "RV-20260529-002 decision is pass.",
+        "No implementation files were modified by final verification."
+      ]
+    }
+  ],
+  "artifacts": [
+    "work_packages/active/WP-2026W22-016.json",
+    "reviews/RV-20260529-002.json",
+    "runs/RUN-20260529-005.json"
+  ],
+  "commands": [
+    {
+      "command": "bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"'",
+      "exit_code": 0,
+      "notes": "Final smoke-test output cleanliness check passed."
+    },
+    {
+      "command": "godot --headless --path game --scene res://scenes/main.tscn --quit-after 3",
+      "exit_code": 0,
+      "notes": "Final headless main scene run passed."
+    },
+    {
+      "command": "Phase 2 WP schema validation loop for WP-2026W22-008 through WP-2026W22-015",
+      "exit_code": 0,
+      "notes": "All existing Phase 2 Work Packages validated before WP-2026W22-016 was created."
+    },
+    {
+      "command": "Phase 2 Run schema validation loop for RUN-20260528-005 through RUN-20260529-004",
+      "exit_code": 0,
+      "notes": "All existing Phase 2 Runs validated before RUN-20260529-005 was created."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/review.schema.json -d reviews/RV-20260529-001.json && npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/learning_card.schema.json -d learning_cards/candidate/LC-20260529-001.json",
+      "exit_code": 0,
+      "notes": "QA review and Candidate Learning Card schemas validated before RV-20260529-002 was created."
+    },
+    {
+      "command": "test ! -e game/scripts/player.gd.uid && final Phase 2 scope check",
+      "exit_code": 0,
+      "notes": "The Godot UID sidecar was absent and dirty paths were limited to expected Phase 2 artifacts and implementation targets."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "work_packages/active/WP-2026W22-016.json",
+      "reviews/RV-20260529-002.json",
+      "runs/RUN-20260529-005.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "Final Phase 2 closeout verification passed. This run does not claim final game fun or launch readiness."
+}
