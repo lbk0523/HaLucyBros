@@ -1,34 +1,122 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
+size = Vector2(32, 48)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
+size = Vector2(760, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_block"]
+size = Vector2(70, 56)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform"]
+size = Vector2(120, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_goal"]
+size = Vector2(40, 64)
+
 [node name="Main" type="Node2D"]
 
-[node name="ReferenceLineH" type="ColorRect" parent="."]
-offset_left = 96.0
-offset_top = 179.0
-offset_right = 544.0
-offset_bottom = 181.0
-color = Color(0.2, 0.24, 0.28, 1)
+[node name="Background" type="ColorRect" parent="."]
+offset_right = 640.0
+offset_bottom = 360.0
+color = Color(0.075, 0.085, 0.1, 1)
 
-[node name="ReferenceLineV" type="ColorRect" parent="."]
-offset_left = 319.0
-offset_top = 48.0
-offset_right = 321.0
-offset_bottom = 312.0
-color = Color(0.2, 0.24, 0.28, 1)
+[node name="StartMarker" type="ColorRect" parent="."]
+offset_left = 56.0
+offset_top = 292.0
+offset_right = 88.0
+offset_bottom = 320.0
+color = Color(0.18, 0.32, 0.44, 1)
 
-[node name="Player" type="ColorRect" parent="."]
-offset_left = 296.0
-offset_top = 156.0
-offset_right = 344.0
-offset_bottom = 204.0
-color = Color(0.15, 0.65, 0.9, 1)
+[node name="Ground" type="StaticBody2D" parent="."]
+
+[node name="GroundCollision" type="CollisionShape2D" parent="Ground"]
+position = Vector2(320, 340)
+shape = SubResource("RectangleShape2D_ground")
+
+[node name="GroundVisual" type="ColorRect" parent="Ground"]
+offset_left = -60.0
+offset_top = 320.0
+offset_right = 700.0
+offset_bottom = 360.0
+color = Color(0.28, 0.3, 0.32, 1)
+
+[node name="Blocker" type="StaticBody2D" parent="."]
+
+[node name="BlockerCollision" type="CollisionShape2D" parent="Blocker"]
+position = Vector2(270, 292)
+shape = SubResource("RectangleShape2D_block")
+
+[node name="BlockerVisual" type="ColorRect" parent="Blocker"]
+offset_left = 235.0
+offset_top = 264.0
+offset_right = 305.0
+offset_bottom = 320.0
+color = Color(0.44, 0.34, 0.24, 1)
+
+[node name="Platform" type="StaticBody2D" parent="."]
+
+[node name="PlatformCollision" type="CollisionShape2D" parent="Platform"]
+position = Vector2(430, 242)
+shape = SubResource("RectangleShape2D_platform")
+
+[node name="PlatformVisual" type="ColorRect" parent="Platform"]
+offset_left = 370.0
+offset_top = 230.0
+offset_right = 490.0
+offset_bottom = 254.0
+color = Color(0.3, 0.32, 0.34, 1)
+
+[node name="GoalArea" type="Area2D" parent="."]
+
+[node name="GoalCollision" type="CollisionShape2D" parent="GoalArea"]
+position = Vector2(604, 288)
+shape = SubResource("RectangleShape2D_goal")
+
+[node name="GoalVisual" type="ColorRect" parent="GoalArea"]
+offset_left = 584.0
+offset_top = 256.0
+offset_right = 624.0
+offset_bottom = 320.0
+color = Color(0.18, 0.8, 0.42, 1)
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(72, 320)
 script = ExtResource("1_player")
 
-[node name="HeadingCue" type="ColorRect" parent="Player"]
-offset_left = 18.0
-offset_top = -8.0
-offset_right = 30.0
+[node name="PlayerCollision" type="CollisionShape2D" parent="Player"]
+position = Vector2(0, -24)
+shape = SubResource("RectangleShape2D_player")
+
+[node name="PlayerVisual" type="ColorRect" parent="Player"]
+offset_left = -16.0
+offset_top = -48.0
+offset_right = 16.0
 offset_bottom = 0.0
-color = Color(1, 0.92, 0.25, 1)
+color = Color(0.1, 0.64, 0.95, 1)
+
+[node name="FacingCue" type="ColorRect" parent="Player"]
+offset_left = 10.0
+offset_top = -30.0
+offset_right = 18.0
+offset_bottom = -18.0
+color = Color(1, 0.92, 0.24, 1)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="TimerLabel" type="Label" parent="HUD"]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 140.0
+offset_bottom = 36.0
+text = "TIME 24.0"
+
+[node name="StatusLabel" type="Label" parent="HUD"]
+offset_left = 16.0
+offset_top = 38.0
+offset_right = 260.0
+offset_bottom = 62.0
+text = "Reach the green goal"

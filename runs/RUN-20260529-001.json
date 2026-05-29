@@ -1,0 +1,110 @@
+{
+  "run_id": "RUN-20260529-001",
+  "work_package_id": "WP-2026W22-012",
+  "agent": "implementation",
+  "agent_profile": "agents/profiles/implementation_agent.yaml",
+  "started_at": "2026-05-29T08:27:33+09:00",
+  "ended_at": "2026-05-29T08:30:16+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "Codex shell",
+      "purpose": "Inspect the approved implementation Work Package, owner approval, current Godot scene/script, smoke-test command, and worktree baseline before editing.",
+      "inputs": [
+        "work_packages/active/WP-2026W22-012.json",
+        "owner_reviews/OR-2026W22-002-platformer-greybox-KR.md",
+        "agents/profiles/implementation_agent.yaml",
+        "game/scenes/main.tscn",
+        "game/scripts/player.gd",
+        "scripts/smoke_test.sh",
+        "scripts/build_game.sh"
+      ],
+      "outputs": [
+        "game/scenes/main.tscn",
+        "game/scripts/player.gd",
+        "runs/RUN-20260529-001.json"
+      ],
+      "evidence": [
+        "Owner review records Decision: approve and implementation authorization through a separate Work Package.",
+        "WP-2026W22-012 targets only game/scenes/main.tscn, game/scripts/player.gd, and runs/RUN-20260529-001.json.",
+        "The baseline scene/script were the Phase 1 ColorRect movement toy before implementation."
+      ]
+    },
+    {
+      "tool_name": "apply_patch",
+      "purpose": "Replace the top-down ColorRect movement toy with a placeholder platformer greybox scene and collision-aware player controller inside the approved target files.",
+      "inputs": [
+        "work_packages/active/WP-2026W22-012.json",
+        "context/game_brief.md",
+        "research_notes/RN-2026W22-002-platformer-greybox-reference.md",
+        "art_notes/AN-2026W22-002-platformer-greybox-readability.md"
+      ],
+      "outputs": [
+        "game/scenes/main.tscn",
+        "game/scripts/player.gd"
+      ],
+      "evidence": [
+        "game/scripts/player.gd now extends CharacterBody2D and implements gravity, horizontal acceleration/friction, floor-gated fixed-height single jump, timer HUD updates, and goal detection.",
+        "game/scenes/main.tscn now contains placeholder player, floor, blocker, platform, right-side goal area, and timer/status labels.",
+        "No project.godot input-map changes, assets, final art, enemies, items, scoring, camera polish, web export, double jump, wall jump, dash, coyote time, jump buffer, or variable jump height were added."
+      ]
+    }
+  ],
+  "artifacts": [
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd",
+    "runs/RUN-20260529-001.json"
+  ],
+  "commands": [
+    {
+      "command": "date '+%Y-%m-%dT%H:%M:%S%z' && git status --short --untracked-files=all",
+      "exit_code": 0,
+      "notes": "Recorded the local start timestamp as 2026-05-29T08:27:33+0900 and confirmed the pre-existing untracked Phase 2 planning artifacts."
+    },
+    {
+      "command": "sed -n '1,260p' work_packages/active/WP-2026W22-012.json",
+      "exit_code": 0,
+      "notes": "Read the approved implementation Work Package before editing."
+    },
+    {
+      "command": "sed -n '207,238p' owner_reviews/OR-2026W22-002-platformer-greybox-KR.md",
+      "exit_code": 0,
+      "notes": "Confirmed owner approval and implementation authorization through a separate Work Package."
+    },
+    {
+      "command": "scripts/smoke_test.sh",
+      "exit_code": 0,
+      "notes": "Godot headless project smoke test passed."
+    },
+    {
+      "command": "bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"'",
+      "exit_code": 0,
+      "notes": "Smoke-test output contained no SCRIPT ERROR or ERROR lines."
+    },
+    {
+      "command": "godot --headless --path game --scene res://scenes/main.tscn --quit-after 3",
+      "exit_code": 0,
+      "notes": "Ran the main scene headlessly for three iterations to catch scene/script runtime load errors."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260529-001.json",
+      "exit_code": 0,
+      "notes": "RUN-20260529-001 validated against the Run schema before this evidence update. AJV ignored date-time formats because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "bash -lc 'extra=$(git status --short --untracked-files=all | sed \"s/^...//\" | grep -Ev \"^(PHASE2_PLATFORMER_GREYBOX_PLAN.md|context/game_brief.md|work_packages/active/WP-2026W22-008.json|runs/RUN-20260528-005.json|research_notes/RN-2026W22-002-platformer-greybox-reference.md|work_packages/active/WP-2026W22-009.json|runs/RUN-20260528-006.json|art_notes/AN-2026W22-002-platformer-greybox-readability.md|work_packages/active/WP-2026W22-010.json|runs/RUN-20260528-007.json|owner_reviews/OR-2026W22-002-platformer-greybox-KR.md|work_packages/active/WP-2026W22-011.json|runs/RUN-20260528-008.json|work_packages/active/WP-2026W22-012.json|game/scenes/main.tscn|game/scripts/player.gd|runs/RUN-20260529-001.json)$\" || true); if test -n \"$extra\"; then printf \"%s\\n\" \"$extra\"; exit 1; fi'",
+      "exit_code": 0,
+      "notes": "Scope check passed. The worktree contained only the pre-existing Phase 2 artifacts, WP-2026W22-012, and this run's authorized implementation artifacts."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "game/scenes/main.tscn",
+      "game/scripts/player.gd",
+      "runs/RUN-20260529-001.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "Implemented the owner-approved Phase 2 platformer greybox. Jump uses existing Godot default ui_up or ui_accept actions so no project.godot input-map change was needed. QA still needs to independently review reachability, movement feel, collision clarity, timer behavior, and scope preservation before a Phase 2 implementation pass is claimed."
+}

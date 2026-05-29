@@ -1,0 +1,109 @@
+{
+  "id": "WP-2026W22-012",
+  "type": "implementation",
+  "status": "active",
+  "goal": "Implement the Phase 2 platformer greybox vertical slice in Godot: left start, right goal, short timer, gravity, floor/obstacle collision, horizontal acceleration/friction, and fixed-height single jump.",
+  "owner_agent": "implementation",
+  "inputs": [
+    "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+    "context/game_brief.md",
+    "research_notes/RN-2026W22-002-platformer-greybox-reference.md",
+    "art_notes/AN-2026W22-002-platformer-greybox-readability.md",
+    "owner_reviews/OR-2026W22-002-platformer-greybox-KR.md",
+    "agents/profiles/implementation_agent.yaml",
+    "game/project.godot",
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd",
+    "scripts/smoke_test.sh"
+  ],
+  "targets": [
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd",
+    "runs/RUN-20260529-001.json"
+  ],
+  "forbidden_changes": [
+    "game/project.godot",
+    "game/assets/**",
+    "game/scripts/*.gd.uid",
+    "scripts/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "research_notes/**",
+    "art_notes/**",
+    "owner_reviews/**",
+    "reviews/**",
+    "learning_cards/**",
+    "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+    "Halucy Codex 구현 계획.md",
+    "final art, generated production assets, imported sprites, brand style, concept art, or style bible decisions",
+    "enemy behavior, item or collectible system, scoring system, camera polish, web export, double jump, wall jump, dash, coyote time, jump buffer, variable jump height, moving platforms, or slopes",
+    "Working, Canonical, or Policy Learning Card promotion"
+  ],
+  "outputs": [
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd",
+    "runs/RUN-20260529-001.json"
+  ],
+  "verify": [
+    {
+      "name": "Owner approval recorded",
+      "method": "manual_check",
+      "description": "Confirm owner_reviews/OR-2026W22-002-platformer-greybox-KR.md records Decision: approve and implementation authorization through a separate Work Package."
+    },
+    {
+      "name": "Main scene artifact exists",
+      "method": "artifact_check",
+      "expected_artifact": "game/scenes/main.tscn"
+    },
+    {
+      "name": "Player script artifact exists",
+      "method": "artifact_check",
+      "expected_artifact": "game/scripts/player.gd"
+    },
+    {
+      "name": "Implementation Run record exists",
+      "method": "artifact_check",
+      "expected_artifact": "runs/RUN-20260529-001.json"
+    },
+    {
+      "name": "Godot smoke test passes",
+      "method": "command",
+      "command": "scripts/smoke_test.sh"
+    },
+    {
+      "name": "Smoke test output is clean",
+      "method": "command",
+      "command": "bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"'"
+    },
+    {
+      "name": "Implementation Run record validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260529-001.json"
+    },
+    {
+      "name": "Only authorized implementation artifacts changed",
+      "method": "command",
+      "command": "bash -lc 'extra=$(git status --short --untracked-files=all | sed \"s/^...//\" | grep -Ev \"^(PHASE2_PLATFORMER_GREYBOX_PLAN.md|context/game_brief.md|work_packages/active/WP-2026W22-008.json|runs/RUN-20260528-005.json|research_notes/RN-2026W22-002-platformer-greybox-reference.md|work_packages/active/WP-2026W22-009.json|runs/RUN-20260528-006.json|art_notes/AN-2026W22-002-platformer-greybox-readability.md|work_packages/active/WP-2026W22-010.json|runs/RUN-20260528-007.json|owner_reviews/OR-2026W22-002-platformer-greybox-KR.md|work_packages/active/WP-2026W22-011.json|runs/RUN-20260528-008.json|work_packages/active/WP-2026W22-012.json|game/scenes/main.tscn|game/scripts/player.gd|runs/RUN-20260529-001.json)$\" || true); test -z \"$extra\"'"
+    }
+  ],
+  "handoff_to": [
+    "qa",
+    "learning_librarian",
+    "human_creative_owner"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "The implementation preserves the owner-approved Phase 2 platformer greybox scope.",
+    "The player starts on the left and can reach a clear right-side goal before the timer expires.",
+    "The controller uses collision-aware platformer movement with gravity, floor/obstacle collision, horizontal acceleration/friction, and fixed-height single jump.",
+    "The jump is allowed only from floor contact; no double jump, wall jump, dash, coyote time, jump buffer, or variable jump height is introduced.",
+    "The scene uses placeholder geometry only and keeps player, floor, obstacle, goal, and timer visually distinct.",
+    "No final art, generated assets, imported sprites, enemies, items, scoring, camera polish, web export, schema/profile changes, or Learning Card promotion are introduced.",
+    "scripts/smoke_test.sh passes and emits no SCRIPT ERROR or ERROR output.",
+    "The implementation Run record validates and records changed-file scope, verification evidence, and any risks.",
+    "The result is handed off to QA for independent review before Phase 2 implementation pass is claimed."
+  ],
+  "created_at": "2026-05-29",
+  "notes": "This Work Package authorizes the Phase 2 platformer greybox implementation only. It does not authorize QA self-review, final art, broader gameplay features, project.godot input-map changes, or Godot .uid sidecar policy changes. If implementation requires game/project.godot or game/scripts/*.gd.uid changes, stop and request a scope/policy decision."
+}
