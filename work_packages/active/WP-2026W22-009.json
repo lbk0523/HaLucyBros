@@ -1,0 +1,82 @@
+{
+  "id": "WP-2026W22-009",
+  "type": "research",
+  "status": "active",
+  "goal": "Produce a narrow Phase 2B platformer greybox reference note for acceleration/friction, fixed-height single jump feel, and readable obstacle/path layout constraints without selecting final product direction.",
+  "owner_agent": "research",
+  "inputs": [
+    "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+    "context/game_brief.md",
+    "work_packages/active/WP-2026W22-008.json",
+    "runs/RUN-20260528-005.json",
+    "agents/profiles/research_agent.yaml"
+  ],
+  "targets": [
+    "research_notes/RN-2026W22-002-platformer-greybox-reference.md",
+    "work_packages/active/WP-2026W22-009.json",
+    "runs/RUN-20260528-006.json"
+  ],
+  "forbidden_changes": [
+    "game/**",
+    "scripts/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "art_notes/**",
+    "owner_reviews/**",
+    "reviews/**",
+    "learning_cards/**",
+    "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+    "Halucy Codex 구현 계획.md",
+    "market launch positioning, final concept selection, final art direction, or asset approval",
+    "enemy, item, scoring, camera polish, web export, double jump, wall jump, or dash decisions",
+    "Working, Canonical, or Policy Learning Card promotion"
+  ],
+  "outputs": [
+    "research_notes/RN-2026W22-002-platformer-greybox-reference.md",
+    "runs/RUN-20260528-006.json"
+  ],
+  "verify": [
+    {
+      "name": "Research note artifact exists",
+      "method": "artifact_check",
+      "expected_artifact": "research_notes/RN-2026W22-002-platformer-greybox-reference.md"
+    },
+    {
+      "name": "Phase 2B Work Package validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-009.json"
+    },
+    {
+      "name": "Phase 2B Run record validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260528-006.json"
+    },
+    {
+      "name": "Research note remains narrow",
+      "method": "manual_check",
+      "description": "Confirm the note covers acceleration/friction, fixed-height single jump feel, readable obstacle/path layout constraints, source/rationale, uncertainty, and Art/Implementation/QA handoffs without market positioning, final concept selection, final art direction, or Godot edits."
+    },
+    {
+      "name": "Only authorized Phase 2B artifacts changed",
+      "method": "command",
+      "command": "bash -lc 'extra=$(git status --short --untracked-files=all | sed \"s/^...//\" | grep -Ev \"^(PHASE2_PLATFORMER_GREYBOX_PLAN.md|context/game_brief.md|work_packages/active/WP-2026W22-008.json|runs/RUN-20260528-005.json|research_notes/RN-2026W22-002-platformer-greybox-reference.md|work_packages/active/WP-2026W22-009.json|runs/RUN-20260528-006.json)$\" || true); test -z \"$extra\"'"
+    }
+  ],
+  "handoff_to": [
+    "art",
+    "implementation",
+    "qa",
+    "learning_librarian"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "The Work Package authorizes only the Phase 2B research note, its Work Package record, and its Run record.",
+    "The research note gives Art, Implementation, and QA usable constraints without requiring final game direction decisions.",
+    "The note includes source/rationale, uncertainty, and explicit handoffs.",
+    "The note does not modify Godot files, create art direction, approve assets, choose market positioning, or promote any Learning Card.",
+    "The note preserves the fixed-height single jump, gravity, floor/obstacle collision, acceleration/friction, and left-to-right goal scope from context/game_brief.md."
+  ],
+  "created_at": "2026-05-28",
+  "notes": "This Work Package is the Phase 2B Research Agent reference note. It prepares the Art/readability manifest and later Implementation/QA handoff, but does not authorize Godot implementation."
+}

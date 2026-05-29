@@ -1,0 +1,106 @@
+{
+  "run_id": "RUN-20260528-008",
+  "work_package_id": "WP-2026W22-011",
+  "agent": "art",
+  "agent_profile": "agents/profiles/art_agent.yaml",
+  "started_at": "2026-05-28T21:31:36+09:00",
+  "ended_at": "2026-05-28T21:33:36+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "Codex shell",
+      "purpose": "Inspect prior owner review format, owner review rules, target artifact availability, and current worktree baseline before creating Phase 2D owner gate artifacts.",
+      "inputs": [
+        "owner_reviews/OR-2026W22-001-placeholder-readability-KR.md",
+        "owner_reviews/OWNER_REVIEW_BRIEF_RULES_KR.md",
+        "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+        "context/game_brief.md",
+        "research_notes/RN-2026W22-002-platformer-greybox-reference.md",
+        "art_notes/AN-2026W22-002-platformer-greybox-readability.md"
+      ],
+      "outputs": [
+        "owner_reviews/OR-2026W22-002-platformer-greybox-KR.md",
+        "work_packages/active/WP-2026W22-011.json",
+        "runs/RUN-20260528-008.json"
+      ],
+      "evidence": [
+        "Before this run, git status showed only the pre-existing untracked Phase 2 plan, game brief, research note, Art manifest, and their WP/Run artifacts.",
+        "owner_reviews/OR-2026W22-002-platformer-greybox-KR.md, work_packages/active/WP-2026W22-011.json, and runs/RUN-20260528-008.json did not exist before this run.",
+        "OWNER_REVIEW_BRIEF_RULES_KR.md requires Korean owner-facing context, approval criteria, redirect/reject criteria, next-agent authorization, and no implied approval."
+      ]
+    },
+    {
+      "tool_name": "apply_patch",
+      "purpose": "Create the bounded Phase 2D owner review gate, Work Package, and Run artifacts without mutating Godot, schema, agent, context, research, art, QA, or learning files.",
+      "inputs": [
+        "owner_reviews/OWNER_REVIEW_BRIEF_RULES_KR.md",
+        "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+        "context/game_brief.md",
+        "research_notes/RN-2026W22-002-platformer-greybox-reference.md",
+        "art_notes/AN-2026W22-002-platformer-greybox-readability.md"
+      ],
+      "outputs": [
+        "owner_reviews/OR-2026W22-002-platformer-greybox-KR.md",
+        "work_packages/active/WP-2026W22-011.json",
+        "runs/RUN-20260528-008.json"
+      ],
+      "evidence": [
+        "The owner review document records Decision as pending.",
+        "The owner review document states implementation is not authorized until BK changes the decision to approve.",
+        "No Godot implementation was performed."
+      ]
+    }
+  ],
+  "artifacts": [
+    "owner_reviews/OR-2026W22-002-platformer-greybox-KR.md",
+    "work_packages/active/WP-2026W22-011.json",
+    "runs/RUN-20260528-008.json"
+  ],
+  "commands": [
+    {
+      "command": "date '+%Y-%m-%dT%H:%M:%S%z'",
+      "exit_code": 0,
+      "notes": "Recorded the local run timestamp as 2026-05-28T21:31:36+0900."
+    },
+    {
+      "command": "git status --short --untracked-files=all",
+      "exit_code": 0,
+      "notes": "Before this slice, the reported paths were the Phase 2 plan, game brief, research note, Art manifest, and their WP/Run artifacts."
+    },
+    {
+      "command": "test -e owner_reviews/OR-2026W22-002-platformer-greybox-KR.md; test -e work_packages/active/WP-2026W22-011.json; test -e runs/RUN-20260528-008.json",
+      "exit_code": 1,
+      "notes": "Preflight confirmed the three Phase 2D target files did not already exist."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-011.json",
+      "exit_code": 0,
+      "notes": "WP-2026W22-011 validated against the Work Package schema. AJV ignored the date format because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260528-008.json",
+      "exit_code": 0,
+      "notes": "RUN-20260528-008 validated against the Run schema before this evidence update. AJV ignored date-time formats because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "bash -lc 'extra=$(git status --short --untracked-files=all | sed \"s/^...//\" | grep -Ev \"^(PHASE2_PLATFORMER_GREYBOX_PLAN.md|context/game_brief.md|work_packages/active/WP-2026W22-008.json|runs/RUN-20260528-005.json|research_notes/RN-2026W22-002-platformer-greybox-reference.md|work_packages/active/WP-2026W22-009.json|runs/RUN-20260528-006.json|art_notes/AN-2026W22-002-platformer-greybox-readability.md|work_packages/active/WP-2026W22-010.json|runs/RUN-20260528-007.json|owner_reviews/OR-2026W22-002-platformer-greybox-KR.md|work_packages/active/WP-2026W22-011.json|runs/RUN-20260528-008.json)$\" || true); if test -n \"$extra\"; then printf \"%s\\n\" \"$extra\"; exit 1; fi'",
+      "exit_code": 0,
+      "notes": "Scope check passed. The worktree contained only the pre-existing Phase 2 plan/Phase 2A/Phase 2B/Phase 2C artifacts and this slice's three authorized artifacts."
+    },
+    {
+      "command": "rg -n \"BK가 지금 검수할 것|Game Brief 요약|Research Note 요약|Art Manifest 요약|승인 기준|Redirect 기준|Reject 기준|Implementation Authorization Boundary|Decision: pending|Implementation authorization: not authorized\" owner_reviews/OR-2026W22-002-platformer-greybox-KR.md",
+      "exit_code": 0,
+      "notes": "Manual coverage check found owner-facing review question, game/research/art summaries, approval/redirect/reject criteria, pending decision, and explicit implementation authorization boundary."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "owner_reviews/OR-2026W22-002-platformer-greybox-KR.md",
+      "work_packages/active/WP-2026W22-011.json",
+      "runs/RUN-20260528-008.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "Phase 2D owner review gate was created as an owner-facing approval artifact. The pre-existing untracked Phase 2 plan, game brief, research note, Art manifest, and their WP/Run artifacts remain outside this run's touched_paths. This run does not approve or authorize Godot implementation."
+}

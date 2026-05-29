@@ -1,0 +1,107 @@
+{
+  "run_id": "RUN-20260528-005",
+  "work_package_id": "WP-2026W22-008",
+  "agent": "research",
+  "agent_profile": "agents/profiles/research_agent.yaml",
+  "started_at": "2026-05-28T21:13:45+09:00",
+  "ended_at": "2026-05-28T21:15:33+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "Codex shell",
+      "purpose": "Inspect schema, existing Work Package and Run conventions, current context directory state, and the pre-existing worktree baseline before creating Phase 2A artifacts.",
+      "inputs": [
+        "schemas/work_package.schema.json",
+        "schemas/run.schema.json",
+        "work_packages/active/WP-2026W22-003.json",
+        "runs/RUN-20260528-002.json",
+        "agents/profiles/research_agent.yaml",
+        "PHASE2_PLATFORMER_GREYBOX_PLAN.md"
+      ],
+      "outputs": [
+        "context/game_brief.md",
+        "work_packages/active/WP-2026W22-008.json",
+        "runs/RUN-20260528-005.json"
+      ],
+      "evidence": [
+        "The current schema has no planning work_package_type, so WP-2026W22-008 uses type research with owner_agent research.",
+        "Before this run, git status showed only the pre-existing untracked PHASE2_PLATFORMER_GREYBOX_PLAN.md.",
+        "context/game_brief.md, work_packages/active/WP-2026W22-008.json, and runs/RUN-20260528-005.json did not exist before this run."
+      ]
+    },
+    {
+      "tool_name": "apply_patch",
+      "purpose": "Create the bounded Phase 2A game brief, Work Package, and Run artifacts without mutating Godot, schema, agent, review, or learning files.",
+      "inputs": [
+        "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+        "BK-approved Phase 2A scope from chat"
+      ],
+      "outputs": [
+        "context/game_brief.md",
+        "work_packages/active/WP-2026W22-008.json",
+        "runs/RUN-20260528-005.json"
+      ],
+      "evidence": [
+        "The game brief records the platformer greybox hook, accepted player verbs, success/failure conditions, excluded scope, handoff requirements, and open decisions.",
+        "No Godot implementation was performed."
+      ]
+    }
+  ],
+  "artifacts": [
+    "context/game_brief.md",
+    "work_packages/active/WP-2026W22-008.json",
+    "runs/RUN-20260528-005.json"
+  ],
+  "commands": [
+    {
+      "command": "date '+%Y-%m-%dT%H:%M:%S%z'",
+      "exit_code": 0,
+      "notes": "Recorded the local run timestamp as 2026-05-28T21:13:45+0900."
+    },
+    {
+      "command": "git status --short --untracked-files=all",
+      "exit_code": 0,
+      "notes": "Before this slice, the only reported path was the pre-existing untracked PHASE2_PLATFORMER_GREYBOX_PLAN.md."
+    },
+    {
+      "command": "test -e context/game_brief.md; test -e work_packages/active/WP-2026W22-008.json; test -e runs/RUN-20260528-005.json",
+      "exit_code": 1,
+      "notes": "Preflight confirmed the three target files did not already exist."
+    },
+    {
+      "command": "mkdir -p context",
+      "exit_code": 0,
+      "notes": "Created the context directory needed for context/game_brief.md."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-008.json",
+      "exit_code": 0,
+      "notes": "WP-2026W22-008 validated against the Work Package schema. AJV ignored the date format because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260528-005.json",
+      "exit_code": 0,
+      "notes": "RUN-20260528-005 validated against the Run schema before this evidence update. AJV ignored date-time formats because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "bash -lc 'extra=$(git status --short --untracked-files=all | sed \"s/^...//\" | grep -Ev \"^(PHASE2_PLATFORMER_GREYBOX_PLAN.md|context/game_brief.md|work_packages/active/WP-2026W22-008.json|runs/RUN-20260528-005.json)$\" || true); if test -n \"$extra\"; then printf \"%s\\n\" \"$extra\"; exit 1; fi'",
+      "exit_code": 0,
+      "notes": "Scope check passed. The worktree contained only the pre-existing Phase 2 plan plus this slice's three authorized artifacts."
+    },
+    {
+      "command": "shasum -a 256 PHASE2_PLATFORMER_GREYBOX_PLAN.md && git status --short --untracked-files=all",
+      "exit_code": 0,
+      "notes": "The Phase 2 plan hash remained b981a8cabaafb7744c52665481c5f557e94a5d48c882f8a2c3ae77ab2a3de1f7. Status showed PHASE2_PLATFORMER_GREYBOX_PLAN.md plus the three Phase 2A artifacts as untracked."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "context/game_brief.md",
+      "work_packages/active/WP-2026W22-008.json",
+      "runs/RUN-20260528-005.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "Phase 2A game brief was created as a Research-owned planning artifact. The pre-existing untracked PHASE2_PLATFORMER_GREYBOX_PLAN.md remains outside this run's touched_paths. This run does not authorize Godot implementation."
+}

@@ -1,0 +1,103 @@
+{
+  "run_id": "RUN-20260528-007",
+  "work_package_id": "WP-2026W22-010",
+  "agent": "art",
+  "agent_profile": "agents/profiles/art_agent.yaml",
+  "started_at": "2026-05-28T21:27:04+09:00",
+  "ended_at": "2026-05-28T21:28:52+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "Codex shell",
+      "purpose": "Inspect Art profile, existing Art note convention, Phase 2 game brief, Phase 2B research note, target artifact availability, and current worktree baseline before creating Phase 2C artifacts.",
+      "inputs": [
+        "agents/profiles/art_agent.yaml",
+        "art_notes/AN-2026W22-001-placeholder-readability.md",
+        "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+        "context/game_brief.md",
+        "research_notes/RN-2026W22-002-platformer-greybox-reference.md"
+      ],
+      "outputs": [
+        "art_notes/AN-2026W22-002-platformer-greybox-readability.md",
+        "work_packages/active/WP-2026W22-010.json",
+        "runs/RUN-20260528-007.json"
+      ],
+      "evidence": [
+        "Before this run, git status showed only the pre-existing untracked Phase 2 plan, game brief, research note, and their WP/Run artifacts.",
+        "art_notes/AN-2026W22-002-platformer-greybox-readability.md, work_packages/active/WP-2026W22-010.json, and runs/RUN-20260528-007.json did not exist before this run."
+      ]
+    },
+    {
+      "tool_name": "apply_patch",
+      "purpose": "Create the bounded Phase 2C Art/readability manifest, Work Package, and Run artifacts without mutating Godot, schema, agent, context, research, owner-review, QA, or learning files.",
+      "inputs": [
+        "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+        "context/game_brief.md",
+        "research_notes/RN-2026W22-002-platformer-greybox-reference.md",
+        "agents/profiles/art_agent.yaml"
+      ],
+      "outputs": [
+        "art_notes/AN-2026W22-002-platformer-greybox-readability.md",
+        "work_packages/active/WP-2026W22-010.json",
+        "runs/RUN-20260528-007.json"
+      ],
+      "evidence": [
+        "The manifest records placeholder-only visual rules for player, floor, obstacle, goal, and timer.",
+        "The manifest includes Implementation, QA, Owner Review, and Learning handoffs.",
+        "No generated assets, imported sprites, final art direction, or Godot implementation were produced."
+      ]
+    }
+  ],
+  "artifacts": [
+    "art_notes/AN-2026W22-002-platformer-greybox-readability.md",
+    "work_packages/active/WP-2026W22-010.json",
+    "runs/RUN-20260528-007.json"
+  ],
+  "commands": [
+    {
+      "command": "date '+%Y-%m-%dT%H:%M:%S%z'",
+      "exit_code": 0,
+      "notes": "Recorded the local run timestamp as 2026-05-28T21:27:04+0900."
+    },
+    {
+      "command": "git status --short --untracked-files=all",
+      "exit_code": 0,
+      "notes": "Before this slice, the reported paths were PHASE2_PLATFORMER_GREYBOX_PLAN.md, context/game_brief.md, research_notes/RN-2026W22-002-platformer-greybox-reference.md, runs/RUN-20260528-005.json, runs/RUN-20260528-006.json, work_packages/active/WP-2026W22-008.json, and work_packages/active/WP-2026W22-009.json."
+    },
+    {
+      "command": "test -e art_notes/AN-2026W22-002-platformer-greybox-readability.md; test -e work_packages/active/WP-2026W22-010.json; test -e runs/RUN-20260528-007.json",
+      "exit_code": 1,
+      "notes": "Preflight confirmed the three Phase 2C target files did not already exist."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-010.json",
+      "exit_code": 0,
+      "notes": "WP-2026W22-010 validated against the Work Package schema. AJV ignored the date format because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260528-007.json",
+      "exit_code": 0,
+      "notes": "RUN-20260528-007 validated against the Run schema before this evidence update. AJV ignored date-time formats because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "bash -lc 'extra=$(git status --short --untracked-files=all | sed \"s/^...//\" | grep -Ev \"^(PHASE2_PLATFORMER_GREYBOX_PLAN.md|context/game_brief.md|work_packages/active/WP-2026W22-008.json|runs/RUN-20260528-005.json|research_notes/RN-2026W22-002-platformer-greybox-reference.md|work_packages/active/WP-2026W22-009.json|runs/RUN-20260528-006.json|art_notes/AN-2026W22-002-platformer-greybox-readability.md|work_packages/active/WP-2026W22-010.json|runs/RUN-20260528-007.json)$\" || true); if test -n \"$extra\"; then printf \"%s\\n\" \"$extra\"; exit 1; fi'",
+      "exit_code": 0,
+      "notes": "Scope check passed. The worktree contained only the pre-existing Phase 2 plan/Phase 2A/Phase 2B artifacts and this slice's three authorized artifacts."
+    },
+    {
+      "command": "rg -n \"Player|Floor|Obstacle|Goal|Timer|Implementation Handoff|QA Handoff|Owner Review Handoff|final art|generated production assets|imported sprites|brand style|concept art\" art_notes/AN-2026W22-002-platformer-greybox-readability.md",
+      "exit_code": 0,
+      "notes": "Manual coverage check found placeholder player, floor, obstacle, goal, timer, implementation/QA/owner handoff, and excluded final-art/asset/style language."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "art_notes/AN-2026W22-002-platformer-greybox-readability.md",
+      "work_packages/active/WP-2026W22-010.json",
+      "runs/RUN-20260528-007.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "Phase 2C Art/readability manifest was created as an Art Agent artifact. The pre-existing untracked Phase 2 plan, game brief, research note, and their WP/Run artifacts remain outside this run's touched_paths. This run does not authorize Godot implementation."
+}

@@ -1,0 +1,81 @@
+{
+  "id": "WP-2026W22-008",
+  "type": "research",
+  "status": "active",
+  "goal": "Create the Phase 2 platformer greybox game brief so Research, Art, Owner Review, Implementation, QA, and Learning can operate from the same bounded first-playable direction.",
+  "owner_agent": "research",
+  "inputs": [
+    "PHASE1_CLOSEOUT.md",
+    "HALUCY_FOUNDATION.md",
+    "Halucy Codex 구현 계획.md",
+    "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+    "agents/profiles/research_agent.yaml"
+  ],
+  "targets": [
+    "context/game_brief.md",
+    "work_packages/active/WP-2026W22-008.json",
+    "runs/RUN-20260528-005.json"
+  ],
+  "forbidden_changes": [
+    "game/**",
+    "scripts/**",
+    "schemas/**",
+    "agents/**",
+    "art_notes/**",
+    "research_notes/**",
+    "owner_reviews/**",
+    "reviews/**",
+    "learning_cards/**",
+    "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+    "Halucy Codex 구현 계획.md",
+    "final art, enemy, item, scoring, camera polish, web export, double jump, wall jump, or dash decisions",
+    "Working, Canonical, or Policy Learning Card promotion"
+  ],
+  "outputs": [
+    "context/game_brief.md",
+    "runs/RUN-20260528-005.json"
+  ],
+  "verify": [
+    {
+      "name": "Game brief artifact exists",
+      "method": "artifact_check",
+      "expected_artifact": "context/game_brief.md"
+    },
+    {
+      "name": "Phase 2A Work Package validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-008.json"
+    },
+    {
+      "name": "Phase 2A Run record validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260528-005.json"
+    },
+    {
+      "name": "Game brief covers accepted direction and excluded scope",
+      "method": "manual_check",
+      "description": "Confirm context/game_brief.md covers left-to-right goal, short timer, gravity, floor/obstacle collision, acceleration/friction, route judgment, fixed-height single jump, success/failure conditions, excluded scope, and implementation block before owner approval."
+    },
+    {
+      "name": "Only authorized Phase 2A artifacts changed",
+      "method": "command",
+      "command": "bash -lc 'extra=$(git status --short --untracked-files=all | sed \"s/^...//\" | grep -Ev \"^(PHASE2_PLATFORMER_GREYBOX_PLAN.md|context/game_brief.md|work_packages/active/WP-2026W22-008.json|runs/RUN-20260528-005.json)$\" || true); test -z \"$extra\"'"
+    }
+  ],
+  "handoff_to": [
+    "research",
+    "art",
+    "human_creative_owner"
+  ],
+  "human_decision_required": true,
+  "human_decision_reason": "The game brief fixes the Phase 2 player-facing hook and must be accepted by BK/Human Creative Owner before downstream Research, Art, and Implementation treat it as approved input.",
+  "acceptance_criteria": [
+    "The Work Package authorizes only the Phase 2 game brief, its Work Package record, and its Run record.",
+    "The game brief states the first-playable hook in player-facing terms.",
+    "The game brief includes player verbs, success condition, failure condition, excluded scope, handoff requirements, and open decisions.",
+    "The game brief blocks Godot implementation until Research, Art, and BK/Human Creative Owner approval are complete.",
+    "No Godot, script, schema, agent profile, research note, art note, owner review, QA review, or Learning Card files are changed by this slice."
+  ],
+  "created_at": "2026-05-28",
+  "notes": "This Work Package treats Phase 2A game-brief authoring as a Research-owned planning artifact because the current schema has no planning type. It does not authorize Godot implementation."
+}

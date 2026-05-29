@@ -1,0 +1,128 @@
+{
+  "run_id": "RUN-20260528-006",
+  "work_package_id": "WP-2026W22-009",
+  "agent": "research",
+  "agent_profile": "agents/profiles/research_agent.yaml",
+  "started_at": "2026-05-28T21:18:37+09:00",
+  "ended_at": "2026-05-28T21:21:17+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "Codex shell",
+      "purpose": "Inspect Phase 2A inputs, confirm target artifact availability, and record the pre-existing untracked Phase 2 plan/game-brief baseline before creating Phase 2B artifacts.",
+      "inputs": [
+        "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+        "context/game_brief.md",
+        "work_packages/active/WP-2026W22-008.json",
+        "runs/RUN-20260528-005.json",
+        "agents/profiles/research_agent.yaml"
+      ],
+      "outputs": [
+        "research_notes/RN-2026W22-002-platformer-greybox-reference.md",
+        "work_packages/active/WP-2026W22-009.json",
+        "runs/RUN-20260528-006.json"
+      ],
+      "evidence": [
+        "Before this run, git status showed the pre-existing untracked Phase 2 plan and Phase 2A game-brief artifacts.",
+        "research_notes/RN-2026W22-002-platformer-greybox-reference.md, work_packages/active/WP-2026W22-009.json, and runs/RUN-20260528-006.json did not exist before this run."
+      ]
+    },
+    {
+      "tool_name": "External web research",
+      "purpose": "Check official Godot documentation for collision-aware platformer movement, grounded floor detection, velocity-based movement, and move_toward semantics.",
+      "inputs": [
+        "Godot 4.6 Using CharacterBody2D/3D",
+        "Godot latest CharacterBody2D class reference",
+        "Godot 4.0 2D movement overview",
+        "Godot stable Vector2 class reference"
+      ],
+      "outputs": [
+        "CharacterBody2D gravity/collision rationale",
+        "move_and_slide and floor detection rationale",
+        "2D movement baseline rationale",
+        "move_toward acceleration/friction rationale"
+      ],
+      "evidence": [
+        "https://docs.godotengine.org/en/4.6/tutorials/physics/using_character_body_2d.html",
+        "https://docs.godotengine.org/en/latest/classes/class_characterbody2d.html",
+        "https://docs.godotengine.org/en/4.0/tutorials/2d/2d_movement.html",
+        "https://docs.godotengine.org/en/stable/classes/class_vector2.html"
+      ]
+    },
+    {
+      "tool_name": "apply_patch",
+      "purpose": "Create the bounded Phase 2B research note, Work Package, and Run artifacts without mutating Godot, schema, agent, context, art, owner-review, QA, or learning files.",
+      "inputs": [
+        "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+        "context/game_brief.md",
+        "official Godot documentation references"
+      ],
+      "outputs": [
+        "research_notes/RN-2026W22-002-platformer-greybox-reference.md",
+        "work_packages/active/WP-2026W22-009.json",
+        "runs/RUN-20260528-006.json"
+      ],
+      "evidence": [
+        "The research note records source/rationale, uncertainty, and Art/Implementation/QA handoffs.",
+        "No Godot implementation was performed."
+      ]
+    }
+  ],
+  "artifacts": [
+    "research_notes/RN-2026W22-002-platformer-greybox-reference.md",
+    "work_packages/active/WP-2026W22-009.json",
+    "runs/RUN-20260528-006.json"
+  ],
+  "commands": [
+    {
+      "command": "date '+%Y-%m-%dT%H:%M:%S%z'",
+      "exit_code": 0,
+      "notes": "Recorded the local run timestamp as 2026-05-28T21:18:37+0900."
+    },
+    {
+      "command": "git status --short --untracked-files=all",
+      "exit_code": 0,
+      "notes": "Before this slice, the reported paths were PHASE2_PLATFORMER_GREYBOX_PLAN.md, context/game_brief.md, runs/RUN-20260528-005.json, and work_packages/active/WP-2026W22-008.json."
+    },
+    {
+      "command": "test -e research_notes/RN-2026W22-002-platformer-greybox-reference.md; test -e work_packages/active/WP-2026W22-009.json; test -e runs/RUN-20260528-006.json",
+      "exit_code": 1,
+      "notes": "Preflight confirmed the three Phase 2B target files did not already exist."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-009.json",
+      "exit_code": 0,
+      "notes": "WP-2026W22-009 validated against the Work Package schema. AJV ignored the date format because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260528-006.json",
+      "exit_code": 0,
+      "notes": "RUN-20260528-006 validated against the Run schema before this evidence update. AJV ignored date-time formats because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "bash -lc 'extra=$(git status --short --untracked-files=all | sed \"s/^...//\" | grep -Ev \"^(PHASE2_PLATFORMER_GREYBOX_PLAN.md|context/game_brief.md|work_packages/active/WP-2026W22-008.json|runs/RUN-20260528-005.json|research_notes/RN-2026W22-002-platformer-greybox-reference.md|work_packages/active/WP-2026W22-009.json|runs/RUN-20260528-006.json)$\" || true); if test -n \"$extra\"; then printf \"%s\\n\" \"$extra\"; exit 1; fi'",
+      "exit_code": 1,
+      "notes": "Scope check found unrelated Godot dirty paths: game/project.godot and game/scripts/player.gd.uid. This run did not execute Godot or intentionally touch those files, so they are recorded as a dirty-state caveat rather than Phase 2B target artifacts."
+    },
+    {
+      "command": "git status --short --untracked-files=all && git diff -- game/project.godot && ls -l game/scripts/player.gd.uid 2>/dev/null || true",
+      "exit_code": 0,
+      "notes": "Confirmed game/project.godot was modified with Godot editor-style metadata/config changes and game/scripts/player.gd.uid existed as an untracked sidecar."
+    },
+    {
+      "command": "rg -n \"Acceleration|friction|Fixed-height|single jump|Source|Uncertainty|Handoff To Art|Handoff To Implementation|Handoff To QA|CharacterBody2D|move_and_slide|Obstacle|Path\" research_notes/RN-2026W22-002-platformer-greybox-reference.md",
+      "exit_code": 0,
+      "notes": "Manual coverage check found the requested source/rationale, acceleration/friction, fixed-height single jump, obstacle/path, uncertainty, and handoff sections."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "research_notes/RN-2026W22-002-platformer-greybox-reference.md",
+      "work_packages/active/WP-2026W22-009.json",
+      "runs/RUN-20260528-006.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "Phase 2B research reference note was created as a Research Agent artifact. The pre-existing untracked Phase 2 plan and Phase 2A game-brief artifacts remain outside this run's touched_paths. This run does not authorize Godot implementation. Final scope verification is caveated because unrelated Godot dirty paths appeared during the turn: game/project.godot and game/scripts/player.gd.uid."
+}

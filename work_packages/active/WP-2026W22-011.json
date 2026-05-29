@@ -1,0 +1,86 @@
+{
+  "id": "WP-2026W22-011",
+  "type": "art",
+  "status": "active",
+  "goal": "Create a Korean owner-facing approval gate document so BK/Human Creative Owner can approve, redirect, or reject Phase 2 platformer greybox implementation readiness.",
+  "owner_agent": "art",
+  "inputs": [
+    "owner_reviews/OWNER_REVIEW_BRIEF_RULES_KR.md",
+    "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+    "context/game_brief.md",
+    "research_notes/RN-2026W22-002-platformer-greybox-reference.md",
+    "art_notes/AN-2026W22-002-platformer-greybox-readability.md",
+    "work_packages/active/WP-2026W22-010.json",
+    "runs/RUN-20260528-007.json"
+  ],
+  "targets": [
+    "owner_reviews/OR-2026W22-002-platformer-greybox-KR.md",
+    "work_packages/active/WP-2026W22-011.json",
+    "runs/RUN-20260528-008.json"
+  ],
+  "forbidden_changes": [
+    "game/**",
+    "scripts/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "research_notes/**",
+    "art_notes/**",
+    "reviews/**",
+    "learning_cards/**",
+    "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+    "Halucy Codex 구현 계획.md",
+    "implementation approval without BK decision",
+    "final art, generated production assets, imported sprites, brand style, concept art, or style bible decisions",
+    "enemy, item, scoring, camera polish, web export, double jump, wall jump, or dash decisions",
+    "Working, Canonical, or Policy Learning Card promotion"
+  ],
+  "outputs": [
+    "owner_reviews/OR-2026W22-002-platformer-greybox-KR.md",
+    "runs/RUN-20260528-008.json"
+  ],
+  "verify": [
+    {
+      "name": "Owner review artifact exists",
+      "method": "artifact_check",
+      "expected_artifact": "owner_reviews/OR-2026W22-002-platformer-greybox-KR.md"
+    },
+    {
+      "name": "Phase 2D Work Package validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-011.json"
+    },
+    {
+      "name": "Phase 2D Run record validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260528-008.json"
+    },
+    {
+      "name": "Owner review remains pending and owner-facing",
+      "method": "manual_check",
+      "description": "Confirm the owner review is Korean, summarizes game brief/research/art manifest, includes approve/redirect/reject options, records Decision as pending, and does not authorize implementation without BK approval."
+    },
+    {
+      "name": "Only authorized Phase 2D artifacts changed",
+      "method": "command",
+      "command": "bash -lc 'extra=$(git status --short --untracked-files=all | sed \"s/^...//\" | grep -Ev \"^(PHASE2_PLATFORMER_GREYBOX_PLAN.md|context/game_brief.md|work_packages/active/WP-2026W22-008.json|runs/RUN-20260528-005.json|research_notes/RN-2026W22-002-platformer-greybox-reference.md|work_packages/active/WP-2026W22-009.json|runs/RUN-20260528-006.json|art_notes/AN-2026W22-002-platformer-greybox-readability.md|work_packages/active/WP-2026W22-010.json|runs/RUN-20260528-007.json|owner_reviews/OR-2026W22-002-platformer-greybox-KR.md|work_packages/active/WP-2026W22-011.json|runs/RUN-20260528-008.json)$\" || true); test -z \"$extra\"'"
+    }
+  ],
+  "handoff_to": [
+    "human_creative_owner",
+    "implementation",
+    "qa",
+    "learning_librarian"
+  ],
+  "human_decision_required": true,
+  "human_decision_reason": "BK/Human Creative Owner must approve, redirect, or reject the Phase 2 implementation boundary before Implementation Agent may mutate Godot files.",
+  "acceptance_criteria": [
+    "The Work Package authorizes only the owner review gate document, its Work Package record, and its Run record.",
+    "The owner review document is Korean and complete enough for BK to judge without relying on English-only workflow text.",
+    "The owner review summarizes the game brief, research note, Art/readability manifest, approval scope, excluded scope, decision options, and implementation authorization boundary.",
+    "The owner review records Decision as pending and does not claim BK approval.",
+    "No Godot, script, schema, agent profile, context, research note, art note, QA review, or Learning Card files are changed by this slice."
+  ],
+  "created_at": "2026-05-28",
+  "notes": "This Work Package creates the Phase 2D owner approval gate. It does not itself approve implementation."
+}
