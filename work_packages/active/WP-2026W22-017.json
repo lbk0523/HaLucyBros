@@ -1,0 +1,81 @@
+{
+  "id": "WP-2026W22-017",
+  "type": "qa",
+  "status": "active",
+  "goal": "Write the Phase 2 closeout document after Learning Capture, UID cleanup, and final verification have passed.",
+  "owner_agent": "qa",
+  "inputs": [
+    "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+    "context/game_brief.md",
+    "research_notes/RN-2026W22-002-platformer-greybox-reference.md",
+    "art_notes/AN-2026W22-002-platformer-greybox-readability.md",
+    "owner_reviews/OR-2026W22-002-platformer-greybox-KR.md",
+    "work_packages/active/WP-2026W22-008.json",
+    "work_packages/active/WP-2026W22-009.json",
+    "work_packages/active/WP-2026W22-010.json",
+    "work_packages/active/WP-2026W22-011.json",
+    "work_packages/active/WP-2026W22-012.json",
+    "work_packages/active/WP-2026W22-013.json",
+    "work_packages/active/WP-2026W22-014.json",
+    "work_packages/active/WP-2026W22-015.json",
+    "work_packages/active/WP-2026W22-016.json",
+    "runs/RUN-20260529-005.json",
+    "reviews/RV-20260529-001.json",
+    "reviews/RV-20260529-002.json",
+    "learning_cards/candidate/LC-20260529-001.json"
+  ],
+  "targets": [
+    "PHASE2_CLOSEOUT.md",
+    "work_packages/active/WP-2026W22-017.json",
+    "runs/RUN-20260529-006.json"
+  ],
+  "forbidden_changes": [
+    "game/**",
+    "scripts/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "research_notes/**",
+    "art_notes/**",
+    "owner_reviews/**",
+    "reviews/**",
+    "learning_cards/**",
+    "Halucy Codex 구현 계획.md",
+    "implementation changes",
+    "Learning Card promotion",
+    "Work Package lifecycle moves"
+  ],
+  "outputs": [
+    "PHASE2_CLOSEOUT.md",
+    "runs/RUN-20260529-006.json"
+  ],
+  "verify": [
+    {
+      "name": "Phase 2 closeout artifact exists",
+      "method": "artifact_check",
+      "expected_artifact": "PHASE2_CLOSEOUT.md"
+    },
+    {
+      "name": "Closeout Work Package validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-017.json"
+    },
+    {
+      "name": "Closeout Run validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260529-006.json"
+    }
+  ],
+  "handoff_to": [
+    "human_creative_owner",
+    "learning_librarian"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "PHASE2_CLOSEOUT.md summarizes Phase 2 status, artifacts, owner decisions, QA result, verification evidence, learning capture, repo hygiene, deferred work, and closeout boundary.",
+    "The closeout does not claim final game fun, launch readiness, final art, market positioning, or durable policy approval.",
+    "No Godot, schema, agent, research, art, owner review, QA review, Learning Card, or Work Package lifecycle move is performed by this slice."
+  ],
+  "created_at": "2026-05-29",
+  "notes": "This Work Package creates the Phase 2 closeout report only."
+}

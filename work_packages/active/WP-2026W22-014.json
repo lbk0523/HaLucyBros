@@ -1,0 +1,89 @@
+{
+  "id": "WP-2026W22-014",
+  "type": "learning",
+  "status": "active",
+  "goal": "Capture the reusable Phase 2 closeout lesson that an inertia-bearing greybox can validate Halucy's production harness and early playable-feel handoff without proving final game fun or launch readiness.",
+  "owner_agent": "learning_librarian",
+  "inputs": [
+    "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+    "owner_reviews/OR-2026W22-002-platformer-greybox-KR.md",
+    "reviews/RV-20260529-001.json",
+    "runs/RUN-20260529-001.json",
+    "work_packages/active/WP-2026W22-012.json",
+    "agents/profiles/learning_librarian_agent.yaml",
+    "learning_cards/candidate/LC-20260528-002.json",
+    "learning_cards/candidate/LC-20260528-003.json"
+  ],
+  "targets": [
+    "learning_cards/candidate/LC-20260529-001.json",
+    "work_packages/active/WP-2026W22-014.json",
+    "runs/RUN-20260529-003.json"
+  ],
+  "forbidden_changes": [
+    "game/**",
+    "scripts/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "research_notes/**",
+    "art_notes/**",
+    "owner_reviews/**",
+    "reviews/**",
+    "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+    "Halucy Codex 구현 계획.md",
+    "Working, Canonical, or Policy Learning Card promotion",
+    "raw transcript dumping",
+    "multi-lesson Learning Card"
+  ],
+  "outputs": [
+    "learning_cards/candidate/LC-20260529-001.json",
+    "runs/RUN-20260529-003.json"
+  ],
+  "verify": [
+    {
+      "name": "Learning Card artifact exists",
+      "method": "artifact_check",
+      "expected_artifact": "learning_cards/candidate/LC-20260529-001.json"
+    },
+    {
+      "name": "Learning Work Package validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-014.json"
+    },
+    {
+      "name": "Learning Card validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/learning_card.schema.json -d learning_cards/candidate/LC-20260529-001.json"
+    },
+    {
+      "name": "Learning Run validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260529-003.json"
+    },
+    {
+      "name": "Learning Card remains Candidate only",
+      "method": "manual_check",
+      "description": "Confirm LC-20260529-001 has status candidate, contains exactly one reusable lesson, cites evidence, and does not promote to Working, Canonical, or Policy."
+    },
+    {
+      "name": "Only authorized Learning Capture artifacts changed",
+      "method": "command",
+      "command": "bash -lc 'extra=$(git status --short --untracked-files=all | sed \"s/^...//\" | grep -Ev \"^(PHASE2_PLATFORMER_GREYBOX_PLAN.md|context/game_brief.md|work_packages/active/WP-2026W22-008.json|runs/RUN-20260528-005.json|research_notes/RN-2026W22-002-platformer-greybox-reference.md|work_packages/active/WP-2026W22-009.json|runs/RUN-20260528-006.json|art_notes/AN-2026W22-002-platformer-greybox-readability.md|work_packages/active/WP-2026W22-010.json|runs/RUN-20260528-007.json|owner_reviews/OR-2026W22-002-platformer-greybox-KR.md|work_packages/active/WP-2026W22-011.json|runs/RUN-20260528-008.json|work_packages/active/WP-2026W22-012.json|game/scenes/main.tscn|game/scripts/player.gd|game/scripts/player.gd.uid|runs/RUN-20260529-001.json|work_packages/active/WP-2026W22-013.json|reviews/RV-20260529-001.json|runs/RUN-20260529-002.json|learning_cards/candidate/LC-20260529-001.json|work_packages/active/WP-2026W22-014.json|runs/RUN-20260529-003.json)$\" || true); test -z \"$extra\"'"
+    }
+  ],
+  "handoff_to": [
+    "human_creative_owner",
+    "qa",
+    "implementation"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "The Learning Card captures exactly one reusable Phase 2 closeout lesson.",
+    "The lesson separates harness/playable-feel validation from final game fun or launch-readiness validation.",
+    "The card includes evidence from owner review, QA review, implementation Run, and implementation Work Package.",
+    "The card remains Candidate only and does not promote to Working, Canonical, or Policy.",
+    "No Godot, review, owner review, research, art, context, schema, agent profile, or existing Learning Card files are changed by this slice."
+  ],
+  "created_at": "2026-05-29",
+  "notes": "This Work Package captures one Candidate Learning Card for Phase 2 closeout. It intentionally does not capture the separate Godot .gd.uid sidecar issue; that should be a separate card only if BK chooses to capture it."
+}

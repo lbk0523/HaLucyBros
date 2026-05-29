@@ -1,0 +1,70 @@
+{
+  "run_id": "RUN-20260529-006",
+  "work_package_id": "WP-2026W22-017",
+  "agent": "qa",
+  "agent_profile": "agents/profiles/qa_agent.yaml",
+  "started_at": "2026-05-29T16:32:21+09:00",
+  "ended_at": "2026-05-29T16:34:20+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "apply_patch",
+      "purpose": "Create Phase 2 closeout document and closeout Work Package/Run records after final verification passed.",
+      "inputs": [
+        "PHASE2_PLATFORMER_GREYBOX_PLAN.md",
+        "owner_reviews/OR-2026W22-002-platformer-greybox-KR.md",
+        "reviews/RV-20260529-001.json",
+        "reviews/RV-20260529-002.json",
+        "learning_cards/candidate/LC-20260529-001.json",
+        "runs/RUN-20260529-005.json"
+      ],
+      "outputs": [
+        "PHASE2_CLOSEOUT.md",
+        "work_packages/active/WP-2026W22-017.json",
+        "runs/RUN-20260529-006.json"
+      ],
+      "evidence": [
+        "Final verification passed before closeout document creation.",
+        "PHASE2_CLOSEOUT.md records the closeout boundary and deferred decisions.",
+        "No implementation files were modified by this closeout slice."
+      ]
+    }
+  ],
+  "artifacts": [
+    "PHASE2_CLOSEOUT.md",
+    "work_packages/active/WP-2026W22-017.json",
+    "runs/RUN-20260529-006.json"
+  ],
+  "commands": [
+    {
+      "command": "date '+%Y-%m-%dT%H:%M:%S%z'",
+      "exit_code": 0,
+      "notes": "Recorded closeout artifact creation timestamp as 2026-05-29T16:32:21+0900."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-017.json && npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260529-006.json",
+      "exit_code": 0,
+      "notes": "WP-2026W22-017 and RUN-20260529-006 validated. AJV ignored date/date-time formats because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "test ! -e game/scripts/player.gd.uid && final closeout scope check",
+      "exit_code": 0,
+      "notes": "The Godot UID sidecar was absent and dirty paths were limited to expected Phase 2 artifacts, closeout artifacts, and implementation target files."
+    },
+    {
+      "command": "rg -n \"Phase 2 is closed|Result|Owner Decisions|QA Result|Verification Evidence|Learning Capture|Repository Hygiene Note|Not Completed Or Deferred|Closeout Boundary\" PHASE2_CLOSEOUT.md",
+      "exit_code": 0,
+      "notes": "Closeout document contains the required major sections."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "PHASE2_CLOSEOUT.md",
+      "work_packages/active/WP-2026W22-017.json",
+      "runs/RUN-20260529-006.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "Created PHASE2_CLOSEOUT.md. This run does not move Work Packages to done, stage files, commit, push, or approve Phase 3 scope."
+}

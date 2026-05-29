@@ -1,0 +1,47 @@
+{
+  "id": "LC-20260529-001",
+  "type": "production",
+  "status": "candidate",
+  "claim": "An inertia-bearing greybox can be enough to validate Halucy's production harness and early playable-feel handoff, but it must not be treated as evidence that the game concept is fun or launch-ready.",
+  "context": "Phase 2 used a small platformer greybox to test whether Halucy's Research -> Art -> Owner -> Implementation -> QA -> Human feel -> Learning loop could produce a playable vertical slice. QA passed the implementation for technical correctness and scope preservation. BK's final execution review said the result was not a game-level fun test yet, but it matched the test intent, felt better than expected, and expressed tension through inertia.",
+  "evidence": [
+    {
+      "source_type": "human_decision",
+      "source_ref": "owner_reviews/OR-2026W22-002-platformer-greybox-KR.md",
+      "summary": "BK approved the implemented Phase 2 greybox for the phase gate while explicitly limiting the meaning: it validated the harness/playable-greybox test intent, not final game fun, launch direction, final art, marketability, or feature expansion."
+    },
+    {
+      "source_type": "review",
+      "source_ref": "reviews/RV-20260529-001.json",
+      "summary": "QA passed RUN-20260529-001 for technical correctness, reachability plausibility, collision/jump/timer representation, and excluded-scope preservation, while requiring BK/Human Creative Owner judgment for actual playable feel."
+    },
+    {
+      "source_type": "run",
+      "source_ref": "runs/RUN-20260529-001.json",
+      "summary": "The implementation Run produced a CharacterBody2D platformer greybox with gravity, acceleration/friction, fixed-height single jump, a timer, and a right-side goal without adding final art or expanded gameplay systems."
+    },
+    {
+      "source_type": "work_package",
+      "source_ref": "work_packages/active/WP-2026W22-012.json",
+      "summary": "The implementation Work Package intentionally scoped the slice to a harness-demo greybox and excluded final art, enemy/item/scoring systems, camera polish, web export, and expanded movement verbs."
+    }
+  ],
+  "scope": {
+    "applies_when": [
+      "Halucy needs to test whether its role-separated production loop can produce a playable greybox slice.",
+      "A prototype slice is intended to validate early playable feel, implementation handoff quality, QA separation, and human owner review.",
+      "The result includes a small but perceivable control-feel signal such as inertia, tension, or route judgment."
+    ],
+    "does_not_apply_when": [
+      "The decision is whether a game concept is fun enough to continue as a product.",
+      "The decision is about market positioning, launch readiness, final art direction, monetization, or production asset quality.",
+      "The greybox lacks human execution feedback or independent QA evidence."
+    ]
+  },
+  "reuse_rule": "When closing a harness-demo playable greybox phase, separate the production-loop/passable-feel conclusion from product-fun validation: record whether the slice proves the handoff loop and early control feel, and explicitly defer final concept or launch judgments unless stronger playtest evidence exists.",
+  "confidence": "medium",
+  "created_by": "learning_librarian",
+  "created_at": "2026-05-29",
+  "related_cards": [],
+  "promotion_note": "Candidate only. Promotion should wait until another playable greybox or feedback loop shows the same boundary between harness validation and product-fun validation."
+}

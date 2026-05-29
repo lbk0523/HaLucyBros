@@ -1,0 +1,107 @@
+{
+  "run_id": "RUN-20260529-003",
+  "work_package_id": "WP-2026W22-014",
+  "agent": "learning_librarian",
+  "agent_profile": "agents/profiles/learning_librarian_agent.yaml",
+  "started_at": "2026-05-29T14:09:06+09:00",
+  "ended_at": "2026-05-29T14:10:55+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "Codex shell",
+      "purpose": "Inspect Learning Card schema, existing Candidate cards, Learning Librarian profile, BK final execution review, and current worktree state before drafting the Phase 2 closeout card.",
+      "inputs": [
+        "schemas/learning_card.schema.json",
+        "learning_cards/candidate/LC-20260528-002.json",
+        "learning_cards/candidate/LC-20260528-003.json",
+        "agents/profiles/learning_librarian_agent.yaml",
+        "owner_reviews/OR-2026W22-002-platformer-greybox-KR.md",
+        "reviews/RV-20260529-001.json",
+        "runs/RUN-20260529-001.json",
+        "work_packages/active/WP-2026W22-012.json"
+      ],
+      "outputs": [
+        "learning_cards/candidate/LC-20260529-001.json",
+        "work_packages/active/WP-2026W22-014.json",
+        "runs/RUN-20260529-003.json"
+      ],
+      "evidence": [
+        "Existing cards LC-20260528-002 and LC-20260528-003 cover smoke-test output cleanliness and Korean owner review context, not the Phase 2 greybox validation boundary.",
+        "BK final execution review records that the result was not enough for game-fun judgment but was sufficient for the Phase 2 test intent and had better-than-expected inertia tension.",
+        "QA passed the implementation technically while requiring human playable-feel judgment."
+      ]
+    },
+    {
+      "tool_name": "apply_patch",
+      "purpose": "Create one Candidate Learning Card and the corresponding Work Package and Run records without changing Godot or promoting learning authority.",
+      "inputs": [
+        "owner_reviews/OR-2026W22-002-platformer-greybox-KR.md",
+        "reviews/RV-20260529-001.json",
+        "runs/RUN-20260529-001.json",
+        "work_packages/active/WP-2026W22-012.json"
+      ],
+      "outputs": [
+        "learning_cards/candidate/LC-20260529-001.json",
+        "work_packages/active/WP-2026W22-014.json",
+        "runs/RUN-20260529-003.json"
+      ],
+      "evidence": [
+        "LC-20260529-001 status is candidate.",
+        "The card contains one production lesson: separate harness/playable-feel validation from product-fun validation.",
+        "No Canonical or Policy promotion was attempted."
+      ]
+    }
+  ],
+  "artifacts": [
+    "learning_cards/candidate/LC-20260529-001.json",
+    "work_packages/active/WP-2026W22-014.json",
+    "runs/RUN-20260529-003.json"
+  ],
+  "commands": [
+    {
+      "command": "date '+%Y-%m-%dT%H:%M:%S%z' && git status --short --untracked-files=all",
+      "exit_code": 0,
+      "notes": "Recorded local run timestamp as 2026-05-29T14:09:06+0900. Status included pre-existing Phase 2 artifacts and a pre-existing untracked game/scripts/player.gd.uid sidecar."
+    },
+    {
+      "command": "sed -n '1,260p' schemas/learning_card.schema.json",
+      "exit_code": 0,
+      "notes": "Inspected Learning Card schema before drafting LC-20260529-001."
+    },
+    {
+      "command": "sed -n '1,240p' learning_cards/candidate/LC-20260528-002.json && sed -n '1,240p' learning_cards/candidate/LC-20260528-003.json",
+      "exit_code": 0,
+      "notes": "Compared existing Candidate cards to avoid duplicating smoke-test or owner-review-brief lessons."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/learning_card.schema.json -d learning_cards/candidate/LC-20260529-001.json",
+      "exit_code": 0,
+      "notes": "LC-20260529-001 validated against the Learning Card schema. AJV ignored date formats because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-014.json",
+      "exit_code": 0,
+      "notes": "WP-2026W22-014 validated against the Work Package schema. AJV ignored the date format because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260529-003.json",
+      "exit_code": 0,
+      "notes": "RUN-20260529-003 validated against the Run schema before this evidence update. AJV ignored date-time formats because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "bash -lc 'extra=$(git status --short --untracked-files=all | sed \"s/^...//\" | grep -Ev \"^(PHASE2_PLATFORMER_GREYBOX_PLAN.md|context/game_brief.md|work_packages/active/WP-2026W22-008.json|runs/RUN-20260528-005.json|research_notes/RN-2026W22-002-platformer-greybox-reference.md|work_packages/active/WP-2026W22-009.json|runs/RUN-20260528-006.json|art_notes/AN-2026W22-002-platformer-greybox-readability.md|work_packages/active/WP-2026W22-010.json|runs/RUN-20260528-007.json|owner_reviews/OR-2026W22-002-platformer-greybox-KR.md|work_packages/active/WP-2026W22-011.json|runs/RUN-20260528-008.json|work_packages/active/WP-2026W22-012.json|game/scenes/main.tscn|game/scripts/player.gd|game/scripts/player.gd.uid|runs/RUN-20260529-001.json|work_packages/active/WP-2026W22-013.json|reviews/RV-20260529-001.json|runs/RUN-20260529-002.json|learning_cards/candidate/LC-20260529-001.json|work_packages/active/WP-2026W22-014.json|runs/RUN-20260529-003.json)$\" || true); if test -n \"$extra\"; then printf \"%s\\n\" \"$extra\"; exit 1; fi'",
+      "exit_code": 0,
+      "notes": "Scope check passed while allowing the pre-existing Godot implementation artifacts and pre-existing untracked game/scripts/player.gd.uid sidecar. This run touched only the Learning Card, Learning Work Package, and Learning Run record."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "learning_cards/candidate/LC-20260529-001.json",
+      "work_packages/active/WP-2026W22-014.json",
+      "runs/RUN-20260529-003.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "Created one Candidate Learning Card for Phase 2 closeout. The separate Godot .gd.uid sidecar issue remains for cleanup/policy handling and was not mixed into this card."
+}
