@@ -171,26 +171,45 @@ Pass:
 - build and smoke test pass
 - human creative review is recorded
 
-### Phase 3. External Feedback Loop
+### Phase 3. Art Production Capability Validation
 
-Feed external or semi-external feedback back into production.
+Validate whether the Art Agent can use real tool workflows, such as MCP,
+computer use, image generation, or asset review tools, to produce
+prototype-grade art candidates and hand them off through owner review and
+implementation planning.
 
 Outputs:
 
-- feedback report
-- rework Work Packages
-- revised build
-- Working Learning Card candidates
+- art tool capability note
+- prototype-grade asset candidate report
+- asset manifest with usage, license, and risk notes
+- Human Creative Owner art review
+- implementation handoff note
+- Candidate or Working Learning Card candidates
 
 Pass:
 
-- feedback changes the work plan
-- repeated signals become Learning Cards
-- prototype decision has evidence
+- Art Agent tool use produces reviewable prototype-grade asset candidates
+- asset candidates have explicit usage scope, constraints, and risks
+- Human Creative Owner can approve, redirect, or reject prototype use
+- Implementation Agent can judge a small Godot integration path without
+  changing gameplay scope
+- repeatable art-production, tool-use, or handoff lessons become Learning Card
+  candidates
+
+Deferred:
+
+- External or semi-external feedback loops are not part of the early numbered
+  phase plan. They should be defined later as a release or platform-dependent
+  loop after the target platform, distribution path, and audience feedback
+  channel are known.
 
 ### Phase 4. Production System Retrospective
 
-Judge whether Halucy's production system is reusable for the next prototype.
+Judge whether Halucy's production system is reusable for the next prototype
+after Phase 0 through Phase 3 have exercised architecture, role-separated
+production, playable greybox implementation, QA, learning capture, and Art
+Agent production capability.
 
 Outputs:
 
@@ -203,6 +222,8 @@ Outputs:
 Pass:
 
 - reusable lessons are separated from one-off noise
+- role boundaries and handoffs are updated or explicitly preserved based on
+  Phase 0-3 evidence
 - next loop can start from updated context
 - automation candidates are evidence-backed
 

@@ -186,7 +186,7 @@ schema lint -> unit test -> Godot import/build -> smoke_test -> review_gate -> a
 flowchart TD
   P0["Phase 0: Architecture Contract"] --> P1["Phase 1: Role-Separated Production Dry Run"]
   P1 --> P2["Phase 2: Playable Vertical Slice"]
-  P2 --> P3["Phase 3: External Feedback Loop"]
+  P2 --> P3["Phase 3: Art Production Capability Validation"]
   P3 --> P4["Phase 4: Production System Retrospective"]
 ```
 
@@ -250,26 +250,42 @@ flowchart TD
 - 빌드와 smoke test가 통과한다.
 - 재미, 이해 가능성, 조작감에 대한 QA와 사람 판단이 기록된다.
 
-### Phase 3. External Feedback Loop
+### Phase 3. Art Production Capability Validation
 
-목표: 외부 또는 준외부 피드백을 production loop에 다시 넣는다.
+목표: Art Agent가 MCP, computer use, image generation, asset review tool 같은
+실제 도구 workflow를 사용해 prototype-grade art asset 후보를 만들고, 그 산출물을
+Human Creative Owner review와 Implementation handoff까지 연결할 수 있는지 검증한다.
 
 산출물:
 
-- feedback report
-- revised Work Packages
-- rework build
-- Working Learning Card 후보
+- art tool capability note
+- prototype-grade asset candidate report
+- asset manifest
+- usage, license, risk note
+- Human Creative Owner art review
+- implementation handoff note
+- Candidate 또는 Working Learning Card 후보
 
 통과 기준:
 
-- 피드백이 단순 의견이 아니라 수정 작업으로 연결된다.
-- 반복되는 신호가 Learning Card로 분리된다.
-- 다음 prototype decision에 영향을 줄 근거가 남는다.
+- Art Agent가 실제 도구를 사용해 검토 가능한 prototype-grade asset 후보를 만든다.
+- asset 후보의 사용 범위, 제약, license/usage risk가 명확하게 기록된다.
+- Human Creative Owner가 prototype 사용 여부를 approve, redirect, reject할 수 있다.
+- Implementation Agent가 gameplay scope를 넓히지 않고 작은 Godot integration 경로를 판단할 수 있다.
+- 반복 가능한 art-production, tool-use, handoff lesson이 Learning Card 후보로 남는다.
+
+Deferred:
+
+- External 또는 semi-external feedback loop는 early numbered phase에서 제외한다. 출시
+  platform, distribution path, audience feedback channel이 정해진 뒤 release 또는
+  platform-dependent loop로 별도 정의한다.
 
 ### Phase 4. Production System Retrospective
 
-목표: Halucy의 에이전트 조직과 학습 구조가 다음 프로토타입에도 재사용 가능한지 판단한다.
+목표: Phase 0부터 Phase 3까지의 architecture, role-separated production,
+playable greybox, QA, learning capture, Art Agent production capability evidence를
+바탕으로 Halucy의 에이전트 조직과 학습 구조가 다음 프로토타입에도 재사용 가능한지
+판단한다.
 
 산출물:
 
@@ -283,6 +299,7 @@ flowchart TD
 
 - 유지할 역할, 바꿀 역할, 제거할 역할이 결정된다.
 - Canonical 승격 후보와 보류 사유가 분리된다.
+- Phase 0-3 evidence를 바탕으로 role boundary와 handoff를 유지할지 수정할지 판단한다.
 - 다음 제작 루프의 첫 Work Package가 작성 가능하다.
 
 ## 포크 범위 및 주의사항
