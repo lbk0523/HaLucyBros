@@ -1,0 +1,91 @@
+{
+  "id": "WP-2026W22-021",
+  "type": "implementation",
+  "status": "active",
+  "goal": "Assess the Phase 3B art candidate package for Godot integration feasibility, import prep needs, visual/collision alignment risk, and gameplay scope risk without mutating Godot or importing assets.",
+  "owner_agent": "implementation",
+  "inputs": [
+    "art_candidates/phase3b/asset_requirements.csv",
+    "art_candidates/phase3b/asset_manifest.csv",
+    "art_candidates/phase3b/asset_requirements.json",
+    "art_candidates/phase3b/asset_manifest.json",
+    "art_candidates/phase3b/individual/P3B-player-v1.png",
+    "art_candidates/phase3b/individual/P3B-floor-platform-v1.png",
+    "art_candidates/phase3b/individual/P3B-obstacle-v1.png",
+    "art_candidates/phase3b/individual/P3B-goal-marker-v1.png",
+    "art_candidates/phase3b/individual/P3B-timer-hud-v1.png",
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd",
+    "agents/profiles/implementation_agent.yaml"
+  ],
+  "targets": [
+    "implementation_notes/IN-2026W22-001-phase3c-asset-integration-assessment.md",
+    "work_packages/active/WP-2026W22-021.json",
+    "runs/RUN-20260531-004.json"
+  ],
+  "forbidden_changes": [
+    "game/**",
+    "scripts/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "research_notes/**",
+    "art_notes/**",
+    "art_candidates/**",
+    "owner_reviews/**",
+    "reviews/**",
+    "learning_cards/**",
+    "asset import, transparent sprite generation, crop cleanup, Godot scene mutation, Godot script mutation, project.godot mutation",
+    "final art direction, style bible, production asset approval, or public-release asset usage",
+    "movement changes, collision changes, HUD implementation, enemy, item, scoring, camera, web export, or gameplay expansion",
+    "Working, Canonical, or Policy Learning Card promotion"
+  ],
+  "outputs": [
+    "implementation_notes/IN-2026W22-001-phase3c-asset-integration-assessment.md",
+    "runs/RUN-20260531-004.json"
+  ],
+  "verify": [
+    {
+      "name": "Implementation assessment note exists",
+      "method": "artifact_check",
+      "expected_artifact": "implementation_notes/IN-2026W22-001-phase3c-asset-integration-assessment.md"
+    },
+    {
+      "name": "Phase 3C Work Package validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-021.json"
+    },
+    {
+      "name": "Phase 3C Run record validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260531-004.json"
+    },
+    {
+      "name": "Assessment covers required implementation questions",
+      "method": "command",
+      "command": "rg -n \"Godot Target Mapping|Import Prep Needs|Visual Collision Alignment Risk|Gameplay Scope Risk|Asset-by-Asset Assessment|Excluded Implementation|Next Work Package Options\" implementation_notes/IN-2026W22-001-phase3c-asset-integration-assessment.md"
+    },
+    {
+      "name": "No Godot or asset files changed",
+      "method": "command",
+      "command": "bash -lc 'extra=$(git status --short --untracked-files=all | sed \"s/^...//\" | grep -Ev \"^(art_notes/AN-2026W22-003-art-production-capability-boundary.md|work_packages/active/WP-2026W22-018.json|runs/RUN-20260531-001.json|art_candidates/phase3b/.*|art_notes/AN-2026W22-004-art-production-candidate-report.md|owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md|work_packages/active/WP-2026W22-019.json|runs/RUN-20260531-002.json|work_packages/active/WP-2026W22-020.json|runs/RUN-20260531-003.json|implementation_notes/IN-2026W22-001-phase3c-asset-integration-assessment.md|work_packages/active/WP-2026W22-021.json|runs/RUN-20260531-004.json)$\" || true); test -z \"$extra\"'"
+    }
+  ],
+  "handoff_to": [
+    "human_creative_owner",
+    "qa",
+    "art"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "The assessment maps each Phase 3B required_asset_id and candidate_id to a likely Godot integration target or explicitly marks it as not implementation-ready.",
+    "The assessment identifies import prep needs such as transparency, crop cleanup, scaling, file placement, and naming.",
+    "The assessment identifies visual/collision alignment risks for player, floor/platform, obstacle, and goal marker.",
+    "The assessment treats timer/HUD as visual reference unless a later UI-specific Work Package authorizes implementation.",
+    "The assessment flags any candidate that could expand gameplay scope.",
+    "The assessment proposes next Work Package options without authorizing Godot mutation.",
+    "No Godot files, asset files, schemas, agent profiles, owner reviews, QA reviews, or Learning Cards are changed."
+  ],
+  "created_at": "2026-05-31",
+  "notes": "This Work Package is implementation-owned assessment only. It does not authorize asset import, transparent sprite generation, Godot changes, gameplay changes, final art direction, or production use."
+}

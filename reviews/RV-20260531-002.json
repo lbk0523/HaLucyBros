@@ -1,0 +1,131 @@
+{
+  "review_id": "RV-20260531-002",
+  "run_id": "RUN-20260531-007",
+  "work_package_id": "WP-2026W22-024",
+  "reviewer_agent": "qa",
+  "review_type": "qa",
+  "started_at": "2026-05-31T16:36:35+09:00",
+  "ended_at": "2026-05-31T16:36:56+09:00",
+  "checks": [
+    {
+      "name": "Implementation record is reviewable",
+      "status": "pass",
+      "evidence": [
+        "work_packages/active/WP-2026W22-024.json exists and describes the Phase 3F Godot import prototype boundary",
+        "runs/RUN-20260531-007.json exists and records the initial import failure, godot --import recovery, and final verification",
+        "implementation_notes/IN-2026W22-002-phase3f-godot-asset-import-test.md records purpose, inputs, implemented changes, verification, known risks, and next boundary"
+      ],
+      "notes": "The implementation handoff is sufficient for QA to audit without relying on chat-only context."
+    },
+    {
+      "name": "Imported asset files are present",
+      "status": "pass",
+      "evidence": [
+        "test command confirmed game/assets/phase3e/player.png and player.png.import exist",
+        "test command confirmed game/assets/phase3e/floor_platform.png and floor_platform.png.import exist",
+        "test command confirmed game/assets/phase3e/obstacle.png and obstacle.png.import exist",
+        "test command confirmed game/assets/phase3e/goal_marker.png and goal_marker.png.import exist"
+      ],
+      "notes": "QA verified both source PNGs and tracked Godot import metadata, not only the source PNGs."
+    },
+    {
+      "name": "Imported assets are RGBA PNGs",
+      "status": "pass",
+      "evidence": [
+        "file game/assets/phase3e/floor_platform.png -> PNG image data, 427 x 161, 8-bit/color RGBA",
+        "file game/assets/phase3e/goal_marker.png -> PNG image data, 194 x 267, 8-bit/color RGBA",
+        "file game/assets/phase3e/obstacle.png -> PNG image data, 199 x 242, 8-bit/color RGBA",
+        "file game/assets/phase3e/player.png -> PNG image data, 199 x 223, 8-bit/color RGBA"
+      ],
+      "notes": "This supports the transparent-asset pipeline requirement for prototype use."
+    },
+    {
+      "name": "Godot import metadata points to the expected files",
+      "status": "pass",
+      "evidence": [
+        "Each game/assets/phase3e/*.png.import file has importer=\"texture\"",
+        "Each game/assets/phase3e/*.png.import file has type=\"CompressedTexture2D\"",
+        "Each game/assets/phase3e/*.png.import file has source_file=res://assets/phase3e/<asset>.png",
+        "Each game/assets/phase3e/*.png.import file records a dest_files entry under res://.godot/imported/",
+        "Each game/assets/phase3e/*.png.import file records process/channel_remap/alpha=3"
+      ],
+      "notes": "The prior failure mode of PNGs existing without Godot import metadata is covered."
+    },
+    {
+      "name": "Scene references imported assets as visuals",
+      "status": "pass",
+      "evidence": [
+        "game/scenes/main.tscn has Texture2D resources for res://assets/phase3e/player.png, floor_platform.png, obstacle.png, and goal_marker.png",
+        "PlayerVisual, GroundVisual, PlatformVisual, BlockerVisual, and GoalVisual are Sprite2D nodes",
+        "No FacingCue node remains after the player visual replacement"
+      ],
+      "notes": "The reviewed scene uses imported art as renderable visuals for the existing gameplay roles."
+    },
+    {
+      "name": "Collision and gameplay script scope are preserved",
+      "status": "pass",
+      "evidence": [
+        "game/scenes/main.tscn still contains RectangleShape2D resources for player, ground, block, platform, and goal",
+        "game/scenes/main.tscn still contains CollisionShape2D nodes for Ground, Blocker, Platform, GoalArea, and Player",
+        "git diff -- game/scripts/player.gd produced no output",
+        "git diff -- game/project.godot produced no output"
+      ],
+      "notes": "QA found no movement, collision-shape, input-map, or gameplay script mutation in this QA pass."
+    },
+    {
+      "name": "Smoke-test output is clean",
+      "status": "pass",
+      "evidence": [
+        "bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"' exit code 0",
+        "Smoke output printed only the Godot 4.6.3 version banner"
+      ],
+      "notes": "QA checked output cleanliness, not only process exit code."
+    },
+    {
+      "name": "Main scene runs headlessly",
+      "status": "pass",
+      "evidence": [
+        "godot --headless --path game --scene res://scenes/main.tscn --quit-after 3 exit code 0"
+      ],
+      "notes": "The imported asset scene loads and runs for a few frames without runtime resource-load errors."
+    },
+    {
+      "name": "Implementation artifacts validate",
+      "status": "pass",
+      "evidence": [
+        "WP-2026W22-024 validates against schemas/work_package.schema.json",
+        "RUN-20260531-007 validates against schemas/run.schema.json"
+      ],
+      "notes": "AJV format warnings are expected in this repo because the format plugin is not bundled."
+    },
+    {
+      "name": "Known visual/collision risks are explicit",
+      "status": "pass",
+      "evidence": [
+        "implementation_notes/IN-2026W22-002-phase3f-godot-asset-import-test.md records player sprite width/roundness versus rectangular collision",
+        "implementation_notes/IN-2026W22-002-phase3f-godot-asset-import-test.md records platform art is decorative and not tile-ready",
+        "implementation_notes/IN-2026W22-002-phase3f-godot-asset-import-test.md records obstacle corner mismatch and goal marker size mismatch"
+      ],
+      "notes": "These risks are acceptable for technical import QA but must remain visible for BK manual review."
+    },
+    {
+      "name": "Forbidden scope is preserved",
+      "status": "pass",
+      "evidence": [
+        "No implementation files were patched by QA",
+        "No new art assets were generated or edited by QA",
+        "No final art direction, production asset approval, movement change, collision change, HUD implementation, gameplay expansion, or public-release approval is claimed"
+      ],
+      "notes": "QA pass is limited to technical import viability and handoff readiness."
+    }
+  ],
+  "scope_findings": {
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "issues": [],
+  "decision": "pass",
+  "human_decision_required": true,
+  "human_decision_reason": "QA can pass technical import, scene load, and scope preservation, but BK/Human Creative Owner still needs to perform direct playable review and decide whether the visual/collision mismatch is acceptable for this prototype capability gate.",
+  "notes": "QA passes the Phase 3F Godot asset import prototype for technical viability and readiness for BK manual testing. This does not approve final art, production use, gameplay expansion, collision polish, or platform/release feedback."
+}

@@ -1,0 +1,49 @@
+{
+  "id": "LC-20260531-002",
+  "type": "technical",
+  "status": "candidate",
+  "claim": "For Godot art-import validation, raw PNG presence is not enough; the package must include Godot import metadata and a clean runtime load check.",
+  "context": "During Phase 3F, Implementation copied prepared transparent PNGs into the Godot project and referenced them from main.tscn. The first smoke command exited 0 but printed loader errors because the PNGs had not been imported by Godot. Running godot --headless --path game --import generated .png.import metadata, after which clean smoke output and headless scene execution passed.",
+  "evidence": [
+    {
+      "source_type": "run",
+      "source_ref": "runs/RUN-20260531-007.json",
+      "summary": "The implementation Run records the initial No loader found errors, the godot --import recovery, generated .png.import files, and final clean smoke/headless runtime success."
+    },
+    {
+      "source_type": "review",
+      "source_ref": "reviews/RV-20260531-002.json",
+      "summary": "QA independently confirmed source PNGs, .png.import metadata, Texture2D/Sprite2D scene wiring, clean smoke output, and headless scene execution."
+    },
+    {
+      "source_type": "work_package",
+      "source_ref": "work_packages/active/WP-2026W22-024.json",
+      "summary": "The implementation Work Package required imported asset files, scene references, clean smoke output, and headless main scene execution without gameplay changes."
+    },
+    {
+      "source_type": "run",
+      "source_ref": "runs/RUN-20260531-008.json",
+      "summary": "The QA Run repeated clean smoke and headless scene checks after artifact creation and found no runtime resource-load errors."
+    }
+  ],
+  "scope": {
+    "applies_when": [
+      "Prototype or production art assets are copied into a Godot project.",
+      "A scene references imported textures through res:// asset paths.",
+      "The phase gate depends on proving that generated or prepared art can load in the engine."
+    ],
+    "does_not_apply_when": [
+      "The asset is not intended to be loaded by Godot.",
+      "The task is only visual review outside the engine.",
+      "The project uses a different engine or a custom import pipeline with different metadata rules."
+    ]
+  },
+  "reuse_rule": "When validating Godot asset import, check for source files, tracked .import metadata, clean smoke output with no engine error lines, and a headless scene run before claiming the art package is engine-loadable.",
+  "confidence": "high",
+  "created_by": "learning_librarian",
+  "created_at": "2026-05-31",
+  "related_cards": [
+    "LC-20260528-002"
+  ],
+  "promotion_note": "Candidate only. Promotion should wait until another Godot asset-import workflow repeats the same metadata/runtime requirement or Phase 4 adopts it as a standard gate."
+}

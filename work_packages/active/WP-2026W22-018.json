@@ -1,0 +1,85 @@
+{
+  "id": "WP-2026W22-018",
+  "type": "art",
+  "status": "active",
+  "goal": "Create the Phase 3A Art Production Capability boundary note so the Art Agent can later use real tool workflows to produce prototype-grade asset candidates with a fixed candidate slice, allowed tool workflow, required manifest fields, owner review gate, and implementation handoff boundary.",
+  "owner_agent": "art",
+  "inputs": [
+    "HALUCY_FOUNDATION.md",
+    "Halucy Codex 구현 계획.md",
+    "PHASE2_CLOSEOUT.md",
+    "context/game_brief.md",
+    "art_notes/AN-2026W22-002-platformer-greybox-readability.md",
+    "agents/profiles/art_agent.yaml"
+  ],
+  "targets": [
+    "art_notes/AN-2026W22-003-art-production-capability-boundary.md",
+    "work_packages/active/WP-2026W22-018.json",
+    "runs/RUN-20260531-001.json"
+  ],
+  "forbidden_changes": [
+    "game/**",
+    "scripts/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "research_notes/**",
+    "owner_reviews/**",
+    "reviews/**",
+    "learning_cards/**",
+    "generated art assets, imported sprites, full asset pack, final art direction, style bible, or production-ready asset approval",
+    "enemy, item, scoring, camera polish, web export, double jump, wall jump, dash, or movement-verb decisions",
+    "external tester workflow, platform launch feedback, market validation, or release channel decisions",
+    "Working, Canonical, or Policy Learning Card promotion"
+  ],
+  "outputs": [
+    "art_notes/AN-2026W22-003-art-production-capability-boundary.md",
+    "runs/RUN-20260531-001.json"
+  ],
+  "verify": [
+    {
+      "name": "Phase 3A boundary artifact exists",
+      "method": "artifact_check",
+      "expected_artifact": "art_notes/AN-2026W22-003-art-production-capability-boundary.md"
+    },
+    {
+      "name": "Phase 3A Work Package validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-018.json"
+    },
+    {
+      "name": "Phase 3A Run record validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260531-001.json"
+    },
+    {
+      "name": "Boundary note covers required gates",
+      "method": "command",
+      "command": "rg -n \"Candidate Slice|Allowed Tool Workflows|Required Asset Manifest Fields|Owner Review Gate|Implementation Handoff Boundary|Excluded Scope|Stop Conditions\" art_notes/AN-2026W22-003-art-production-capability-boundary.md"
+    },
+    {
+      "name": "Only authorized Phase 3A artifacts changed",
+      "method": "command",
+      "command": "bash -lc 'extra=$(git status --short --untracked-files=all | sed \"s/^...//\" | grep -Ev \"^(art_notes/AN-2026W22-003-art-production-capability-boundary.md|work_packages/active/WP-2026W22-018.json|runs/RUN-20260531-001.json)$\" || true); test -z \"$extra\"'"
+    }
+  ],
+  "handoff_to": [
+    "art",
+    "qa",
+    "human_creative_owner",
+    "implementation"
+  ],
+  "human_decision_required": true,
+  "human_decision_reason": "BK/Human Creative Owner must approve the Phase 3A candidate slice and tool-use boundary before Art Agent produces prototype-grade asset candidates with image generation, computer use, MCP, asset review tools, or external sources.",
+  "acceptance_criteria": [
+    "The Work Package authorizes only the Phase 3A boundary note, its Work Package record, and its Run record.",
+    "The boundary note fixes the candidate slice to Phase 2 platformer visual replacement candidates: player, floor/platform, obstacle, goal marker, and optional timer/HUD treatment.",
+    "The boundary note defines allowed tool workflows and required evidence without executing image generation or asset production.",
+    "The boundary note defines required asset manifest fields including source/tool, prompt or acquisition path, usage scope, license or rights risk, attribution, editability, format, resolution, and Godot integration risk.",
+    "The boundary note defines the Human Creative Owner approve, redirect, reject gate before implementation planning.",
+    "The boundary note limits Implementation handoff to integration assessment only and does not authorize Godot mutation.",
+    "No Godot, schema, agent profile, research note, owner review, QA review, Learning Card, generated asset, imported sprite, or final art direction file is changed by this slice."
+  ],
+  "created_at": "2026-05-31",
+  "notes": "This Work Package is a Phase 3A Art planning/boundary artifact because the current schema has no planning type. It prepares later Art Agent tool execution but does not authorize asset production, image generation, Godot implementation, final art direction, or external feedback."
+}

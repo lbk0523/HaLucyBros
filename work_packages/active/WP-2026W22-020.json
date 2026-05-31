@@ -1,0 +1,111 @@
+{
+  "id": "WP-2026W22-020",
+  "type": "art",
+  "status": "active",
+  "goal": "Rework the Phase 3B art candidate package after BK redirect by adding an explicit asset requirement list, individual candidate files, and requirement-to-candidate mapping so the package is reviewable.",
+  "owner_agent": "art",
+  "inputs": [
+    "owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md",
+    "art_notes/AN-2026W22-004-art-production-candidate-report.md",
+    "art_candidates/phase3b/asset_manifest.json",
+    "art_candidates/phase3b/phase3b_candidate_sheet_v1.png",
+    "art_notes/AN-2026W22-003-art-production-capability-boundary.md"
+  ],
+  "targets": [
+    "art_candidates/phase3b/asset_requirements.json",
+    "art_candidates/phase3b/asset_requirements.csv",
+    "art_candidates/phase3b/asset_manifest.csv",
+    "art_candidates/phase3b/individual/P3B-player-v1.png",
+    "art_candidates/phase3b/individual/P3B-floor-platform-v1.png",
+    "art_candidates/phase3b/individual/P3B-obstacle-v1.png",
+    "art_candidates/phase3b/individual/P3B-goal-marker-v1.png",
+    "art_candidates/phase3b/individual/P3B-timer-hud-v1.png",
+    "art_candidates/phase3b/individual_preview.png",
+    "art_candidates/phase3b/asset_manifest.json",
+    "art_notes/AN-2026W22-004-art-production-candidate-report.md",
+    "owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md",
+    "work_packages/active/WP-2026W22-020.json",
+    "runs/RUN-20260531-003.json"
+  ],
+  "forbidden_changes": [
+    "game/**",
+    "scripts/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "research_notes/**",
+    "reviews/**",
+    "learning_cards/**",
+    "new image generation",
+    "final art direction, style bible, full asset pack, production-ready asset approval, or public-release asset usage",
+    "enemy, item, scoring, camera polish, web export, double jump, wall jump, dash, or movement-verb decisions",
+    "external tester workflow, platform launch feedback, market validation, or release channel decisions",
+    "Working, Canonical, or Policy Learning Card promotion"
+  ],
+  "outputs": [
+    "art_candidates/phase3b/asset_requirements.json",
+    "art_candidates/phase3b/asset_requirements.csv",
+    "art_candidates/phase3b/asset_manifest.csv",
+    "art_candidates/phase3b/individual/P3B-player-v1.png",
+    "art_candidates/phase3b/individual/P3B-floor-platform-v1.png",
+    "art_candidates/phase3b/individual/P3B-obstacle-v1.png",
+    "art_candidates/phase3b/individual/P3B-goal-marker-v1.png",
+    "art_candidates/phase3b/individual/P3B-timer-hud-v1.png",
+    "art_candidates/phase3b/individual_preview.png",
+    "runs/RUN-20260531-003.json"
+  ],
+  "verify": [
+    {
+      "name": "Asset requirements exist",
+      "method": "artifact_check",
+      "expected_artifact": "art_candidates/phase3b/asset_requirements.json"
+    },
+    {
+      "name": "Individual candidates exist",
+      "method": "command",
+      "command": "test -e art_candidates/phase3b/individual/P3B-player-v1.png && test -e art_candidates/phase3b/individual/P3B-floor-platform-v1.png && test -e art_candidates/phase3b/individual/P3B-obstacle-v1.png && test -e art_candidates/phase3b/individual/P3B-goal-marker-v1.png && test -e art_candidates/phase3b/individual/P3B-timer-hud-v1.png"
+    },
+    {
+      "name": "Requirement and manifest JSON parse",
+      "method": "command",
+      "command": "jq empty art_candidates/phase3b/asset_requirements.json art_candidates/phase3b/asset_manifest.json"
+    },
+    {
+      "name": "CSV review surfaces parse",
+      "method": "command",
+      "command": "python3 - <<'PY'\nimport csv\nfor path in ['art_candidates/phase3b/asset_requirements.csv','art_candidates/phase3b/asset_manifest.csv']:\n    with open(path, newline='') as f:\n        rows = list(csv.DictReader(f))\n    assert rows, path\n    assert 'required_asset_id' in rows[0], path\nprint('csv ok')\nPY"
+    },
+    {
+      "name": "Rework Work Package validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-020.json"
+    },
+    {
+      "name": "Rework Run validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260531-003.json"
+    },
+    {
+      "name": "Requirement-to-candidate mapping exists",
+      "method": "command",
+      "command": "rg -n \"required_asset_id|candidate_id|individual_file_path|reviewability_rule|count_rationale\" art_candidates/phase3b/asset_requirements.json art_candidates/phase3b/asset_manifest.json"
+    }
+  ],
+  "handoff_to": [
+    "human_creative_owner",
+    "qa",
+    "implementation"
+  ],
+  "human_decision_required": true,
+  "human_decision_reason": "BK/Human Creative Owner redirected the original Phase 3B package because it lacked an asset requirement report and individual candidate mapping. The reworked package must be reviewed again.",
+  "acceptance_criteria": [
+    "The owner review records BK's redirect reason instead of leaving the package as pending or approved.",
+    "The package states which assets are required for the Phase 3B capability slice and why the count is limited to five.",
+    "The package includes CSV review surfaces for human-readable and human-editable asset requirement and manifest review.",
+    "Every required asset maps to a candidate id and an individual candidate file.",
+    "The contact sheet is demoted to supplementary evidence, not the primary review unit.",
+    "No new image generation, Godot mutation, final art direction, or production use approval occurs."
+  ],
+  "created_at": "2026-05-31",
+  "notes": "This rework addresses reviewability defects in the Phase 3B package without generating new art or changing gameplay scope. It adds CSV review surfaces because large asset inventories must be human-readable and human-editable."
+}

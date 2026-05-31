@@ -1,0 +1,121 @@
+{
+  "id": "WP-2026W22-024",
+  "type": "implementation",
+  "status": "active",
+  "goal": "Import the Phase 3E prepared transparent world-facing assets into the Godot project, reference them from the existing platformer scene, and verify the scene loads and smoke-tests without changing gameplay logic.",
+  "owner_agent": "implementation",
+  "inputs": [
+    "art_candidates/phase3e/prepared/P3E-player-v1-transparent.png",
+    "art_candidates/phase3e/prepared/P3E-floor-platform-v1-transparent.png",
+    "art_candidates/phase3e/prepared/P3E-obstacle-v1-transparent.png",
+    "art_candidates/phase3e/prepared/P3E-goal-marker-v1-transparent.png",
+    "art_candidates/phase3e/prepared_manifest.csv",
+    "implementation_notes/IN-2026W22-001-phase3c-asset-integration-assessment.md",
+    "art_notes/AN-2026W22-005-transparent-asset-prep-report.md",
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd",
+    "scripts/smoke_test.sh",
+    "agents/profiles/implementation_agent.yaml"
+  ],
+  "targets": [
+    "game/assets/phase3e/player.png",
+    "game/assets/phase3e/player.png.import",
+    "game/assets/phase3e/floor_platform.png",
+    "game/assets/phase3e/floor_platform.png.import",
+    "game/assets/phase3e/obstacle.png",
+    "game/assets/phase3e/obstacle.png.import",
+    "game/assets/phase3e/goal_marker.png",
+    "game/assets/phase3e/goal_marker.png.import",
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd.uid",
+    "implementation_notes/IN-2026W22-002-phase3f-godot-asset-import-test.md",
+    "work_packages/active/WP-2026W22-024.json",
+    "runs/RUN-20260531-007.json"
+  ],
+  "forbidden_changes": [
+    "game/scripts/player.gd",
+    "game/project.godot",
+    "scripts/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "research_notes/**",
+    "art_notes/** except art_notes/AN-2026W22-005-transparent-asset-prep-report.md as input only",
+    "art_candidates/**",
+    "owner_reviews/**",
+    "reviews/**",
+    "learning_cards/**",
+    "movement changes, collision changes, HUD implementation, enemy, item, scoring, camera, web export, or gameplay expansion",
+    "final art direction, style bible, production asset approval, or public-release asset usage",
+    "Working, Canonical, or Policy Learning Card promotion"
+  ],
+  "outputs": [
+    "game/assets/phase3e/player.png",
+    "game/assets/phase3e/player.png.import",
+    "game/assets/phase3e/floor_platform.png",
+    "game/assets/phase3e/floor_platform.png.import",
+    "game/assets/phase3e/obstacle.png",
+    "game/assets/phase3e/obstacle.png.import",
+    "game/assets/phase3e/goal_marker.png",
+    "game/assets/phase3e/goal_marker.png.import",
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd.uid",
+    "implementation_notes/IN-2026W22-002-phase3f-godot-asset-import-test.md",
+    "runs/RUN-20260531-007.json"
+  ],
+  "verify": [
+    {
+      "name": "Imported asset files exist",
+      "method": "command",
+      "command": "test -e game/assets/phase3e/player.png && test -e game/assets/phase3e/player.png.import && test -e game/assets/phase3e/floor_platform.png && test -e game/assets/phase3e/floor_platform.png.import && test -e game/assets/phase3e/obstacle.png && test -e game/assets/phase3e/obstacle.png.import && test -e game/assets/phase3e/goal_marker.png && test -e game/assets/phase3e/goal_marker.png.import"
+    },
+    {
+      "name": "Scene references imported assets",
+      "method": "command",
+      "command": "rg -n \"Texture2D|Sprite2D|res://assets/phase3e|PlayerVisual|GroundVisual|PlatformVisual|BlockerVisual|GoalVisual\" game/scenes/main.tscn"
+    },
+    {
+      "name": "Godot smoke test passes",
+      "method": "command",
+      "command": "scripts/smoke_test.sh"
+    },
+    {
+      "name": "Smoke test output is clean",
+      "method": "command",
+      "command": "bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"'"
+    },
+    {
+      "name": "Main scene runs headlessly",
+      "method": "command",
+      "command": "godot --headless --path game --scene res://scenes/main.tscn --quit-after 3"
+    },
+    {
+      "name": "Phase 3F Work Package validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-024.json"
+    },
+    {
+      "name": "Phase 3F Run validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260531-007.json"
+    }
+  ],
+  "handoff_to": [
+    "qa",
+    "human_creative_owner",
+    "learning_librarian"
+  ],
+  "human_decision_required": true,
+  "human_decision_reason": "BK/Human Creative Owner must review whether the imported prototype art result is acceptable for the Phase 3 capability gate. This Work Package only proves technical loading and smoke-test viability.",
+  "acceptance_criteria": [
+    "The prepared player, floor/platform, obstacle, and goal marker assets are copied into game/assets/phase3e.",
+    "Godot import metadata is generated for each copied PNG.",
+    "main.tscn references the prototype assets with Sprite2D/Texture2D while preserving existing collision and gameplay logic.",
+    "game/scripts/player.gd is not changed.",
+    "Smoke test and main scene headless run pass with no SCRIPT ERROR or ERROR output.",
+    "The implementation note records the initial import failure, recovery via godot --import, verification, and remaining visual/collision risks.",
+    "No final art, production use, gameplay expansion, or broader asset-pack scope is approved."
+  ],
+  "created_at": "2026-05-31",
+  "notes": "This Work Package performs the Phase 3F Godot import prototype test. It proves technical viability of using prepared transparent assets in the Godot scene and stops before QA/human creative approval."
+}

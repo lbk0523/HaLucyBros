@@ -1,0 +1,104 @@
+{
+  "id": "WP-2026W22-019",
+  "type": "art",
+  "status": "active",
+  "goal": "Produce a bounded Phase 3B prototype-grade art candidate set using a real image generation workflow, record asset manifest and risk notes, and prepare owner review handoff without mutating Godot or approving final art.",
+  "owner_agent": "art",
+  "inputs": [
+    "art_notes/AN-2026W22-003-art-production-capability-boundary.md",
+    "work_packages/active/WP-2026W22-018.json",
+    "runs/RUN-20260531-001.json",
+    "PHASE2_CLOSEOUT.md",
+    "context/game_brief.md",
+    "agents/profiles/art_agent.yaml"
+  ],
+  "targets": [
+    "art_candidates/phase3b/phase3b_candidate_sheet_v1.png",
+    "art_candidates/phase3b/asset_manifest.json",
+    "art_notes/AN-2026W22-004-art-production-candidate-report.md",
+    "owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md",
+    "work_packages/active/WP-2026W22-019.json",
+    "runs/RUN-20260531-002.json"
+  ],
+  "forbidden_changes": [
+    "game/**",
+    "scripts/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "research_notes/**",
+    "reviews/**",
+    "learning_cards/**",
+    "final art direction, style bible, full asset pack, production-ready asset approval, or public-release asset usage",
+    "enemy, item, scoring, camera polish, web export, double jump, wall jump, dash, or movement-verb decisions",
+    "external tester workflow, platform launch feedback, market validation, or release channel decisions",
+    "Working, Canonical, or Policy Learning Card promotion"
+  ],
+  "outputs": [
+    "art_candidates/phase3b/phase3b_candidate_sheet_v1.png",
+    "art_candidates/phase3b/asset_manifest.json",
+    "art_notes/AN-2026W22-004-art-production-candidate-report.md",
+    "owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md",
+    "runs/RUN-20260531-002.json"
+  ],
+  "verify": [
+    {
+      "name": "Candidate sheet exists",
+      "method": "artifact_check",
+      "expected_artifact": "art_candidates/phase3b/phase3b_candidate_sheet_v1.png"
+    },
+    {
+      "name": "Manifest exists",
+      "method": "artifact_check",
+      "expected_artifact": "art_candidates/phase3b/asset_manifest.json"
+    },
+    {
+      "name": "Candidate report exists",
+      "method": "artifact_check",
+      "expected_artifact": "art_notes/AN-2026W22-004-art-production-candidate-report.md"
+    },
+    {
+      "name": "Owner review handoff exists",
+      "method": "artifact_check",
+      "expected_artifact": "owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md"
+    },
+    {
+      "name": "Phase 3B Work Package validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-019.json"
+    },
+    {
+      "name": "Phase 3B Run record validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260531-002.json"
+    },
+    {
+      "name": "Manifest records required fields",
+      "method": "command",
+      "command": "rg -n \"candidate_id|source_tool_or_service|usage_scope|license_or_rights_note|rights_risk|godot_import_risk|gameplay_scope_risk|owner_review_status|implementation_handoff_note\" art_candidates/phase3b/asset_manifest.json"
+    },
+    {
+      "name": "Only authorized Phase 3B artifacts changed",
+      "method": "command",
+      "command": "bash -lc 'extra=$(git status --short --untracked-files=all | sed \"s/^...//\" | grep -Ev \"^(art_notes/AN-2026W22-003-art-production-capability-boundary.md|work_packages/active/WP-2026W22-018.json|runs/RUN-20260531-001.json|art_candidates/phase3b/phase3b_candidate_sheet_v1.png|art_candidates/phase3b/asset_manifest.json|art_notes/AN-2026W22-004-art-production-candidate-report.md|owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md|work_packages/active/WP-2026W22-019.json|runs/RUN-20260531-002.json)$\" || true); test -z \"$extra\"'"
+    }
+  ],
+  "handoff_to": [
+    "human_creative_owner",
+    "qa",
+    "implementation",
+    "learning_librarian"
+  ],
+  "human_decision_required": true,
+  "human_decision_reason": "BK/Human Creative Owner must approve, redirect, or reject the generated prototype-grade candidate set before QA or Implementation treats it as approved input.",
+  "acceptance_criteria": [
+    "The Work Package authorizes only the Phase 3B candidate asset sheet, asset manifest, candidate report, owner review handoff, its Work Package record, and its Run record.",
+    "The Art Agent uses a real image generation workflow and records prompt/tool evidence.",
+    "The manifest records each candidate role, usage scope, license or rights risk, Godot import risk, gameplay scope risk, owner review status, and implementation handoff note.",
+    "The candidate report separates capability validation from final art direction or production asset approval.",
+    "The owner review handoff is Korean and records Decision as pending.",
+    "No Godot, schema, agent profile, context, research note, QA review, Learning Card, final art direction, style bible, full asset pack, or external feedback files are changed by this slice."
+  ],
+  "created_at": "2026-05-31",
+  "notes": "This Work Package executes Phase 3B Art Agent tool capability validation using one generated review sheet. The output is prototype-review-only and does not authorize Godot implementation or production use."
+}

@@ -1,0 +1,186 @@
+{
+  "run_id": "RUN-20260531-008",
+  "work_package_id": "WP-2026W22-025",
+  "agent": "qa",
+  "agent_profile": "agents/profiles/qa_agent.yaml",
+  "started_at": "2026-05-31T16:36:35+09:00",
+  "ended_at": "2026-05-31T16:38:23+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "Codex shell",
+      "purpose": "Inspect QA profile, review schema, prior QA conventions, Phase 3F implementation artifacts, target scene/assets, and worktree baseline before QA.",
+      "inputs": [
+        "agents/profiles/qa_agent.yaml",
+        "schemas/review.schema.json",
+        "reviews/RV-20260529-001.json",
+        "reviews/RV-20260531-001.json",
+        "work_packages/active/WP-2026W22-024.json",
+        "runs/RUN-20260531-007.json",
+        "implementation_notes/IN-2026W22-002-phase3f-godot-asset-import-test.md",
+        "game/scenes/main.tscn",
+        "game/assets/phase3e/*.png",
+        "game/assets/phase3e/*.png.import"
+      ],
+      "outputs": [
+        "reviews/RV-20260531-002.json",
+        "work_packages/active/WP-2026W22-025.json",
+        "runs/RUN-20260531-008.json"
+      ],
+      "evidence": [
+        "QA profile forbids modifying implementation files under review.",
+        "Prior QA convention uses Work Package, Review, and Run records.",
+        "Phase 3F implementation record reports import failure recovery and headless verification."
+      ]
+    },
+    {
+      "tool_name": "Godot CLI",
+      "purpose": "Independently verify clean smoke output and headless main scene execution for the imported asset scene.",
+      "inputs": [
+        "scripts/smoke_test.sh",
+        "game/scenes/main.tscn",
+        "game/assets/phase3e/*.png",
+        "game/assets/phase3e/*.png.import"
+      ],
+      "outputs": [
+        "verification results"
+      ],
+      "evidence": [
+        "Clean smoke output check exited 0 with no SCRIPT ERROR or ERROR lines.",
+        "godot --headless --path game --scene res://scenes/main.tscn --quit-after 3 exited 0."
+      ]
+    },
+    {
+      "tool_name": "Codex shell",
+      "purpose": "Inspect scene/resource wiring, import metadata, PNG formats, and scope boundaries without editing implementation files.",
+      "inputs": [
+        "game/scenes/main.tscn",
+        "game/assets/phase3e/*.png",
+        "game/assets/phase3e/*.png.import",
+        "game/scripts/player.gd",
+        "game/project.godot"
+      ],
+      "outputs": [
+        "verification results"
+      ],
+      "evidence": [
+        "Scene contains Texture2D resources for all four imported assets.",
+        "Scene contains Sprite2D visuals for player, ground, platform, blocker, and goal.",
+        "Scene keeps RectangleShape2D and CollisionShape2D nodes for gameplay geometry.",
+        "git diff showed no changes to game/scripts/player.gd or game/project.godot.",
+        "All four imported PNGs are RGBA."
+      ]
+    },
+    {
+      "tool_name": "apply_patch",
+      "purpose": "Create the Phase 3F QA Work Package, QA Review, and QA Run artifacts only.",
+      "inputs": [
+        "verification results",
+        "work_packages/active/WP-2026W22-024.json",
+        "runs/RUN-20260531-007.json",
+        "implementation_notes/IN-2026W22-002-phase3f-godot-asset-import-test.md"
+      ],
+      "outputs": [
+        "work_packages/active/WP-2026W22-025.json",
+        "reviews/RV-20260531-002.json",
+        "runs/RUN-20260531-008.json"
+      ],
+      "evidence": [
+        "QA Review decision is pass with human_decision_required true for BK manual testing.",
+        "QA artifacts record that no implementation files were patched by QA."
+      ]
+    }
+  ],
+  "artifacts": [
+    "work_packages/active/WP-2026W22-025.json",
+    "reviews/RV-20260531-002.json",
+    "runs/RUN-20260531-008.json"
+  ],
+  "commands": [
+    {
+      "command": "date '+%Y-%m-%dT%H:%M:%S%z'",
+      "exit_code": 0,
+      "notes": "Recorded QA start timestamp as 2026-05-31T16:36:35+0900."
+    },
+    {
+      "command": "test -e game/assets/phase3e/player.png && test -e game/assets/phase3e/player.png.import && test -e game/assets/phase3e/floor_platform.png && test -e game/assets/phase3e/floor_platform.png.import && test -e game/assets/phase3e/obstacle.png && test -e game/assets/phase3e/obstacle.png.import && test -e game/assets/phase3e/goal_marker.png && test -e game/assets/phase3e/goal_marker.png.import",
+      "exit_code": 0,
+      "notes": "Confirmed all four imported PNGs and all four .png.import files exist."
+    },
+    {
+      "command": "bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"'",
+      "exit_code": 0,
+      "notes": "Smoke-test output was clean after import."
+    },
+    {
+      "command": "godot --headless --path game --scene res://scenes/main.tscn --quit-after 3",
+      "exit_code": 0,
+      "notes": "Main scene ran headlessly for three iterations without runtime resource-load errors."
+    },
+    {
+      "command": "git diff -- game/scripts/player.gd game/project.godot scripts schemas agents context research_notes art_notes owner_reviews reviews/RV-20260531-001.json",
+      "exit_code": 0,
+      "notes": "No forbidden implementation, schema, profile, prior review, or owner-review diff was produced by QA."
+    },
+    {
+      "command": "rg -n \"Texture2D|Sprite2D|res://assets/phase3e|PlayerVisual|GroundVisual|PlatformVisual|BlockerVisual|GoalVisual|CollisionShape2D|RectangleShape2D|FacingCue|TimerLabel|StatusLabel\" game/scenes/main.tscn",
+      "exit_code": 0,
+      "notes": "Scene inspection found imported asset references, Sprite2D visuals, preserved collision nodes, and no FacingCue node."
+    },
+    {
+      "command": "for f in game/assets/phase3e/*.png.import; do rg -n \"^importer=|^type=|^source_file=|^dest_files=|process/channel_remap/alpha\" \"$f\" || exit 1; done",
+      "exit_code": 0,
+      "notes": "Import metadata inspection confirmed texture imports, CompressedTexture2D type, expected source files, dest_files, and alpha channel remap settings."
+    },
+    {
+      "command": "file game/assets/phase3e/*.png",
+      "exit_code": 0,
+      "notes": "All four imported assets are PNG RGBA."
+    },
+    {
+      "command": "git diff -- game/scenes/main.tscn",
+      "exit_code": 0,
+      "notes": "Reviewed scene diff: ColorRect gameplay visuals were replaced by Sprite2D nodes, while collision resources and script resource remained in place."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-024.json && npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260531-007.json",
+      "exit_code": 0,
+      "notes": "Phase 3F implementation Work Package and Run records validated."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-025.json",
+      "exit_code": 0,
+      "notes": "Phase 3F QA Work Package schema validation passed."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/review.schema.json -d reviews/RV-20260531-002.json",
+      "exit_code": 0,
+      "notes": "Phase 3F QA Review schema validation passed."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260531-008.json",
+      "exit_code": 0,
+      "notes": "Phase 3F QA Run schema validation passed before this final timestamp update; validation was rerun after updating the record."
+    },
+    {
+      "command": "bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"'",
+      "exit_code": 0,
+      "notes": "Post-artifact clean smoke output check still passed."
+    },
+    {
+      "command": "godot --headless --path game --scene res://scenes/main.tscn --quit-after 3",
+      "exit_code": 0,
+      "notes": "Post-artifact headless main scene run still passed."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "work_packages/active/WP-2026W22-025.json",
+      "reviews/RV-20260531-002.json",
+      "runs/RUN-20260531-008.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "Phase 3F QA passes the Godot asset import prototype for technical import viability, clean scene load, and scope preservation. BK manual testing is still required for playable feel and visual/collision acceptability."
+}

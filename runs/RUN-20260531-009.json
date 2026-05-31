@@ -1,0 +1,81 @@
+{
+  "run_id": "RUN-20260531-009",
+  "work_package_id": "WP-2026W22-026",
+  "agent": "qa",
+  "agent_profile": "agents/profiles/qa_agent.yaml",
+  "started_at": "2026-05-31T16:53:02+09:00",
+  "ended_at": "2026-05-31T16:56:25+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "Codex shell",
+      "purpose": "Inspect prior owner-review format and Phase 3 QA/implementation evidence before recording BK's direct-test approval.",
+      "inputs": [
+        "owner_reviews/OR-2026W22-002-platformer-greybox-KR.md",
+        "owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md",
+        "reviews/RV-20260531-002.json",
+        "implementation_notes/IN-2026W22-002-phase3f-godot-asset-import-test.md"
+      ],
+      "outputs": [
+        "owner_reviews/OR-2026W22-004-phase3-godot-import-KR.md",
+        "work_packages/active/WP-2026W22-026.json",
+        "runs/RUN-20260531-009.json"
+      ],
+      "evidence": [
+        "Prior owner reviews record BK decisions in Korean with explicit non-approved scope.",
+        "QA passed Phase 3F technical import viability and left manual playable review to BK.",
+        "BK stated: ok. 테스트했고 합격입니다. closeout 진행합시다."
+      ]
+    },
+    {
+      "tool_name": "apply_patch",
+      "purpose": "Create the Phase 3 final owner decision artifact and its Work Package/Run records without editing Godot or art files.",
+      "inputs": [
+        "BK direct-test approval from current session",
+        "reviews/RV-20260531-002.json",
+        "implementation_notes/IN-2026W22-002-phase3f-godot-asset-import-test.md"
+      ],
+      "outputs": [
+        "owner_reviews/OR-2026W22-004-phase3-godot-import-KR.md",
+        "work_packages/active/WP-2026W22-026.json",
+        "runs/RUN-20260531-009.json"
+      ],
+      "evidence": [
+        "Owner review records direct-test pass.",
+        "Owner review excludes final art, production use, gameplay expansion, platform launch, and external feedback workflow."
+      ]
+    }
+  ],
+  "artifacts": [
+    "owner_reviews/OR-2026W22-004-phase3-godot-import-KR.md",
+    "work_packages/active/WP-2026W22-026.json",
+    "runs/RUN-20260531-009.json"
+  ],
+  "commands": [
+    {
+      "command": "date '+%Y-%m-%dT%H:%M:%S%z'",
+      "exit_code": 0,
+      "notes": "Recorded owner-decision capture timestamp as 2026-05-31T16:53:02+0900."
+    },
+    {
+      "command": "rg -n \"Decision: approve implemented result|직접 테스트했고 합격|Not approved|Phase 4 Production System Retrospective\" owner_reviews/OR-2026W22-004-phase3-godot-import-KR.md",
+      "exit_code": 0,
+      "notes": "Confirmed the owner review records direct-test approval, excluded scope, and Phase 4 next boundary."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-026.json && npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260531-009.json",
+      "exit_code": 0,
+      "notes": "Owner decision Work Package and Run schema validation passed before this final evidence update; validation was rerun after updating records."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "owner_reviews/OR-2026W22-004-phase3-godot-import-KR.md",
+      "work_packages/active/WP-2026W22-026.json",
+      "runs/RUN-20260531-009.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "Recorded BK/Human Creative Owner direct-test approval for Phase 3 closeout. This run does not approve final art, production assets, gameplay expansion, or Phase 4 execution details."
+}

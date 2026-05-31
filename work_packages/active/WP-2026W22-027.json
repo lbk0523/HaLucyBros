@@ -1,0 +1,91 @@
+{
+  "id": "WP-2026W22-027",
+  "type": "learning",
+  "status": "active",
+  "goal": "Capture the reusable Phase 3 lessons about art package reviewability and Godot import metadata/runtime validation as Candidate Learning Cards only.",
+  "owner_agent": "learning_librarian",
+  "inputs": [
+    "owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md",
+    "owner_reviews/OR-2026W22-004-phase3-godot-import-KR.md",
+    "work_packages/active/WP-2026W22-020.json",
+    "work_packages/active/WP-2026W22-024.json",
+    "reviews/RV-20260531-001.json",
+    "reviews/RV-20260531-002.json",
+    "runs/RUN-20260531-003.json",
+    "runs/RUN-20260531-007.json",
+    "runs/RUN-20260531-008.json",
+    "learning_cards/candidate/LC-20260528-002.json",
+    "learning_cards/candidate/LC-20260528-003.json",
+    "agents/profiles/learning_librarian_agent.yaml"
+  ],
+  "targets": [
+    "learning_cards/candidate/LC-20260531-001.json",
+    "learning_cards/candidate/LC-20260531-002.json",
+    "work_packages/active/WP-2026W22-027.json",
+    "runs/RUN-20260531-010.json"
+  ],
+  "forbidden_changes": [
+    "game/**",
+    "scripts/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "research_notes/**",
+    "art_notes/**",
+    "art_candidates/**",
+    "implementation_notes/**",
+    "owner_reviews/**",
+    "reviews/**",
+    "existing learning card edits",
+    "Working, Canonical, or Policy Learning Card promotion",
+    "raw transcript dumping",
+    "multi-lesson Learning Card"
+  ],
+  "outputs": [
+    "learning_cards/candidate/LC-20260531-001.json",
+    "learning_cards/candidate/LC-20260531-002.json",
+    "runs/RUN-20260531-010.json"
+  ],
+  "verify": [
+    {
+      "name": "Phase 3 Learning Cards exist",
+      "method": "artifact_check",
+      "expected_artifact": "learning_cards/candidate/LC-20260531-001.json and learning_cards/candidate/LC-20260531-002.json"
+    },
+    {
+      "name": "Learning Work Package validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-027.json"
+    },
+    {
+      "name": "Learning Cards validate",
+      "method": "command",
+      "command": "for f in learning_cards/candidate/LC-20260531-001.json learning_cards/candidate/LC-20260531-002.json; do npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/learning_card.schema.json -d \"$f\" || exit 1; done"
+    },
+    {
+      "name": "Learning Run validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260531-010.json"
+    },
+    {
+      "name": "Learning Cards remain Candidate only",
+      "method": "manual_check",
+      "description": "Confirm both Phase 3 cards have status candidate, each contains one reusable lesson, and neither promotes to Working, Canonical, or Policy."
+    }
+  ],
+  "handoff_to": [
+    "human_creative_owner",
+    "qa",
+    "implementation"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "LC-20260531-001 captures only the art package reviewability lesson.",
+    "LC-20260531-002 captures only the Godot import metadata/runtime validation lesson.",
+    "Both cards cite Work Package, Run, Review, and/or Human Decision evidence.",
+    "Both cards remain Candidate only.",
+    "No Godot, art, implementation, owner review, QA review, schema, agent profile, or existing Learning Card files are changed by this slice."
+  ],
+  "created_at": "2026-05-31",
+  "notes": "This Work Package captures two separate Phase 3 Candidate Learning Cards. It does not promote learning authority or rewrite existing cards."
+}

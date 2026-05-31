@@ -1,0 +1,100 @@
+{
+  "id": "WP-2026W22-022",
+  "type": "qa",
+  "status": "active",
+  "goal": "Independently review the Phase 3B/3C art-to-implementation handoff package for CSV reviewability, asset-to-candidate mapping, individual file availability, implementation assessment coverage, and scope preservation before any asset prep or Godot import work.",
+  "owner_agent": "qa",
+  "inputs": [
+    "art_candidates/phase3b/asset_requirements.csv",
+    "art_candidates/phase3b/asset_manifest.csv",
+    "art_candidates/phase3b/asset_requirements.json",
+    "art_candidates/phase3b/asset_manifest.json",
+    "art_candidates/phase3b/individual/P3B-player-v1.png",
+    "art_candidates/phase3b/individual/P3B-floor-platform-v1.png",
+    "art_candidates/phase3b/individual/P3B-obstacle-v1.png",
+    "art_candidates/phase3b/individual/P3B-goal-marker-v1.png",
+    "art_candidates/phase3b/individual/P3B-timer-hud-v1.png",
+    "art_notes/AN-2026W22-004-art-production-candidate-report.md",
+    "owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md",
+    "implementation_notes/IN-2026W22-001-phase3c-asset-integration-assessment.md",
+    "work_packages/active/WP-2026W22-021.json",
+    "runs/RUN-20260531-004.json",
+    "agents/profiles/qa_agent.yaml"
+  ],
+  "targets": [
+    "reviews/RV-20260531-001.json",
+    "work_packages/active/WP-2026W22-022.json",
+    "runs/RUN-20260531-005.json"
+  ],
+  "forbidden_changes": [
+    "game/**",
+    "scripts/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "research_notes/**",
+    "art_notes/**",
+    "art_candidates/**",
+    "implementation_notes/**",
+    "owner_reviews/**",
+    "learning_cards/**",
+    "asset import, transparent sprite generation, crop cleanup, Godot scene mutation, Godot script mutation, project.godot mutation",
+    "final art direction, style bible, production asset approval, or public-release asset usage",
+    "movement changes, collision changes, HUD implementation, enemy, item, scoring, camera, web export, or gameplay expansion",
+    "Working, Canonical, or Policy Learning Card promotion"
+  ],
+  "outputs": [
+    "reviews/RV-20260531-001.json",
+    "runs/RUN-20260531-005.json"
+  ],
+  "verify": [
+    {
+      "name": "Phase 3D QA review exists",
+      "method": "artifact_check",
+      "expected_artifact": "reviews/RV-20260531-001.json"
+    },
+    {
+      "name": "Phase 3D Work Package validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-022.json"
+    },
+    {
+      "name": "Phase 3D QA review validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/review.schema.json -d reviews/RV-20260531-001.json"
+    },
+    {
+      "name": "Phase 3D Run validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260531-005.json"
+    },
+    {
+      "name": "CSV and JSON source records parse",
+      "method": "command",
+      "command": "python3 - <<'PY'\nimport csv, json\nfor path in ['art_candidates/phase3b/asset_requirements.csv','art_candidates/phase3b/asset_manifest.csv']:\n    with open(path, newline='') as f:\n        rows = list(csv.DictReader(f))\n    assert rows and 'required_asset_id' in rows[0], path\nfor path in ['art_candidates/phase3b/asset_requirements.json','art_candidates/phase3b/asset_manifest.json']:\n    json.load(open(path))\nprint('records ok')\nPY"
+    },
+    {
+      "name": "Only authorized QA artifacts changed",
+      "method": "command",
+      "command": "bash -lc 'extra=$(git status --short --untracked-files=all | sed \"s/^...//\" | grep -Ev \"^(art_notes/AN-2026W22-003-art-production-capability-boundary.md|work_packages/active/WP-2026W22-018.json|runs/RUN-20260531-001.json|art_candidates/phase3b/.*|art_notes/AN-2026W22-004-art-production-candidate-report.md|owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md|work_packages/active/WP-2026W22-019.json|runs/RUN-20260531-002.json|work_packages/active/WP-2026W22-020.json|runs/RUN-20260531-003.json|implementation_notes/IN-2026W22-001-phase3c-asset-integration-assessment.md|work_packages/active/WP-2026W22-021.json|runs/RUN-20260531-004.json|reviews/RV-20260531-001.json|work_packages/active/WP-2026W22-022.json|runs/RUN-20260531-005.json)$\" || true); test -z \"$extra\"'"
+    }
+  ],
+  "handoff_to": [
+    "human_creative_owner",
+    "art",
+    "implementation",
+    "learning_librarian"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "QA independently reviews the Phase 3B and Phase 3C handoff package without modifying art, implementation, owner review, or Godot files.",
+    "QA confirms the CSV review surfaces are parseable and suitable as human-readable asset review tables for this prototype slice.",
+    "QA confirms every required asset maps to a candidate id and individual candidate file.",
+    "QA confirms the implementation assessment covers target mapping, import prep needs, visual/collision alignment risk, gameplay scope risk, and next Work Package options.",
+    "QA confirms the package does not authorize Godot import, transparent sprite generation, production art approval, or gameplay expansion.",
+    "QA records pass, rework, or blocked in reviews/RV-20260531-001.json with actionable issues if needed.",
+    "No Godot files, asset files, implementation notes, owner reviews, schemas, agent profiles, or Learning Cards are changed by QA."
+  ],
+  "created_at": "2026-05-31",
+  "notes": "This Work Package authorizes QA review only. If QA finds defects, it must record rework issues instead of editing the art or implementation package."
+}

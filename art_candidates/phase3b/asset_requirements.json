@@ -1,0 +1,112 @@
+{
+  "requirements_id": "AR-20260531-001",
+  "phase": "Phase 3B Art Production Capability Validation",
+  "created_at": "2026-05-31",
+  "human_editable_csv": "art_candidates/phase3b/asset_requirements.csv",
+  "scope_statement": "This requirement list covers only the Phase 3B capability test for replacing Phase 2 greybox visual roles with prototype-grade review candidates. It is not a full game asset inventory.",
+  "source_basis": [
+    "PHASE2_CLOSEOUT.md",
+    "context/game_brief.md",
+    "art_notes/AN-2026W22-002-platformer-greybox-readability.md",
+    "art_notes/AN-2026W22-003-art-production-capability-boundary.md"
+  ],
+  "required_asset_count_for_phase3b": 5,
+  "count_rationale": "Phase 2's playable greybox has five review-relevant visual roles: player, floor/platform, obstacle/blocker, goal marker, and timer. Phase 3B validates Art Agent production and handoff capability against those roles only. This count is sufficient for the capability slice, not for a full production game.",
+  "required_assets": [
+    {
+      "required_asset_id": "REQ-P3B-001",
+      "role": "player",
+      "asset_name": "player_static_visual_candidate",
+      "phase3b_required": true,
+      "purpose": "Represent the controllable player body from the Phase 2 greybox.",
+      "minimum_candidate_count": 1,
+      "review_need": "BK must be able to judge whether the player reads as controllable and does not imply attack, dash, weapon, aim, or final character identity.",
+      "implementation_need": "Later Implementation can assess whether visual bounds can align with the existing player collision body.",
+      "excluded_for_phase3b": [
+        "animation frames",
+        "costume variants",
+        "facial expression set",
+        "final character identity"
+      ]
+    },
+    {
+      "required_asset_id": "REQ-P3B-002",
+      "role": "floor_platform",
+      "asset_name": "floor_platform_static_visual_candidate",
+      "phase3b_required": true,
+      "purpose": "Represent solid standing surfaces from the Phase 2 greybox.",
+      "minimum_candidate_count": 1,
+      "review_need": "BK must be able to judge whether the surface reads as solid and distinct from background, obstacle, and goal.",
+      "implementation_need": "Later Implementation can assess crop/tile extraction and visual-to-collision alignment.",
+      "excluded_for_phase3b": [
+        "full tileset",
+        "slope tiles",
+        "moving platform visuals",
+        "background decoration"
+      ]
+    },
+    {
+      "required_asset_id": "REQ-P3B-003",
+      "role": "obstacle",
+      "asset_name": "obstacle_blocker_static_visual_candidate",
+      "phase3b_required": true,
+      "purpose": "Represent static blockers or route constraints from the Phase 2 greybox.",
+      "minimum_candidate_count": 1,
+      "review_need": "BK must be able to judge whether the obstacle reads as a blocker without implying enemy, trap, damage, collectible, or item behavior.",
+      "implementation_need": "Later Implementation can assess whether the visual bounds can align with existing blocker collision.",
+      "excluded_for_phase3b": [
+        "enemy sprites",
+        "hazard VFX",
+        "damage states",
+        "breakable block variants"
+      ]
+    },
+    {
+      "required_asset_id": "REQ-P3B-004",
+      "role": "goal_marker",
+      "asset_name": "goal_marker_static_visual_candidate",
+      "phase3b_required": true,
+      "purpose": "Represent the right-side destination from the Phase 2 greybox.",
+      "minimum_candidate_count": 1,
+      "review_need": "BK must be able to judge whether the goal reads as a destination and is not confused with obstacle, item, or reward object.",
+      "implementation_need": "Later Implementation can assess whether the visual marker can remain separate from the trigger area.",
+      "excluded_for_phase3b": [
+        "level-complete animation",
+        "reward chest",
+        "portal effect",
+        "progression UI"
+      ]
+    },
+    {
+      "required_asset_id": "REQ-P3B-005",
+      "role": "timer_hud",
+      "asset_name": "timer_hud_visual_reference",
+      "phase3b_required": true,
+      "purpose": "Represent the existing time-pressure signal from the Phase 2 greybox.",
+      "minimum_candidate_count": 1,
+      "review_need": "BK must be able to judge whether the timer visual communicates time pressure without becoming score, ranking, or polished HUD scope.",
+      "implementation_need": "Later Implementation should treat this as visual reference unless a UI-specific Work Package authorizes HUD integration.",
+      "excluded_for_phase3b": [
+        "score UI",
+        "rank medals",
+        "animated countdown",
+        "full HUD system"
+      ]
+    }
+  ],
+  "explicitly_not_required_for_phase3b": [
+    "background art",
+    "enemy art",
+    "item or collectible art",
+    "VFX",
+    "animation sheets",
+    "full tileset",
+    "menus",
+    "buttons",
+    "score UI",
+    "camera or transition art",
+    "marketing art"
+  ],
+  "reviewability_rule": "Every required_asset_id must map to at least one candidate_id and at least one individual candidate file. Contact sheets may be included only as supplementary evidence, not as the primary review unit.",
+  "csv_management_rule": "For prototype scale, this JSON file may remain the structured source for agents. For production-scale or massive asset review, maintain the human-editable CSV table so BK or a human reviewer can inspect, sort, filter, and directly edit required assets without hand-editing nested JSON."
+}

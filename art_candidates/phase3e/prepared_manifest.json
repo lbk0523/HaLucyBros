@@ -1,0 +1,113 @@
+{
+  "manifest_id": "PM-20260531-001",
+  "phase": "Phase 3E Transparent Asset Prep",
+  "created_at": "2026-05-31",
+  "source_requirements_csv": "art_candidates/phase3b/asset_requirements.csv",
+  "source_manifest_csv": "art_candidates/phase3b/asset_manifest.csv",
+  "human_editable_csv": "art_candidates/phase3e/prepared_manifest.csv",
+  "preview_path": "art_candidates/phase3e/prepared_preview.png",
+  "prep_method": {
+    "name": "connected-light-background-removal",
+    "tooling": "Python PIL local deterministic image processing",
+    "description": "Flood-filled connected light neutral pixels from image borders, set those background pixels to alpha 0, then trimmed transparent border with 8px padding.",
+    "new_image_generation": false,
+    "godot_import_performed": false
+  },
+  "prepared_assets": [
+    {
+      "required_asset_id": "REQ-P3B-001",
+      "source_candidate_id": "P3B-player-v1",
+      "prepared_asset_id": "P3E-player-v1-transparent",
+      "role": "player",
+      "source_file_path": "art_candidates/phase3b/individual/P3B-player-v1.png",
+      "prepared_file_path": "art_candidates/phase3e/prepared/P3E-player-v1-transparent.png",
+      "source_sha256": "83f0a2e6ac9c549e20ac452ebd87d3e557c6fa8a9602cc9b527d5c70c69fd6b3",
+      "prepared_sha256": "57610632d0bc3a2aa7aee6e880e3f394f003cd648f518604b8bece15f5b46988",
+      "format": "png RGBA",
+      "resolution": "199x223",
+      "alpha_channel": true,
+      "transparent_corners": true,
+      "usage_scope": "prototype_import_prep_only",
+      "prep_status": "prepared_review_pending",
+      "known_quality_risk": "possible light-edge halo; pivot and scale not decided",
+      "godot_import_risk": "medium: needs implementation planning before Godot import",
+      "gameplay_scope_risk": "low: no new verb implied",
+      "implementation_handoff_note": "Can be considered in a later import planning WP; do not import until target path, pivot, scale, and collision alignment are decided."
+    },
+    {
+      "required_asset_id": "REQ-P3B-002",
+      "source_candidate_id": "P3B-floor-platform-v1",
+      "prepared_asset_id": "P3E-floor-platform-v1-transparent",
+      "role": "floor_platform",
+      "source_file_path": "art_candidates/phase3b/individual/P3B-floor-platform-v1.png",
+      "prepared_file_path": "art_candidates/phase3e/prepared/P3E-floor-platform-v1-transparent.png",
+      "source_sha256": "3ea90eab5e2824b0648fa8d4adbece667a9f92a76afc64ec00acd25036b7baf9",
+      "prepared_sha256": "bdec7b0e2be8b6d23c3c04dd6c969ce23ac333da6a168f8a8a17251474a6f0c0",
+      "format": "png RGBA",
+      "resolution": "427x161",
+      "alpha_channel": true,
+      "transparent_corners": true,
+      "usage_scope": "prototype_import_prep_only",
+      "prep_status": "prepared_review_pending",
+      "known_quality_risk": "not tile-ready; decorative height may not align with flat collision",
+      "godot_import_risk": "medium-high: needs stretch/tile decision and collision alignment review",
+      "gameplay_scope_risk": "low if used as static surface art only",
+      "implementation_handoff_note": "Use only after deciding whether it is a stretched visual, one-off surface, or tile experiment. Do not change collision to match decorative art."
+    },
+    {
+      "required_asset_id": "REQ-P3B-003",
+      "source_candidate_id": "P3B-obstacle-v1",
+      "prepared_asset_id": "P3E-obstacle-v1-transparent",
+      "role": "obstacle",
+      "source_file_path": "art_candidates/phase3b/individual/P3B-obstacle-v1.png",
+      "prepared_file_path": "art_candidates/phase3e/prepared/P3E-obstacle-v1-transparent.png",
+      "source_sha256": "62c1afe6c84abf919b717b267c92c0354ae9ced2c3565acaa49ae1060f7d14c6",
+      "prepared_sha256": "99fd91bbe4e77fe55204fcce306cb7deaee2af17be49778d18b18c533a98e24f",
+      "format": "png RGBA",
+      "resolution": "199x242",
+      "alpha_channel": true,
+      "transparent_corners": true,
+      "usage_scope": "prototype_import_prep_only",
+      "prep_status": "prepared_review_pending",
+      "known_quality_risk": "rounded visual corners differ from rectangular collision",
+      "godot_import_risk": "medium: needs scale and collision mismatch note",
+      "gameplay_scope_risk": "low: static blocker only",
+      "implementation_handoff_note": "Can be considered for static blocker visual replacement after scale and bounds are decided."
+    },
+    {
+      "required_asset_id": "REQ-P3B-004",
+      "source_candidate_id": "P3B-goal-marker-v1",
+      "prepared_asset_id": "P3E-goal-marker-v1-transparent",
+      "role": "goal_marker",
+      "source_file_path": "art_candidates/phase3b/individual/P3B-goal-marker-v1.png",
+      "prepared_file_path": "art_candidates/phase3e/prepared/P3E-goal-marker-v1-transparent.png",
+      "source_sha256": "19860e63d8db5674154ae3e5ed98ad64c9d98b6538219ba17f7ebd93264d2c84",
+      "prepared_sha256": "adba897b50729b0ea2bd7195edbfe482dde06e8e0fe9e394c7cbb2260ca007eb",
+      "format": "png RGBA",
+      "resolution": "194x267",
+      "alpha_channel": true,
+      "transparent_corners": true,
+      "usage_scope": "prototype_import_prep_only",
+      "prep_status": "prepared_review_pending",
+      "known_quality_risk": "visual is wider than current goal trigger; trigger/visual separation required",
+      "godot_import_risk": "medium: needs target marker scale and trigger separation plan",
+      "gameplay_scope_risk": "low: destination marker only",
+      "implementation_handoff_note": "Use as visual marker only. Keep GoalArea trigger separate unless a later WP changes interaction scope."
+    }
+  ],
+  "deferred_assets": [
+    {
+      "required_asset_id": "REQ-P3B-005",
+      "source_candidate_id": "P3B-timer-hud-v1",
+      "role": "timer_hud",
+      "source_file_path": "art_candidates/phase3b/individual/P3B-timer-hud-v1.png",
+      "reason": "Timer/HUD prep is deferred to avoid scope expansion into a polished UI system. It should be handled by a UI-specific Work Package if needed."
+    }
+  ],
+  "manifest_limits": [
+    "Prepared assets are prototype import-prep candidates only.",
+    "No Godot import was performed.",
+    "No final art direction or production/public use approval is implied.",
+    "Implementation planning is still required before any game/** mutation."
+  ]
+}

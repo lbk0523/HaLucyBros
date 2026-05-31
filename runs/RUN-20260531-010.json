@@ -1,0 +1,101 @@
+{
+  "run_id": "RUN-20260531-010",
+  "work_package_id": "WP-2026W22-027",
+  "agent": "learning_librarian",
+  "agent_profile": "agents/profiles/learning_librarian_agent.yaml",
+  "started_at": "2026-05-31T16:53:02+09:00",
+  "ended_at": "2026-05-31T16:56:25+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "Codex shell",
+      "purpose": "Inspect Learning Card schema, existing Candidate cards, and Phase 3 owner/QA/implementation evidence before drafting Phase 3 Candidate cards.",
+      "inputs": [
+        "schemas/learning_card.schema.json",
+        "learning_cards/candidate/LC-20260528-001.json",
+        "learning_cards/candidate/LC-20260528-002.json",
+        "learning_cards/candidate/LC-20260528-003.json",
+        "learning_cards/candidate/LC-20260529-001.json",
+        "owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md",
+        "reviews/RV-20260531-001.json",
+        "reviews/RV-20260531-002.json",
+        "runs/RUN-20260531-007.json",
+        "runs/RUN-20260531-008.json"
+      ],
+      "outputs": [
+        "learning_cards/candidate/LC-20260531-001.json",
+        "learning_cards/candidate/LC-20260531-002.json",
+        "work_packages/active/WP-2026W22-027.json",
+        "runs/RUN-20260531-010.json"
+      ],
+      "evidence": [
+        "Existing cards cover missing tools, smoke output cleanliness, Korean owner briefs, and Phase 2 greybox validation boundary.",
+        "No existing card captures art package CSV/individual-file reviewability.",
+        "No existing card captures Godot .png.import metadata plus runtime asset-load validation."
+      ]
+    },
+    {
+      "tool_name": "apply_patch",
+      "purpose": "Create two Candidate Learning Cards and the corresponding Work Package/Run records without changing production artifacts or promoting learning authority.",
+      "inputs": [
+        "owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md",
+        "reviews/RV-20260531-001.json",
+        "reviews/RV-20260531-002.json",
+        "runs/RUN-20260531-003.json",
+        "runs/RUN-20260531-007.json",
+        "runs/RUN-20260531-008.json"
+      ],
+      "outputs": [
+        "learning_cards/candidate/LC-20260531-001.json",
+        "learning_cards/candidate/LC-20260531-002.json",
+        "work_packages/active/WP-2026W22-027.json",
+        "runs/RUN-20260531-010.json"
+      ],
+      "evidence": [
+        "Both new cards have status candidate.",
+        "LC-20260531-001 captures one production lesson about asset reviewability.",
+        "LC-20260531-002 captures one technical lesson about Godot import metadata/runtime validation.",
+        "No Canonical or Policy promotion was attempted."
+      ]
+    }
+  ],
+  "artifacts": [
+    "learning_cards/candidate/LC-20260531-001.json",
+    "learning_cards/candidate/LC-20260531-002.json",
+    "work_packages/active/WP-2026W22-027.json",
+    "runs/RUN-20260531-010.json"
+  ],
+  "commands": [
+    {
+      "command": "date '+%Y-%m-%dT%H:%M:%S%z'",
+      "exit_code": 0,
+      "notes": "Recorded learning capture timestamp as 2026-05-31T16:53:02+0900."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-027.json",
+      "exit_code": 0,
+      "notes": "Phase 3 Learning Work Package schema validation passed."
+    },
+    {
+      "command": "for f in learning_cards/candidate/LC-20260531-001.json learning_cards/candidate/LC-20260531-002.json; do npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/learning_card.schema.json -d \"$f\" || exit 1; done",
+      "exit_code": 0,
+      "notes": "Both Phase 3 Candidate Learning Cards validated."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260531-010.json",
+      "exit_code": 0,
+      "notes": "Phase 3 Learning Run schema validation passed before this final evidence update; validation was rerun after updating records."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "learning_cards/candidate/LC-20260531-001.json",
+      "learning_cards/candidate/LC-20260531-002.json",
+      "work_packages/active/WP-2026W22-027.json",
+      "runs/RUN-20260531-010.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "Captured two Phase 3 Candidate Learning Cards. This run does not promote cards beyond Candidate or modify Godot/art/owner/QA artifacts."
+}

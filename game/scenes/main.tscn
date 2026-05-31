@@ -1,6 +1,10 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
+[ext_resource type="Texture2D" path="res://assets/phase3e/player.png" id="2_player_texture"]
+[ext_resource type="Texture2D" path="res://assets/phase3e/floor_platform.png" id="3_floor_texture"]
+[ext_resource type="Texture2D" path="res://assets/phase3e/obstacle.png" id="4_obstacle_texture"]
+[ext_resource type="Texture2D" path="res://assets/phase3e/goal_marker.png" id="5_goal_texture"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
 size = Vector2(32, 48)
@@ -37,12 +41,10 @@ color = Color(0.18, 0.32, 0.44, 1)
 position = Vector2(320, 340)
 shape = SubResource("RectangleShape2D_ground")
 
-[node name="GroundVisual" type="ColorRect" parent="Ground"]
-offset_left = -60.0
-offset_top = 320.0
-offset_right = 700.0
-offset_bottom = 360.0
-color = Color(0.28, 0.3, 0.32, 1)
+[node name="GroundVisual" type="Sprite2D" parent="Ground"]
+position = Vector2(320, 320)
+scale = Vector2(1.78, 0.25)
+texture = ExtResource("3_floor_texture")
 
 [node name="Blocker" type="StaticBody2D" parent="."]
 
@@ -50,12 +52,10 @@ color = Color(0.28, 0.3, 0.32, 1)
 position = Vector2(270, 292)
 shape = SubResource("RectangleShape2D_block")
 
-[node name="BlockerVisual" type="ColorRect" parent="Blocker"]
-offset_left = 235.0
-offset_top = 264.0
-offset_right = 305.0
-offset_bottom = 320.0
-color = Color(0.44, 0.34, 0.24, 1)
+[node name="BlockerVisual" type="Sprite2D" parent="Blocker"]
+position = Vector2(270, 292)
+scale = Vector2(0.35, 0.23)
+texture = ExtResource("4_obstacle_texture")
 
 [node name="Platform" type="StaticBody2D" parent="."]
 
@@ -63,12 +63,10 @@ color = Color(0.44, 0.34, 0.24, 1)
 position = Vector2(430, 242)
 shape = SubResource("RectangleShape2D_platform")
 
-[node name="PlatformVisual" type="ColorRect" parent="Platform"]
-offset_left = 370.0
-offset_top = 230.0
-offset_right = 490.0
-offset_bottom = 254.0
-color = Color(0.3, 0.32, 0.34, 1)
+[node name="PlatformVisual" type="Sprite2D" parent="Platform"]
+position = Vector2(430, 242)
+scale = Vector2(0.28, 0.15)
+texture = ExtResource("3_floor_texture")
 
 [node name="GoalArea" type="Area2D" parent="."]
 
@@ -76,12 +74,10 @@ color = Color(0.3, 0.32, 0.34, 1)
 position = Vector2(604, 288)
 shape = SubResource("RectangleShape2D_goal")
 
-[node name="GoalVisual" type="ColorRect" parent="GoalArea"]
-offset_left = 584.0
-offset_top = 256.0
-offset_right = 624.0
-offset_bottom = 320.0
-color = Color(0.18, 0.8, 0.42, 1)
+[node name="GoalVisual" type="Sprite2D" parent="GoalArea"]
+position = Vector2(604, 276)
+scale = Vector2(0.32, 0.32)
+texture = ExtResource("5_goal_texture")
 
 [node name="Player" type="CharacterBody2D" parent="."]
 position = Vector2(72, 320)
@@ -91,19 +87,10 @@ script = ExtResource("1_player")
 position = Vector2(0, -24)
 shape = SubResource("RectangleShape2D_player")
 
-[node name="PlayerVisual" type="ColorRect" parent="Player"]
-offset_left = -16.0
-offset_top = -48.0
-offset_right = 16.0
-offset_bottom = 0.0
-color = Color(0.1, 0.64, 0.95, 1)
-
-[node name="FacingCue" type="ColorRect" parent="Player"]
-offset_left = 10.0
-offset_top = -30.0
-offset_right = 18.0
-offset_bottom = -18.0
-color = Color(1, 0.92, 0.24, 1)
+[node name="PlayerVisual" type="Sprite2D" parent="Player"]
+position = Vector2(0, -24)
+scale = Vector2(0.215, 0.215)
+texture = ExtResource("2_player_texture")
 
 [node name="HUD" type="CanvasLayer" parent="."]
 

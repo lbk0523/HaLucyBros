@@ -1,0 +1,78 @@
+{
+  "id": "WP-2026W22-026",
+  "type": "qa",
+  "status": "active",
+  "goal": "Record BK/Human Creative Owner's direct-test approval for the Phase 3 Godot import prototype so the Phase 3 capability gate is not left as chat-only evidence.",
+  "owner_agent": "qa",
+  "inputs": [
+    "reviews/RV-20260531-002.json",
+    "implementation_notes/IN-2026W22-002-phase3f-godot-asset-import-test.md",
+    "game/scenes/main.tscn",
+    "game/assets/phase3e/player.png",
+    "game/assets/phase3e/floor_platform.png",
+    "game/assets/phase3e/obstacle.png",
+    "game/assets/phase3e/goal_marker.png",
+    "owner_reviews/OWNER_REVIEW_BRIEF_RULES_KR.md"
+  ],
+  "targets": [
+    "owner_reviews/OR-2026W22-004-phase3-godot-import-KR.md",
+    "work_packages/active/WP-2026W22-026.json",
+    "runs/RUN-20260531-009.json"
+  ],
+  "forbidden_changes": [
+    "game/**",
+    "scripts/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "research_notes/**",
+    "art_notes/**",
+    "art_candidates/**",
+    "implementation_notes/**",
+    "reviews/**",
+    "learning_cards/**",
+    "implementation changes",
+    "final art approval, production asset approval, gameplay expansion, platform launch approval, or external feedback workflow approval",
+    "Working, Canonical, or Policy Learning Card promotion"
+  ],
+  "outputs": [
+    "owner_reviews/OR-2026W22-004-phase3-godot-import-KR.md",
+    "runs/RUN-20260531-009.json"
+  ],
+  "verify": [
+    {
+      "name": "Phase 3 owner approval artifact exists",
+      "method": "artifact_check",
+      "expected_artifact": "owner_reviews/OR-2026W22-004-phase3-godot-import-KR.md"
+    },
+    {
+      "name": "Owner decision records direct test pass",
+      "method": "command",
+      "command": "rg -n \"Decision: approve implemented result|직접 테스트했고 합격|Not approved|Phase 4 Production System Retrospective\" owner_reviews/OR-2026W22-004-phase3-godot-import-KR.md"
+    },
+    {
+      "name": "Owner decision Work Package validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-026.json"
+    },
+    {
+      "name": "Owner decision Run validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260531-009.json"
+    }
+  ],
+  "handoff_to": [
+    "learning_librarian",
+    "qa",
+    "human_creative_owner"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "The owner review records BK/Human Creative Owner direct-test approval for the Phase 3 capability gate.",
+    "The owner review states the approval does not approve final art, production use, gameplay expansion, platform launch, or external tester workflow.",
+    "The owner review points to Phase 4 Production System Retrospective as the next boundary.",
+    "No Godot, art, implementation, QA review, schema, agent profile, or Learning Card files are changed by this slice."
+  ],
+  "created_at": "2026-05-31",
+  "notes": "This Work Package records a human decision that already happened in the current session. It does not make a new creative decision on BK's behalf."
+}

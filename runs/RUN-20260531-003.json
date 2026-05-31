@@ -1,0 +1,194 @@
+{
+  "run_id": "RUN-20260531-003",
+  "work_package_id": "WP-2026W22-020",
+  "agent": "art",
+  "agent_profile": "agents/profiles/art_agent.yaml",
+  "started_at": "2026-05-31T13:40:00+09:00",
+  "ended_at": "2026-05-31T13:43:49+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "Codex shell",
+      "purpose": "Inspect BK owner redirect feedback, current Phase 3B report, manifest, owner review, and available image tooling before reworking the review package.",
+      "inputs": [
+        "owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md",
+        "art_notes/AN-2026W22-004-art-production-candidate-report.md",
+        "art_candidates/phase3b/asset_manifest.json",
+        "art_candidates/phase3b/phase3b_candidate_sheet_v1.png"
+      ],
+      "outputs": [
+        "art_candidates/phase3b/asset_requirements.json",
+        "art_candidates/phase3b/asset_requirements.csv",
+        "art_candidates/phase3b/asset_manifest.csv",
+        "art_candidates/phase3b/individual/P3B-player-v1.png",
+        "art_candidates/phase3b/individual/P3B-floor-platform-v1.png",
+        "art_candidates/phase3b/individual/P3B-obstacle-v1.png",
+        "art_candidates/phase3b/individual/P3B-goal-marker-v1.png",
+        "art_candidates/phase3b/individual/P3B-timer-hud-v1.png",
+        "art_candidates/phase3b/individual_preview.png",
+        "work_packages/active/WP-2026W22-020.json",
+        "runs/RUN-20260531-003.json"
+      ],
+      "evidence": [
+        "BK said the sheet was not reviewable because the package did not report which assets were needed.",
+        "BK said one PNG without individual mapping does not scale to real game production review.",
+        "ImageMagick was unavailable and sips was available; deterministic crop was performed locally."
+      ]
+    },
+    {
+      "tool_name": "python3 PIL crop",
+      "purpose": "Split the generated contact sheet into individual candidate files so each candidate has a stable file path.",
+      "inputs": [
+        "art_candidates/phase3b/phase3b_candidate_sheet_v1.png"
+      ],
+      "outputs": [
+        "art_candidates/phase3b/individual/P3B-player-v1.png",
+        "art_candidates/phase3b/individual/P3B-floor-platform-v1.png",
+        "art_candidates/phase3b/individual/P3B-obstacle-v1.png",
+        "art_candidates/phase3b/individual/P3B-goal-marker-v1.png",
+        "art_candidates/phase3b/individual/P3B-timer-hud-v1.png",
+        "art_candidates/phase3b/individual_preview.png"
+      ],
+      "evidence": [
+        "Individual crop sizes were player 265x275, floor/platform 455x195, obstacle 235x280, goal marker 220x305, and timer/HUD 360x215.",
+        "A labeled preview image was created for review convenience."
+      ]
+    },
+    {
+      "tool_name": "apply_patch",
+      "purpose": "Record BK redirect, add asset requirements, update manifest/report reviewability language, and create rework Work Package and Run records.",
+      "inputs": [
+        "BK owner feedback",
+        "art_candidates/phase3b/individual/*.png",
+        "art_candidates/phase3b/asset_requirements.json"
+      ],
+      "outputs": [
+        "owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md",
+        "art_notes/AN-2026W22-004-art-production-candidate-report.md",
+        "art_candidates/phase3b/asset_manifest.json",
+        "work_packages/active/WP-2026W22-020.json",
+        "runs/RUN-20260531-003.json"
+      ],
+      "evidence": [
+        "Owner review now records Decision: redirect.",
+        "Asset requirements explain why five assets are sufficient for this capability slice and not a full game inventory.",
+        "Manifest maps each required_asset_id to a candidate_id and individual_file_path."
+      ]
+    },
+    {
+      "tool_name": "apply_patch",
+      "purpose": "Add CSV review surfaces after BK clarified that massive asset review needs human-readable and human-editable tables rather than JSON-only records.",
+      "inputs": [
+        "BK CSV review-surface feedback",
+        "art_candidates/phase3b/asset_requirements.json",
+        "art_candidates/phase3b/asset_manifest.json"
+      ],
+      "outputs": [
+        "art_candidates/phase3b/asset_requirements.csv",
+        "art_candidates/phase3b/asset_manifest.csv",
+        "art_candidates/phase3b/asset_requirements.json",
+        "art_candidates/phase3b/asset_manifest.json",
+        "art_notes/AN-2026W22-004-art-production-candidate-report.md",
+        "owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md",
+        "work_packages/active/WP-2026W22-020.json",
+        "runs/RUN-20260531-003.json"
+      ],
+      "evidence": [
+        "asset_requirements.csv records one row per required asset.",
+        "asset_manifest.csv records one row per candidate with required_asset_id, candidate_id, file path, risk, and handoff fields.",
+        "JSON now points to the CSV review surfaces."
+      ]
+    }
+  ],
+  "artifacts": [
+    "art_candidates/phase3b/asset_requirements.json",
+    "art_candidates/phase3b/asset_requirements.csv",
+    "art_candidates/phase3b/asset_manifest.csv",
+    "art_candidates/phase3b/individual/P3B-player-v1.png",
+    "art_candidates/phase3b/individual/P3B-floor-platform-v1.png",
+    "art_candidates/phase3b/individual/P3B-obstacle-v1.png",
+    "art_candidates/phase3b/individual/P3B-goal-marker-v1.png",
+    "art_candidates/phase3b/individual/P3B-timer-hud-v1.png",
+    "art_candidates/phase3b/individual_preview.png",
+    "work_packages/active/WP-2026W22-020.json",
+    "runs/RUN-20260531-003.json"
+  ],
+  "commands": [
+    {
+      "command": "which magick || which convert || which sips",
+      "exit_code": 0,
+      "notes": "ImageMagick was unavailable; /usr/bin/sips was available. Cropping was completed with Python PIL because it provides deterministic coordinate crops for this local asset rework."
+    },
+    {
+      "command": "python3 PIL crop script for five individual regions",
+      "exit_code": 0,
+      "notes": "Created individual candidate PNG files and a labeled preview image from the existing contact sheet without new image generation."
+    },
+    {
+      "command": "file art_candidates/phase3b/individual/*.png",
+      "exit_code": 0,
+      "notes": "Confirmed individual PNG dimensions: floor/platform 455x195, goal marker 220x305, obstacle 235x280, player 265x275, timer/HUD 360x215."
+    },
+    {
+      "command": "shasum -a 256 art_candidates/phase3b/individual/*.png",
+      "exit_code": 0,
+      "notes": "Recorded stable hashes for each individual candidate file before manifest update."
+    },
+    {
+      "command": "jq empty art_candidates/phase3b/asset_requirements.json art_candidates/phase3b/asset_manifest.json",
+      "exit_code": 0,
+      "notes": "Requirement list and updated manifest parsed as valid JSON."
+    },
+    {
+      "command": "test -e art_candidates/phase3b/individual/P3B-player-v1.png && test -e art_candidates/phase3b/individual/P3B-floor-platform-v1.png && test -e art_candidates/phase3b/individual/P3B-obstacle-v1.png && test -e art_candidates/phase3b/individual/P3B-goal-marker-v1.png && test -e art_candidates/phase3b/individual/P3B-timer-hud-v1.png && test -e art_candidates/phase3b/individual_preview.png",
+      "exit_code": 0,
+      "notes": "All five individual candidate files and the preview file exist."
+    },
+    {
+      "command": "python3 - <<'PY'\nimport csv\nfor path in ['art_candidates/phase3b/asset_requirements.csv','art_candidates/phase3b/asset_manifest.csv']:\n    with open(path, newline='') as f:\n        rows = list(csv.DictReader(f))\n    assert rows, path\n    assert 'required_asset_id' in rows[0], path\nprint('csv ok')\nPY",
+      "exit_code": 0,
+      "notes": "CSV review surfaces parsed successfully and each includes required_asset_id."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-020.json",
+      "exit_code": 0,
+      "notes": "WP-2026W22-020 validated against the Work Package schema. AJV ignored the date format because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260531-003.json",
+      "exit_code": 0,
+      "notes": "RUN-20260531-003 validated against the Run schema before this evidence update. AJV ignored date-time formats because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "rg -n \"required_asset_id|candidate_id|individual_file_path|reviewability_rule|count_rationale\" art_candidates/phase3b/asset_requirements.json art_candidates/phase3b/asset_manifest.json",
+      "exit_code": 0,
+      "notes": "Mapping coverage check found asset count rationale, reviewability rule, required asset ids, candidate ids, and individual file paths."
+    },
+    {
+      "command": "rg -n \"Decision: redirect|Original package was not reviewable|required asset|individual candidate|implementation authorization\" owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md",
+      "exit_code": 0,
+      "notes": "Owner review now records BK redirect and the rework boundary."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "art_candidates/phase3b/asset_requirements.json",
+      "art_candidates/phase3b/asset_requirements.csv",
+      "art_candidates/phase3b/asset_manifest.csv",
+      "art_candidates/phase3b/individual/P3B-player-v1.png",
+      "art_candidates/phase3b/individual/P3B-floor-platform-v1.png",
+      "art_candidates/phase3b/individual/P3B-obstacle-v1.png",
+      "art_candidates/phase3b/individual/P3B-goal-marker-v1.png",
+      "art_candidates/phase3b/individual/P3B-timer-hud-v1.png",
+      "art_candidates/phase3b/individual_preview.png",
+      "art_candidates/phase3b/asset_manifest.json",
+      "art_notes/AN-2026W22-004-art-production-candidate-report.md",
+      "owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md",
+      "work_packages/active/WP-2026W22-020.json",
+      "runs/RUN-20260531-003.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "This rework fixes reviewability defects identified by BK and adds CSV review surfaces for scalable human asset review. It does not create new generated art, approve final art, or authorize Godot implementation."
+}

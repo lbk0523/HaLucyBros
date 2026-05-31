@@ -1,0 +1,194 @@
+{
+  "run_id": "RUN-20260531-006",
+  "work_package_id": "WP-2026W22-023",
+  "agent": "art",
+  "agent_profile": "agents/profiles/art_agent.yaml",
+  "started_at": "2026-05-31T15:57:22+09:00",
+  "ended_at": "2026-05-31T16:01:45+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "Codex shell",
+      "purpose": "Confirm target availability, timestamp, PIL availability, source candidate modes/sizes, and worktree baseline before transparent asset prep.",
+      "inputs": [
+        "art_candidates/phase3b/individual/P3B-player-v1.png",
+        "art_candidates/phase3b/individual/P3B-floor-platform-v1.png",
+        "art_candidates/phase3b/individual/P3B-obstacle-v1.png",
+        "art_candidates/phase3b/individual/P3B-goal-marker-v1.png",
+        "art_candidates/phase3b/individual/P3B-timer-hud-v1.png"
+      ],
+      "outputs": [
+        "art_candidates/phase3e/prepared/P3E-player-v1-transparent.png",
+        "art_candidates/phase3e/prepared/P3E-floor-platform-v1-transparent.png",
+        "art_candidates/phase3e/prepared/P3E-obstacle-v1-transparent.png",
+        "art_candidates/phase3e/prepared/P3E-goal-marker-v1-transparent.png",
+        "art_candidates/phase3e/prepared_preview.png"
+      ],
+      "evidence": [
+        "Target Phase 3E files did not already exist.",
+        "PIL is available.",
+        "Source Phase 3B candidate files are RGB crops without alpha."
+      ]
+    },
+    {
+      "tool_name": "Python PIL local image processing",
+      "purpose": "Remove connected light background from the four world-facing candidate files and save transparent RGBA PNGs.",
+      "inputs": [
+        "art_candidates/phase3b/individual/P3B-player-v1.png",
+        "art_candidates/phase3b/individual/P3B-floor-platform-v1.png",
+        "art_candidates/phase3b/individual/P3B-obstacle-v1.png",
+        "art_candidates/phase3b/individual/P3B-goal-marker-v1.png"
+      ],
+      "outputs": [
+        "art_candidates/phase3e/prepared/P3E-player-v1-transparent.png",
+        "art_candidates/phase3e/prepared/P3E-floor-platform-v1-transparent.png",
+        "art_candidates/phase3e/prepared/P3E-obstacle-v1-transparent.png",
+        "art_candidates/phase3e/prepared/P3E-goal-marker-v1-transparent.png",
+        "art_candidates/phase3e/prepared_preview.png"
+      ],
+      "evidence": [
+        "Prepared player PNG is RGBA 199x223 with transparent corners.",
+        "Prepared floor/platform PNG is RGBA 427x161 with transparent corners.",
+        "Prepared obstacle PNG is RGBA 199x242 with transparent corners.",
+        "Prepared goal marker PNG is RGBA 194x267 with transparent corners.",
+        "Timer/HUD was intentionally deferred."
+      ]
+    },
+    {
+      "tool_name": "file, shasum, PIL alpha validation, view_image",
+      "purpose": "Validate prepared asset format, hashes, alpha channel presence, transparent corners, and visual preview.",
+      "inputs": [
+        "art_candidates/phase3e/prepared/*.png",
+        "art_candidates/phase3e/prepared_preview.png"
+      ],
+      "outputs": [
+        "validation evidence for prepared_manifest.csv",
+        "validation evidence for prepared_manifest.json",
+        "validation evidence for AN-2026W22-005"
+      ],
+      "evidence": [
+        "file reported four prepared assets as PNG RGBA.",
+        "Alpha validation confirmed transparent corners for all four prepared assets.",
+        "Prepared preview was inspected over checkerboard background."
+      ]
+    },
+    {
+      "tool_name": "apply_patch",
+      "purpose": "Create prepared manifests, transparent asset prep report, Work Package, and Run records without mutating Godot or approving production art.",
+      "inputs": [
+        "art_candidates/phase3e/prepared/*.png",
+        "art_candidates/phase3b/asset_requirements.csv",
+        "art_candidates/phase3b/asset_manifest.csv",
+        "implementation_notes/IN-2026W22-001-phase3c-asset-integration-assessment.md"
+      ],
+      "outputs": [
+        "art_candidates/phase3e/prepared_manifest.csv",
+        "art_candidates/phase3e/prepared_manifest.json",
+        "art_notes/AN-2026W22-005-transparent-asset-prep-report.md",
+        "work_packages/active/WP-2026W22-023.json",
+        "runs/RUN-20260531-006.json"
+      ],
+      "evidence": [
+        "Prepared manifests map source required_asset_id and candidate_id to prepared asset paths.",
+        "Prep report records method, validation results, quality risks, and Godot import boundary.",
+        "No Godot import or game/** mutation was performed."
+      ]
+    }
+  ],
+  "artifacts": [
+    "art_candidates/phase3e/prepared/P3E-player-v1-transparent.png",
+    "art_candidates/phase3e/prepared/P3E-floor-platform-v1-transparent.png",
+    "art_candidates/phase3e/prepared/P3E-obstacle-v1-transparent.png",
+    "art_candidates/phase3e/prepared/P3E-goal-marker-v1-transparent.png",
+    "art_candidates/phase3e/prepared_preview.png",
+    "art_candidates/phase3e/prepared_manifest.csv",
+    "art_candidates/phase3e/prepared_manifest.json",
+    "art_notes/AN-2026W22-005-transparent-asset-prep-report.md",
+    "work_packages/active/WP-2026W22-023.json",
+    "runs/RUN-20260531-006.json"
+  ],
+  "commands": [
+    {
+      "command": "test ! -e work_packages/active/WP-2026W22-023.json && test ! -e runs/RUN-20260531-006.json && test ! -e art_notes/AN-2026W22-005-transparent-asset-prep-report.md && test ! -e art_candidates/phase3e/prepared_manifest.csv && test ! -e art_candidates/phase3e/prepared_manifest.json",
+      "exit_code": 0,
+      "notes": "Preflight confirmed the main Phase 3E target files did not already exist."
+    },
+    {
+      "command": "date '+%Y-%m-%dT%H:%M:%S%z'",
+      "exit_code": 0,
+      "notes": "Recorded the local run timestamp as 2026-05-31T15:57:22+0900."
+    },
+    {
+      "command": "python3 PIL availability and source image inspection",
+      "exit_code": 0,
+      "notes": "PIL was available. Source candidate files were RGB crops with sizes player 265x275, floor/platform 455x195, obstacle 235x280, goal marker 220x305, and timer/HUD 360x215."
+    },
+    {
+      "command": "python3 connected-light-background-removal prep script",
+      "exit_code": 0,
+      "notes": "Created four prepared transparent RGBA assets and a checkerboard preview. Timer/HUD was deferred."
+    },
+    {
+      "command": "file art_candidates/phase3e/prepared/*.png art_candidates/phase3e/prepared_preview.png",
+      "exit_code": 0,
+      "notes": "file reported four prepared assets as PNG RGBA and prepared_preview.png as PNG RGB."
+    },
+    {
+      "command": "shasum -a 256 art_candidates/phase3e/prepared/*.png art_candidates/phase3e/prepared_preview.png",
+      "exit_code": 0,
+      "notes": "Recorded stable hashes for prepared assets and preview."
+    },
+    {
+      "command": "python3 PIL alpha validation for prepared assets",
+      "exit_code": 0,
+      "notes": "Confirmed all four prepared assets have alpha channels and transparent corners."
+    },
+    {
+      "command": "python3 - <<'PY'\nfrom pathlib import Path\nfrom PIL import Image\nfor path in sorted(Path('art_candidates/phase3e/prepared').glob('*.png')):\n    im = Image.open(path)\n    assert 'A' in im.getbands(), path\n    alpha = im.getchannel('A')\n    corners = [alpha.getpixel(pt) for pt in [(0,0),(im.width-1,0),(0,im.height-1),(im.width-1,im.height-1)]]\n    assert all(v == 0 for v in corners), (path, corners)\nprint('alpha ok')\nPY",
+      "exit_code": 0,
+      "notes": "Final alpha validation passed for all prepared assets."
+    },
+    {
+      "command": "python3 - <<'PY'\nimport csv, json\nwith open('art_candidates/phase3e/prepared_manifest.csv', newline='') as f:\n    rows = list(csv.DictReader(f))\nassert len(rows) == 5 and 'prepared_asset_id' in rows[0]\njson.load(open('art_candidates/phase3e/prepared_manifest.json'))\nprint('manifests ok')\nPY",
+      "exit_code": 0,
+      "notes": "Prepared CSV and JSON manifests parsed successfully."
+    },
+    {
+      "command": "rg -n \"Prep Scope|Method|Prepared Assets|Validation Results|Quality Risks|Godot Import Boundary|Implementation Handoff|Capability Finding\" art_notes/AN-2026W22-005-transparent-asset-prep-report.md",
+      "exit_code": 0,
+      "notes": "Prep report coverage check found required sections."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-023.json",
+      "exit_code": 0,
+      "notes": "WP-2026W22-023 validated against the Work Package schema. AJV ignored the date format because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260531-006.json",
+      "exit_code": 0,
+      "notes": "RUN-20260531-006 validated against the Run schema before this evidence update. AJV ignored date-time formats because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "bash -lc 'extra=$(git status --short --untracked-files=all | sed \"s/^...//\" | grep -Ev \"^(art_notes/AN-2026W22-003-art-production-capability-boundary.md|work_packages/active/WP-2026W22-018.json|runs/RUN-20260531-001.json|art_candidates/phase3b/.*|art_notes/AN-2026W22-004-art-production-candidate-report.md|owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md|work_packages/active/WP-2026W22-019.json|runs/RUN-20260531-002.json|work_packages/active/WP-2026W22-020.json|runs/RUN-20260531-003.json|implementation_notes/IN-2026W22-001-phase3c-asset-integration-assessment.md|work_packages/active/WP-2026W22-021.json|runs/RUN-20260531-004.json|reviews/RV-20260531-001.json|work_packages/active/WP-2026W22-022.json|runs/RUN-20260531-005.json|art_candidates/phase3e/.*|art_notes/AN-2026W22-005-transparent-asset-prep-report.md|work_packages/active/WP-2026W22-023.json|runs/RUN-20260531-006.json)$\" || true); if test -n \"$extra\"; then printf \"%s\\n\" \"$extra\"; exit 1; fi'",
+      "exit_code": 0,
+      "notes": "Scope check passed while allowing previous Phase 3 artifacts and the authorized Phase 3E artifacts."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "art_candidates/phase3e/prepared/P3E-player-v1-transparent.png",
+      "art_candidates/phase3e/prepared/P3E-floor-platform-v1-transparent.png",
+      "art_candidates/phase3e/prepared/P3E-obstacle-v1-transparent.png",
+      "art_candidates/phase3e/prepared/P3E-goal-marker-v1-transparent.png",
+      "art_candidates/phase3e/prepared_preview.png",
+      "art_candidates/phase3e/prepared_manifest.csv",
+      "art_candidates/phase3e/prepared_manifest.json",
+      "art_notes/AN-2026W22-005-transparent-asset-prep-report.md",
+      "work_packages/active/WP-2026W22-023.json",
+      "runs/RUN-20260531-006.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "Phase 3E transparent asset prep completed as one longer unit. It produced transparent prepared assets for world-facing candidates and stopped before Godot import, final art approval, or gameplay expansion."
+}

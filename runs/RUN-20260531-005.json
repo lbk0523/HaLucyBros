@@ -1,0 +1,148 @@
+{
+  "run_id": "RUN-20260531-005",
+  "work_package_id": "WP-2026W22-022",
+  "agent": "qa",
+  "agent_profile": "agents/profiles/qa_agent.yaml",
+  "started_at": "2026-05-31T15:34:18+09:00",
+  "ended_at": "2026-05-31T15:37:00+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "Codex shell",
+      "purpose": "Inspect QA profile, review schema, prior QA conventions, Phase 3B/3C artifacts, target availability, and worktree baseline before producing QA artifacts.",
+      "inputs": [
+        "agents/profiles/qa_agent.yaml",
+        "schemas/review.schema.json",
+        "work_packages/active/WP-2026W22-013.json",
+        "reviews/RV-20260529-001.json",
+        "runs/RUN-20260529-002.json",
+        "art_candidates/phase3b/asset_requirements.csv",
+        "art_candidates/phase3b/asset_manifest.csv",
+        "implementation_notes/IN-2026W22-001-phase3c-asset-integration-assessment.md"
+      ],
+      "outputs": [
+        "work_packages/active/WP-2026W22-022.json",
+        "reviews/RV-20260531-001.json",
+        "runs/RUN-20260531-005.json"
+      ],
+      "evidence": [
+        "QA profile forbids modifying implementation files under review.",
+        "Target Phase 3D files did not exist before this run.",
+        "Pre-run status contained only pre-existing Phase 3 artifacts."
+      ]
+    },
+    {
+      "tool_name": "Codex shell",
+      "purpose": "Run independent package traceability and scope checks without editing art, implementation, or Godot files.",
+      "inputs": [
+        "art_candidates/phase3b/asset_requirements.csv",
+        "art_candidates/phase3b/asset_manifest.csv",
+        "art_candidates/phase3b/asset_requirements.json",
+        "art_candidates/phase3b/asset_manifest.json",
+        "art_candidates/phase3b/individual/*.png",
+        "owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md",
+        "implementation_notes/IN-2026W22-001-phase3c-asset-integration-assessment.md"
+      ],
+      "outputs": [
+        "verification results for RV-20260531-001"
+      ],
+      "evidence": [
+        "CSV files parsed and each contains required_asset_id.",
+        "Manifest maps REQ-P3B-001 through REQ-P3B-005 to candidate ids and individual file paths.",
+        "All five individual candidate files exist.",
+        "Implementation assessment covers target mapping, import prep, visual/collision risk, gameplay risk, excluded implementation, and next Work Package options."
+      ]
+    },
+    {
+      "tool_name": "apply_patch",
+      "purpose": "Create the QA Work Package, QA Review, and QA Run artifacts only.",
+      "inputs": [
+        "art_candidates/phase3b/asset_requirements.csv",
+        "art_candidates/phase3b/asset_manifest.csv",
+        "implementation_notes/IN-2026W22-001-phase3c-asset-integration-assessment.md",
+        "owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md"
+      ],
+      "outputs": [
+        "work_packages/active/WP-2026W22-022.json",
+        "reviews/RV-20260531-001.json",
+        "runs/RUN-20260531-005.json"
+      ],
+      "evidence": [
+        "QA Review decision is pass with human_decision_required true for next-path authorization.",
+        "No art, implementation, owner-review, Godot, or asset files were patched by QA."
+      ]
+    }
+  ],
+  "artifacts": [
+    "work_packages/active/WP-2026W22-022.json",
+    "reviews/RV-20260531-001.json",
+    "runs/RUN-20260531-005.json"
+  ],
+  "commands": [
+    {
+      "command": "date '+%Y-%m-%dT%H:%M:%S%z' && git status --short --untracked-files=all",
+      "exit_code": 0,
+      "notes": "Recorded QA start timestamp as 2026-05-31T15:34:18+0900 and captured the pre-QA worktree baseline."
+    },
+    {
+      "command": "python3 - <<'PY'\nimport csv\nfor path in ['art_candidates/phase3b/asset_requirements.csv','art_candidates/phase3b/asset_manifest.csv']:\n    with open(path, newline='') as f:\n        rows=list(csv.DictReader(f))\n    print(path, len(rows), sorted(rows[0].keys())[:5])\nPY",
+      "exit_code": 0,
+      "notes": "CSV review surfaces parsed. asset_requirements.csv and asset_manifest.csv each contain 5 rows."
+    },
+    {
+      "command": "jq -r '.required_assets[].required_asset_id' art_candidates/phase3b/asset_requirements.json && jq -r '.candidates[] | [.required_asset_id,.candidate_id,.individual_file_path,.owner_review_status] | @tsv' art_candidates/phase3b/asset_manifest.json",
+      "exit_code": 0,
+      "notes": "Confirmed required asset ids and manifest mapping to individual files. Owner review status remains pending for all candidates."
+    },
+    {
+      "command": "test -e art_candidates/phase3b/individual/P3B-player-v1.png && test -e art_candidates/phase3b/individual/P3B-floor-platform-v1.png && test -e art_candidates/phase3b/individual/P3B-obstacle-v1.png && test -e art_candidates/phase3b/individual/P3B-goal-marker-v1.png && test -e art_candidates/phase3b/individual/P3B-timer-hud-v1.png",
+      "exit_code": 0,
+      "notes": "Confirmed all five individual candidate PNG files exist."
+    },
+    {
+      "command": "rg -n \"Godot Target Mapping|Import Prep Needs|Visual Collision Alignment Risk|Gameplay Scope Risk|Do not jump directly|not implementation-ready|timer_hud\" implementation_notes/IN-2026W22-001-phase3c-asset-integration-assessment.md",
+      "exit_code": 0,
+      "notes": "Confirmed implementation assessment covers target mapping, prep needs, risks, timer/HUD deferral, and no direct Godot import."
+    },
+    {
+      "command": "rg -n \"Decision: redirect|Rework 기록|CSV|implementation authorization|not authorized\" owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md",
+      "exit_code": 0,
+      "notes": "Confirmed owner review records redirect, rework, CSV review surfaces, and no implementation authorization."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-022.json",
+      "exit_code": 0,
+      "notes": "WP-2026W22-022 validated against the Work Package schema. AJV ignored the date format because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/review.schema.json -d reviews/RV-20260531-001.json",
+      "exit_code": 0,
+      "notes": "RV-20260531-001 validated against the Review schema. AJV ignored date-time formats because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260531-005.json",
+      "exit_code": 0,
+      "notes": "RUN-20260531-005 validated against the Run schema before this evidence update. AJV ignored date-time formats because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "python3 - <<'PY'\nimport csv, json\nfor path in ['art_candidates/phase3b/asset_requirements.csv','art_candidates/phase3b/asset_manifest.csv']:\n    with open(path, newline='') as f:\n        rows = list(csv.DictReader(f))\n    assert rows and 'required_asset_id' in rows[0], path\nfor path in ['art_candidates/phase3b/asset_requirements.json','art_candidates/phase3b/asset_manifest.json']:\n    json.load(open(path))\nprint('records ok')\nPY",
+      "exit_code": 0,
+      "notes": "CSV and JSON source records parsed successfully after QA artifact creation."
+    },
+    {
+      "command": "bash -lc 'extra=$(git status --short --untracked-files=all | sed \"s/^...//\" | grep -Ev \"^(art_notes/AN-2026W22-003-art-production-capability-boundary.md|work_packages/active/WP-2026W22-018.json|runs/RUN-20260531-001.json|art_candidates/phase3b/.*|art_notes/AN-2026W22-004-art-production-candidate-report.md|owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md|work_packages/active/WP-2026W22-019.json|runs/RUN-20260531-002.json|work_packages/active/WP-2026W22-020.json|runs/RUN-20260531-003.json|implementation_notes/IN-2026W22-001-phase3c-asset-integration-assessment.md|work_packages/active/WP-2026W22-021.json|runs/RUN-20260531-004.json|reviews/RV-20260531-001.json|work_packages/active/WP-2026W22-022.json|runs/RUN-20260531-005.json)$\" || true); if test -n \"$extra\"; then printf \"%s\\n\" \"$extra\"; exit 1; fi'",
+      "exit_code": 0,
+      "notes": "Scope check passed while allowing pre-existing Phase 3A/3B/3C artifacts and the three authorized Phase 3D QA artifacts."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "work_packages/active/WP-2026W22-022.json",
+      "reviews/RV-20260531-001.json",
+      "runs/RUN-20260531-005.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "Phase 3D QA passes the Phase 3B/3C handoff package for traceability and scope review only. This does not approve final art, production use, transparent sprite generation, Godot import, or gameplay expansion."
+}

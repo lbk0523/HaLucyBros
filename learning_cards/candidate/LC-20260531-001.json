@@ -1,0 +1,49 @@
+{
+  "id": "LC-20260531-001",
+  "type": "production",
+  "status": "candidate",
+  "claim": "A generated art candidate package is not reviewable at production scale unless asset requirements, individual files, and a human-editable mapping surface are connected from the start.",
+  "context": "In Phase 3B, the initial Art Agent output produced a single candidate sheet and manifest, but BK rejected the review surface because it did not report which art assets were required and did not connect individual assets to individual files. Rework added asset_requirements.json, asset_requirements.csv, asset_manifest.json, asset_manifest.csv, and individual candidate files before QA passed the handoff package.",
+  "evidence": [
+    {
+      "source_type": "human_decision",
+      "source_ref": "owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md",
+      "summary": "BK redirected the initial art package because it lacked an explicit asset requirement report and delivered candidates as one PNG without durable requirement-to-image mapping."
+    },
+    {
+      "source_type": "work_package",
+      "source_ref": "work_packages/active/WP-2026W22-020.json",
+      "summary": "The rework Work Package required explicit asset requirements, CSV review surfaces, individual candidate files, and requirement-to-candidate mapping without generating new art."
+    },
+    {
+      "source_type": "review",
+      "source_ref": "reviews/RV-20260531-001.json",
+      "summary": "QA passed the reworked Phase 3B/3C package for CSV reviewability, explicit inventory, candidate-file mapping, and scope preservation."
+    },
+    {
+      "source_type": "run",
+      "source_ref": "runs/RUN-20260531-003.json",
+      "summary": "The rework Run created the CSV and JSON review surfaces plus individual PNG files for the five Phase 3B required assets."
+    }
+  ],
+  "scope": {
+    "applies_when": [
+      "An Art Agent produces multiple game asset candidates for owner review.",
+      "The asset package may later scale beyond a handful of images.",
+      "A human reviewer must inspect, filter, edit, or correct asset requirements and candidate mappings."
+    ],
+    "does_not_apply_when": [
+      "The artifact is only a moodboard or style exploration with no asset handoff intent.",
+      "The task produces one standalone image that will not be mapped to a game asset requirement.",
+      "The asset set is final production work that already has a stronger asset database or DCC pipeline."
+    ]
+  },
+  "reuse_rule": "For future Art Agent asset packages, require an explicit asset requirement list, individual candidate files, and a human-editable CSV mapping surface before owner review; treat contact sheets as preview evidence, not the primary review database.",
+  "confidence": "high",
+  "created_by": "learning_librarian",
+  "created_at": "2026-05-31",
+  "related_cards": [
+    "LC-20260528-003"
+  ],
+  "promotion_note": "Candidate only. Promotion should wait until a second asset-package workflow confirms the same reviewability requirement or Phase 4 adopts it as a broader production rule."
+}

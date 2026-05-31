@@ -1,0 +1,117 @@
+{
+  "id": "WP-2026W22-028",
+  "type": "qa",
+  "status": "active",
+  "goal": "Run final Phase 3 closeout verification and write PHASE3_CLOSEOUT.md after owner approval and Candidate Learning Card capture.",
+  "owner_agent": "qa",
+  "inputs": [
+    "art_notes/AN-2026W22-003-art-production-capability-boundary.md",
+    "art_notes/AN-2026W22-004-art-production-candidate-report.md",
+    "art_notes/AN-2026W22-005-transparent-asset-prep-report.md",
+    "owner_reviews/OR-2026W22-003-phase3b-art-candidates-KR.md",
+    "owner_reviews/OR-2026W22-004-phase3-godot-import-KR.md",
+    "implementation_notes/IN-2026W22-001-phase3c-asset-integration-assessment.md",
+    "implementation_notes/IN-2026W22-002-phase3f-godot-asset-import-test.md",
+    "reviews/RV-20260531-001.json",
+    "reviews/RV-20260531-002.json",
+    "learning_cards/candidate/LC-20260531-001.json",
+    "learning_cards/candidate/LC-20260531-002.json",
+    "work_packages/active/WP-2026W22-018.json",
+    "work_packages/active/WP-2026W22-019.json",
+    "work_packages/active/WP-2026W22-020.json",
+    "work_packages/active/WP-2026W22-021.json",
+    "work_packages/active/WP-2026W22-022.json",
+    "work_packages/active/WP-2026W22-023.json",
+    "work_packages/active/WP-2026W22-024.json",
+    "work_packages/active/WP-2026W22-025.json",
+    "work_packages/active/WP-2026W22-026.json",
+    "work_packages/active/WP-2026W22-027.json",
+    "runs/RUN-20260531-001.json",
+    "runs/RUN-20260531-002.json",
+    "runs/RUN-20260531-003.json",
+    "runs/RUN-20260531-004.json",
+    "runs/RUN-20260531-005.json",
+    "runs/RUN-20260531-006.json",
+    "runs/RUN-20260531-007.json",
+    "runs/RUN-20260531-008.json",
+    "runs/RUN-20260531-009.json",
+    "runs/RUN-20260531-010.json"
+  ],
+  "targets": [
+    "PHASE3_CLOSEOUT.md",
+    "reviews/RV-20260531-003.json",
+    "work_packages/active/WP-2026W22-028.json",
+    "runs/RUN-20260531-011.json"
+  ],
+  "forbidden_changes": [
+    "game/**",
+    "scripts/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "research_notes/**",
+    "art_notes/**",
+    "art_candidates/**",
+    "implementation_notes/**",
+    "owner_reviews/**",
+    "reviews/RV-20260531-001.json",
+    "reviews/RV-20260531-002.json",
+    "learning_cards/**",
+    "implementation changes",
+    "asset edits",
+    "Learning Card promotion",
+    "Work Package lifecycle moves",
+    "final art, production asset approval, gameplay expansion, platform launch approval, or external feedback workflow approval"
+  ],
+  "outputs": [
+    "PHASE3_CLOSEOUT.md",
+    "reviews/RV-20260531-003.json",
+    "runs/RUN-20260531-011.json"
+  ],
+  "verify": [
+    {
+      "name": "Phase 3 closeout artifact exists",
+      "method": "artifact_check",
+      "expected_artifact": "PHASE3_CLOSEOUT.md"
+    },
+    {
+      "name": "Final smoke output is clean",
+      "method": "command",
+      "command": "bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"'"
+    },
+    {
+      "name": "Main scene runs headlessly",
+      "method": "command",
+      "command": "godot --headless --path game --scene res://scenes/main.tscn --quit-after 3"
+    },
+    {
+      "name": "Phase 3 schema validations pass",
+      "method": "manual_check",
+      "description": "Confirm WP-2026W22-018 through 028, RUN-20260531-001 through 011, RV-20260531-001 through 003, and LC-20260531-001/002 validate against their schemas."
+    },
+    {
+      "name": "Imported asset package remains present",
+      "method": "command",
+      "command": "test -e game/assets/phase3e/player.png && test -e game/assets/phase3e/player.png.import && test -e game/assets/phase3e/floor_platform.png && test -e game/assets/phase3e/floor_platform.png.import && test -e game/assets/phase3e/obstacle.png && test -e game/assets/phase3e/obstacle.png.import && test -e game/assets/phase3e/goal_marker.png && test -e game/assets/phase3e/goal_marker.png.import"
+    },
+    {
+      "name": "Closeout document has required sections",
+      "method": "command",
+      "command": "rg -n \"Status|Closed Loop|Completed Artifacts|Result|Owner Decisions|QA Result|Verification Evidence|Learning Capture|Repository Hygiene Note|Not Completed Or Deferred|Next Boundary|Closeout Boundary\" PHASE3_CLOSEOUT.md"
+    }
+  ],
+  "handoff_to": [
+    "human_creative_owner",
+    "learning_librarian"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "PHASE3_CLOSEOUT.md summarizes Phase 3 status, artifacts, owner decisions, QA result, verification evidence, learning capture, repo hygiene, deferred work, next boundary, and closeout boundary.",
+    "Final smoke and headless scene checks pass with clean output.",
+    "All Phase 3 Work Package, Run, Review, and Learning Card artifacts validate.",
+    "The closeout does not claim final art, production readiness, gameplay expansion, platform launch feedback, or external tester workflow approval.",
+    "No Godot, art, implementation, owner review, learning, schema, agent, or Work Package lifecycle move is performed by this closeout slice except the authorized closeout artifacts."
+  ],
+  "created_at": "2026-05-31",
+  "notes": "This Work Package closes Phase 3 and prepares the handoff to Phase 4 Production System Retrospective planning."
+}
