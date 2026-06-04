@@ -11,19 +11,20 @@ Halucy가 먼저 만들 것은 에이전트 플랫폼이 아니다. 먼저 검�
 - Halucy는 인디 게임을 제작하는 AI-native 프로젝트다.
 - 장르는 하이퍼캐주얼에 국한하지 않는다.
 - 기존 AI 에이전트 플랫폼과 오픈소스 프로젝트는 참고, 최적화, 필요 시 fork 대상이다.
-- 초기 prototype은 Godot desktop/web-capable target으로 시작한다.
+- prototype track은 Godot desktop/web-capable target으로 시작했다.
 - 에이전트 역할은 문서상 구분에 그치지 않고 실제 prototype 제작에 사용한다.
-- 초기 역할은 Research Agent, Art Agent, Implementation Agent, QA Agent, Learning Librarian Agent로 둔다.
+- 현재 기본 역할은 Research Agent, Art Agent, Implementation Agent, QA Agent, Learning Librarian Agent로 둔다.
 - Human Creative Owner가 creative/product 방향과 Canonical/Policy 판단 권한을 가진다.
 - Implementation과 QA는 분리한다.
 - 학습은 raw log가 아니라 Learning Card로 자산화한다.
 - Learning Card는 status-first store에 저장한다: `candidate`, `working`, `canonical`, `policy`.
 - Candidate와 Working은 에이전트가 생성하거나 제안할 수 있지만, Canonical과 Policy는 더 강한 검토 기준이 필요하다.
 - 계획은 고정된 달력이 아니라 Phase로 관리한다.
+- 현재 다음 production boundary는 Phase 4B Complex Prototype Production Validation이다.
 
 ## Non-Goals
 
-초기 Halucy가 하지 않을 일:
+현재 Halucy가 하지 않을 일:
 
 - 에이전트 플랫폼 자체를 제품으로 만드는 것
 - 게임 엔진을 여러 개 동시에 지원하는 것
@@ -57,7 +58,7 @@ Implementation Agent가 만든 결과는 QA Agent가 독립적으로 검토한�
 
 자동화는 생산 루프에서 반복 병목이 확인된 뒤 붙인다. 처음부터 모든 결정을 자동화하지 않는다.
 
-## Initial Agent Organization
+## Current Agent Organization
 
 | Role | Owns | Main Outputs | Must Not Own |
 |---|---|---|---|
@@ -110,122 +111,89 @@ Promotion model:
 - `Working -> Canonical`: human approval or later strong review protocol required.
 - `Canonical -> Policy`: human approval required.
 
-## Phase Plan
+Current validation loops default to Candidate-only capture unless a separate
+approved Work Package explicitly authorizes promotion.
 
-### Phase 0. Architecture Contract
+## Phase Status And Plan
 
-Lock the operating contract before real production expands.
+### Completed Evidence: Phase 0-3
 
-Outputs:
+Phase 0 fixed the architecture contract: agent profiles, Work Package, Run,
+Review, Learning Card schemas, role handoff map, Godot target, and GitHub sync
+direction.
 
-- agent profile schema
-- Work Package schema
-- Run schema
-- Review schema
-- Learning Card schema
-- role handoff map
-- Godot desktop/web target decision
-- GitHub repo sync decision
+Phase 1 proved a tiny Research -> Art -> Owner -> Implementation -> QA ->
+Learning loop on a Godot readability slice.
 
-Pass:
+Phase 2 proved the role-separated production harness can create a playable
+platformer greybox with QA and BK/Human Creative Owner feel judgment.
 
-- each agent has clear inputs, outputs, authority, forbidden scope
-- Work Package to Learning Card evidence path is traceable
-- human decision points are explicit
+Phase 3 proved Art Agent production capability: tool-assisted art candidates,
+owner redirect/rework, implementation handoff, transparent asset prep, Godot
+import, QA, and BK direct test approval.
 
-### Phase 1. Role-Separated Production Dry Run
+These phases do not approve final game concept, launch readiness, final art,
+external tester workflow, platform feedback, or broad gameplay expansion.
 
-Run one small production loop with separated roles before committing to a full prototype.
+### Phase 4A. Production System Retrospective
 
-Outputs:
-
-- Research Agent note
-- Art Agent note
-- Implementation Agent tiny Godot slice
-- QA Agent review
-- Learning Librarian Candidate Learning Card
-
-Pass:
-
-- handoffs work as written
-- QA is independent from implementation
-- one Learning Capture Gate closes cleanly
-
-### Phase 2. Playable Vertical Slice
-
-Use the separated agents to create a playable core loop.
+Phase 4A synthesizes Phase 0-3 evidence and creates the decision surface for
+Phase 4B. It does not close Phase 4 by itself.
 
 Outputs:
 
-- game brief
-- reference pack
-- style board or asset manifest
-- Godot greybox
-- first playable build
-- QA report
-- Candidate Learning Cards
+- `production_retrospectives/PR-2026W22-001-phase4a-production-system-retrospective-KR.md`
+- `plans/PHASE4B_COMPLEX_PROTOTYPE_VALIDATION_PLAN.md`
+- role handoff, QA gate, Learning Card triage, automation, and repo hygiene decisions
 
 Pass:
 
-- player-facing hook is testable
-- build and smoke test pass
-- human creative review is recorded
+- Phase 0-3 evidence is separated from assumptions
+- role boundaries and handoffs are classified as keep, revise, defer, or remove
+- Phase 4B can start from a bounded production validation plan
+- no Learning Card promotion is executed without separate authority
 
-### Phase 3. Art Production Capability Validation
+### Phase 4B. Complex Prototype Production Validation
 
-Validate whether the Art Agent can use real tool workflows, such as MCP,
-computer use, image generation, or asset review tools, to produce
-prototype-grade art candidates and hand them off through owner review and
-implementation planning.
+Phase 4B is the current next production boundary. It is not final game
+development; it is a controlled stress test of whether Halucy's production
+system can build a more complex playable prototype than the Phase 2 greybox and
+Phase 3 art import test.
 
-Outputs:
+Recommended boundary:
 
-- art tool capability note
-- prototype-grade asset candidate report
-- asset manifest with usage, license, and risk notes
-- Human Creative Owner art review
-- implementation handoff note
-- Candidate or Working Learning Card candidates
+```text
+Two-section platformer challenge with one hazard or moving obstacle, collectible/progression state, simple result/retry UI, camera follow or section framing, and at least one imported gameplay-readable asset category.
+```
 
-Pass:
+Required sequence:
 
-- Art Agent tool use produces reviewable prototype-grade asset candidates
-- asset candidates have explicit usage scope, constraints, and risks
-- Human Creative Owner can approve, redirect, or reject prototype use
-- Implementation Agent can judge a small Godot integration path without
-  changing gameplay scope
-- repeatable art-production, tool-use, or handoff lessons become Learning Card
-  candidates
-
-Deferred:
-
-- External or semi-external feedback loops are not part of the early numbered
-  phase plan. They should be defined later as a release or platform-dependent
-  loop after the target platform, distribution path, and audience feedback
-  channel are known.
-
-### Phase 4. Production System Retrospective
-
-Judge whether Halucy's production system is reusable for the next prototype
-after Phase 0 through Phase 3 have exercised architecture, role-separated
-production, playable greybox implementation, QA, learning capture, and Art
-Agent production capability.
-
-Outputs:
-
-- production retrospective
-- Canonical candidates
-- agent profile revision proposal
-- next prototype plan
-- automation candidate list
+```text
+Phase 4B Scope/Game Brief
+-> Research Agent constraints
+-> Art Agent requirements and candidate package
+-> BK/Human Creative Owner scope/art review
+-> Implementation Agent Godot slice
+-> QA Agent technical/playability review
+-> BK/Human Creative Owner direct play/feel review
+-> Learning Librarian Candidate capture
+-> Closeout verification
+```
 
 Pass:
 
-- reusable lessons are separated from one-off noise
-- role boundaries and handoffs are updated or explicitly preserved based on
-  Phase 0-3 evidence
-- next loop can start from updated context
-- automation candidates are evidence-backed
+- Work Package based execution holds under higher prototype complexity
+- Implementation and QA remain separate
+- owner approval happens before implementation and owner feel judgment closes the playable gate
+- QA covers schema, smoke cleanliness, headless runtime, scope, imported asset metadata when applicable, and target-file diff review
+- Learning capture stays Candidate-only unless a separate approved Work Package authorizes promotion
+- repo hygiene decisions for `.gd.uid`, `.png.import`, `.godot/`, and active Work Package lifecycle are explicit
+
+### Deferred Later Loops
+
+External or semi-external feedback, release/platform feedback, launch planning,
+monetization, and market-position validation are deferred until the target
+platform, distribution path, and audience feedback channel are known.
 
 ## Source of Truth
 
@@ -233,9 +201,12 @@ Pass:
 - `CONTEXT.md`: controlled vocabulary and learning terminology
 - `Halucy Codex 구현 계획.md`: implementation contract and repo skeleton plan
 - `templates/learning-card.md`: Learning Card format
+- `AGENTS.md` and `CLAUDE.md`: tool-specific startup shims only, not canonical policy sources
 
 When these conflict, update `HALUCY_FOUNDATION.md` first, then propagate the decision into the more specific document.
 
-## Immediate Next Step
+## Current Next Boundary
 
-After this foundation is reviewed, write `schemas/agent_profile.schema.json` first. Do not start game candidate selection until the profile schema and initial agent profile files are stable enough to run Phase 1.
+Start Phase 4B only after BK/Human Creative Owner accepts the complex prototype
+validation boundary. The next execution unit should be the Phase 4B Scope/Game
+Brief Work Package described in `plans/PHASE4B_COMPLEX_PROTOTYPE_VALIDATION_PLAN.md`.

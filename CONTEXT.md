@@ -1,6 +1,8 @@
 # Halucy Context
 
-Halucy is an AI-native indie game production project. This context captures the project language before implementation and operating documents are rewritten.
+Halucy is an AI-native indie game production project. This context captures the
+project vocabulary, durable learning terminology, and role language that future
+agents should use when the active Work Package or task requires it.
 
 ## Language
 
@@ -141,14 +143,14 @@ A small build that tests whether a game concept has a real player-facing hook.
 _Avoid_: Final product, technical demo only
 
 **Initial Validation**:
-A phase-gated test of whether organized AI agents can produce a playable indie game prototype with enough evidence to judge the production loop.
+A phase-gated test of whether organized AI agents can produce playable indie game prototypes with enough evidence to judge and improve the production loop.
 _Avoid_: Commercial launch, agent-platform buildout
 
 ## Relationships
 
 - **Halucy** studies **Open-Source Reference Projects** and uses one or more **Agent Platforms** to run the **Indie Game Production Loop**.
 - **Agent Organization** defines how AI agents participate in the **Indie Game Production Loop** and how their work becomes **Core Learning Assets**.
-- The initial **Agent Organization** uses **Research Agent**, **Art Agent**, **Implementation Agent**, **QA Agent**, and **Learning Librarian Agent** to actually produce the prototype.
+- The current **Agent Organization** uses **Research Agent**, **Art Agent**, **Implementation Agent**, **QA Agent**, and **Learning Librarian Agent** to actually produce prototypes.
 - **Human Creative Owner** keeps final creative, product, Canonical, and Policy authority.
 - **Learning Capture** turns agent work into **Learning Cards** that become **Durable Context**.
 - **Learning Capture** occurs at explicit **Learning Capture Gates**, not after every small task.
@@ -161,7 +163,7 @@ _Avoid_: Commercial launch, agent-platform buildout
 - **Learning Automation** should automate proven **Learning Capture** workflows, not replace human judgment before the loop is understood.
 - An **Opportunity Space** produces one or more candidate game concepts.
 - A candidate game concept becomes a **Playable Prototype** only when it has a specific testable hook.
-- **Initial Validation** succeeds only if **Agent Organization** produces a **Playable Prototype** through phase gates and leaves evidence for judging the loop.
+- **Initial Validation** succeeds only if **Agent Organization** produces **Playable Prototype** evidence through phase gates and leaves evidence for judging the loop.
 - A **Playable Prototype** produces feedback and learning for the next loop.
 
 ## Example Dialogue
@@ -194,7 +196,7 @@ _Avoid_: Commercial launch, agent-platform buildout
 > **Domain expert:** "No. **Policy Learning Cards** change operating rules and require human approval."
 >
 > **Dev:** "Do we only define agent roles, or do we use them to build the prototype?"
-> **Domain expert:** "Use them to build the prototype. The initial split is a working production structure, not an org chart."
+> **Domain expert:** "Use them to build the prototype. The current split is a working production structure, not an org chart."
 
 ## Flagged Ambiguities
 
@@ -203,9 +205,9 @@ _Avoid_: Commercial launch, agent-platform buildout
 - "Use existing AI agent platforms" was too passive. Resolved: Halucy optimizes agent-platform and open-source references into its own **Agent Organization** and production loop.
 - "Learning" can mean raw logs, summaries, decisions, or reusable knowledge. Resolved: only reusable lessons that should affect future decisions are **Core Learning Assets**.
 
-## Initial Agent Profiles
+## Current Agent Profiles
 
-The initial validation uses these AI profiles in real prototype production:
+Halucy currently uses these AI profiles in real prototype production:
 
 - **Research Agent**: produces market research, reference packs, pre-production inputs, launch-channel notes, and post-launch signal reports.
 - **Art Agent**: produces style direction, art resource candidates, asset prompts, visual reviews, and asset manifests.
@@ -214,7 +216,7 @@ The initial validation uses these AI profiles in real prototype production:
 - **Learning Librarian Agent**: creates Learning Card candidates, detects duplicates, links evidence, and suggests status changes.
 - **Human Creative Owner**: makes final creative and product decisions.
 
-These profiles are used to make the prototype. They are coordinated through Work Packages and artifact handoffs, not through an automatic multi-agent runtime at the start.
+These profiles are used to make prototypes. They are coordinated through Work Packages and artifact handoffs, not through an automatic multi-agent runtime.
 
 ## Core Learning Asset Criteria
 
@@ -281,6 +283,9 @@ Humans should not manually approve every **Candidate Learning Card**. Long-term 
 - the same lesson appears in two or more independent sources, or
 - evidence inside one prototype is clear enough to guide current work.
 
+Current validation loops default to **Candidate Learning Card** capture only
+unless a separate approved Work Package explicitly authorizes promotion.
+
 `Working -> Canonical` requires human approval or a later-defined strong review protocol when:
 
 - the lesson has been reused in at least two production loops, or
@@ -289,15 +294,15 @@ Humans should not manually approve every **Candidate Learning Card**. Long-term 
 
 `Canonical -> Policy` always requires human approval because it changes an operating rule, prohibition, or default process.
 
-During initial validation, do not create automatic promotion rules. Observe the manual pattern first.
+During current validation loops, do not create automatic promotion rules. Observe the manual pattern first.
 
 ## Learning Capture Gates
 
-During initial validation, Learning Capture happens at these gates:
+During current validation loops, Learning Capture happens at these gates:
 
 - `Concept Selection`: capture why candidates were selected or rejected.
 - `Prototype Vertical Slice`: capture reusable agent-organization, Godot, or tooling lessons.
-- `First External Feedback`: capture repeated player, community, or positioning signals.
+- `Release / Platform Feedback`: capture repeated player, community, or positioning signals after a release or feedback channel is defined.
 - `Major Failure / Scope Cut`: capture causes that should not repeat.
 - `Production Retrospective`: capture reusable agent roles, prompts, handoffs, and review patterns.
 
