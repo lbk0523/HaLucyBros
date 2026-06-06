@@ -1,0 +1,103 @@
+{
+  "id": "WP-2026W22-030",
+  "type": "learning",
+  "status": "active",
+  "goal": "Create the Phase 4B Scope And Game Brief so the complex prototype validation loop starts from a concrete local prototype boundary, selected complexity features, role boundaries, verification expectations, and a Research handoff.",
+  "owner_agent": "learning_librarian",
+  "inputs": [
+    "plans/PHASE4B_COMPLEX_PROTOTYPE_VALIDATION_PLAN.md",
+    "HALUCY_FOUNDATION.md",
+    "CONTEXT.md",
+    "PHASE2_CLOSEOUT.md",
+    "PHASE3_CLOSEOUT.md",
+    "production_retrospectives/PR-2026W22-001-phase4a-production-system-retrospective-KR.md",
+    "agents/profiles/research_agent.yaml",
+    "agents/profiles/art_agent.yaml",
+    "agents/profiles/implementation_agent.yaml",
+    "agents/profiles/qa_agent.yaml",
+    "agents/profiles/learning_librarian_agent.yaml"
+  ],
+  "targets": [
+    "plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md",
+    "work_packages/active/WP-2026W22-030.json"
+  ],
+  "forbidden_changes": [
+    "game/**",
+    "game/.godot/**",
+    "game/assets/**",
+    "game/scenes/**",
+    "game/scripts/**",
+    "art_candidates/**",
+    "art_notes/**",
+    "research_notes/**",
+    "implementation_notes/**",
+    "owner_reviews/**",
+    "reviews/**",
+    "runs/**",
+    "learning_cards/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "Godot implementation",
+    "art asset creation or editing",
+    "WP-031 or later execution",
+    "final game concept approval",
+    "final art direction approval",
+    "launch readiness approval",
+    "external tester workflow",
+    "Learning Card promotion",
+    "Work Package lifecycle moves",
+    "commit, stage, or push"
+  ],
+  "outputs": [
+    "plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md"
+  ],
+  "verify": [
+    {
+      "name": "Phase 4B scope brief exists",
+      "method": "artifact_check",
+      "expected_artifact": "plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md"
+    },
+    {
+      "name": "Scope brief contains required planning boundaries",
+      "method": "command",
+      "command": "rg -n \"Concrete Local Prototype Boundary|Selected Complexity Features|Allowed Target Surfaces|Forbidden Gameplay Scope|Role Boundaries|Verification Expectations|Next Handoff\" plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md"
+    },
+    {
+      "name": "WP-030 validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-030.json"
+    },
+    {
+      "name": "No implementation or art surfaces changed",
+      "method": "manual_check",
+      "description": "Confirm git diff is limited to plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md and work_packages/active/WP-2026W22-030.json."
+    },
+    {
+      "name": "Next handoff is Research constraints only",
+      "method": "manual_check",
+      "description": "Confirm the brief hands off to WP-031 Research Constraints and does not start Art, Implementation, QA, Learning promotion, or closeout work."
+    }
+  ],
+  "handoff_to": [
+    "research",
+    "art",
+    "implementation",
+    "qa",
+    "learning_librarian",
+    "human_creative_owner"
+  ],
+  "human_decision_required": true,
+  "human_decision_reason": "BK/Human Creative Owner must accept or redirect the Phase 4B local prototype boundary and selected complexity features before Research, Art, or Implementation work can proceed.",
+  "acceptance_criteria": [
+    "The scope brief defines a concrete local playable prototype boundary for Phase 4B without approving final game concept, final art direction, launch readiness, external testing, or Learning Card promotion.",
+    "The selected complexity features include multi-section level flow, one hazard or moving obstacle, collectible or progression state, UI state, camera behavior, imported gameplay-readable art, and a player-facing feel gate.",
+    "Allowed target surfaces and forbidden gameplay scope are explicit enough to constrain WP-031 through WP-034.",
+    "Research, Art, Implementation, QA, Learning Librarian, and Human Creative Owner boundaries are preserved.",
+    "Verification expectations include schema validation, clean smoke output, headless runtime, target-file diff review, imported asset metadata checks when applicable, QA/Implementation separation, and BK direct play/feel review.",
+    "The next handoff is WP-031 Research Constraints only.",
+    "No Godot implementation files, art assets, runs, reviews, Learning Cards, schemas, agent profiles, or Work Package lifecycle moves are changed by WP-030."
+  ],
+  "created_at": "2026-06-04",
+  "notes": "This Work Package opens Phase 4B from the approved complex prototype validation plan. It intentionally stops before Research execution, Art production, Godot implementation, QA, owner play review, learning capture, closeout, staging, committing, or pushing."
+}
