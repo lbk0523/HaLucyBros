@@ -1,0 +1,107 @@
+{
+  "review_id": "RV-20260613-001",
+  "run_id": "RUN-20260613-004",
+  "work_package_id": "WP-2026W22-035",
+  "reviewer_agent": "qa",
+  "review_type": "qa",
+  "started_at": "2026-06-13T19:57:35+09:00",
+  "ended_at": "2026-06-13T20:01:20+09:00",
+  "checks": [
+    {
+      "name": "Implementation scope matches WP-034",
+      "status": "pass",
+      "evidence": [
+        "game/scenes/main.tscn and game/scripts/player.gd contain the Phase 4B implementation changes under WP-034 target scope",
+        "runs/RUN-20260613-004.json records touched paths as game/scenes/main.tscn, game/scripts/player.gd, and runs/RUN-20260613-004.json",
+        "QA did not modify implementation files under review"
+      ],
+      "notes": "The repository has broader Phase 4B untracked artifacts and a pre-existing AGENTS.md edit, but the implementation slice itself remains within the WP-034 target set."
+    },
+    {
+      "name": "Two-section local flow is represented",
+      "status": "pass",
+      "evidence": [
+        "game/scenes/main.tscn contains SECTION 1 WARMUP and SECTION 2 HAZARD + ITEM labels",
+        "game/scenes/main.tscn contains a left start marker, traversal platform, hazard, collectible, and right-side goal in one scene"
+      ],
+      "notes": "Static scene review confirms a readable one-scene, two-section layout."
+    },
+    {
+      "name": "Movement verbs remain bounded",
+      "status": "pass",
+      "evidence": [
+        "game/scripts/player.gd implements horizontal movement from ui_left/ui_right",
+        "game/scripts/player.gd implements one fixed jump from floor using ui_up or ui_accept",
+        "No dash, wall jump, double jump, attack, health, lives, checkpoint, inventory, or save/load code was found in the changed player script"
+      ],
+      "notes": "The script preserves the approved Phase 2 movement verb boundary."
+    },
+    {
+      "name": "Hazard fail and collectible progression are represented",
+      "status": "pass",
+      "evidence": [
+        "game/scenes/main.tscn contains HazardArea, HazardCollision, HazardWarning, and HazardLabel",
+        "game/scenes/main.tscn contains CollectibleArea, CollectibleCollision, CollectibleVisual, and CollectibleLabel",
+        "game/scripts/player.gd sets has_collectible on overlap, hides/disables the collectible, gates success at GoalArea, and resets the collectible in _reset_run"
+      ],
+      "notes": "The hazard is readable before punishment through color and label. The collectible remains placeholder-only as required."
+    },
+    {
+      "name": "UI and retry state are represented",
+      "status": "pass",
+      "evidence": [
+        "game/scenes/main.tscn contains TimerLabel, ItemLabel, StatusLabel, ResultLabel, and RetryButton",
+        "game/scripts/player.gd updates TIME, ITEM, status, and result text",
+        "game/scripts/player.gd exposes retry through RetryButton and ui_accept after a finished state"
+      ],
+      "notes": "The UI stays within status/result/retry scope and does not become a full menu/settings/save system."
+    },
+    {
+      "name": "Camera/readability support exists",
+      "status": "pass",
+      "evidence": [
+        "game/scenes/main.tscn contains Camera2D under Player with enabled=true",
+        "Camera limits cover the 0-1220 by 0-360 playable area"
+      ],
+      "notes": "Static review finds camera support sufficient for a local prototype. BK direct play should still judge feel and readability in motion."
+    },
+    {
+      "name": "Approved imported asset references are valid after import",
+      "status": "pass",
+      "evidence": [
+        "game/scenes/main.tscn references res://assets/phase3e/obstacle.png and res://assets/phase3e/goal_marker.png",
+        "godot --headless --path game --import exit code 0",
+        "bash -lc 'out=$(godot --headless --path game --scene res://scenes/main.tscn --quit-after 3 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR|Parse Error|Failed\" <<< \"$out\"' exit code 0"
+      ],
+      "notes": "The generated game/.godot import cache is required for local runtime but remains ignored and is not treated as an artifact or evidence source."
+    },
+    {
+      "name": "Deterministic smoke verification passes",
+      "status": "pass",
+      "evidence": [
+        "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-035.json exit code 0",
+        "bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"' exit code 0"
+      ],
+      "notes": "AJV format warnings are expected in this repo because the format plugin is not bundled."
+    },
+    {
+      "name": "Human creative play-feel gate remains open",
+      "status": "pass",
+      "evidence": [
+        "plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md requires BK/Human Creative Owner to directly judge play/feel",
+        "WP-034 acceptance criteria say the result is handed off to QA before Phase 4B implementation pass is claimed",
+        "This QA review recommends technical pass but does not approve final play/feel"
+      ],
+      "notes": "BK should play the slice locally before Phase 4B pass/closeout is claimed."
+    }
+  ],
+  "scope_findings": {
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "issues": [],
+  "decision": "pass",
+  "human_decision_required": true,
+  "human_decision_reason": "Phase 4B requires BK/Human Creative Owner direct play/feel judgment after QA; this QA pass is technical and scope-readiness only.",
+  "notes": "QA recommends technical pass for WP-034/WP-035 with no rework issues found. Remaining limitation: QA used static scene/script review plus Godot smoke/runtime checks, not an automated input playback that proves the level can be completed by simulated controls. Human play/feel approval remains required before Phase 4B implementation pass or closeout."
+}

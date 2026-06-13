@@ -1,0 +1,70 @@
+{
+  "requirements_id": "AR-20260613-001",
+  "phase": "Phase 4B Art Requirements And Candidate Package",
+  "created_at": "2026-06-13",
+  "source_research_note": "research_notes/RN-2026W22-003-phase4b-complex-prototype-reference.md",
+  "asset_requirements": [
+    {
+      "required_asset_id": "REQ-P4B-001",
+      "role": "hazard",
+      "asset_name": "hazard_or_moving_obstacle_signifier",
+      "phase4b_required": true,
+      "purpose": "Make the single hazard or moving obstacle readable before contact without implying enemy AI, combat, health, or damage systems.",
+      "review_need": "BK must judge whether the candidate reads as danger or timing risk, not merely as a static blocker.",
+      "implementation_need": "Can be used only as visual signifier for an Area2D hazard or simple moving obstacle in a later approved implementation WP.",
+      "reviewability_rule": "Must differ from floor, collectible, goal, and player by shape/position/label or motion cue, not color alone.",
+      "reuse_decision": "reuse_candidate_available_with_readability_risk",
+      "existing_source_path": "art_candidates/phase3e/prepared/P3E-obstacle-v1-transparent.png",
+      "excluded_for_phase4b": "enemy sprites; damage VFX; health/lives UI; boss or patrol AI; combat affordances",
+      "notes": "Existing obstacle art may not communicate danger strongly enough. Owner can approve as prototype hazard marker, redirect to new art generation, or keep it as static obstacle only."
+    },
+    {
+      "required_asset_id": "REQ-P4B-002",
+      "role": "collectible",
+      "asset_name": "collectible_or_progression_item",
+      "phase4b_required": true,
+      "purpose": "Represent the one visible progression item that changes result or goal state.",
+      "review_need": "BK must judge whether the item reads as collectible/progression, not as goal, obstacle, reward chest, inventory item, or final economy object.",
+      "implementation_need": "Later implementation may use placeholder geometry if this role is redirected; do not block Phase 4B imported-art requirement on this role alone.",
+      "reviewability_rule": "Must read as intentionally collectable through shape, placement, or label. Color-only distinction is insufficient.",
+      "reuse_decision": "no_clear_reuse_candidate_new_art_or_placeholder_needed",
+      "existing_source_path": "",
+      "excluded_for_phase4b": "inventory icons; coin economy; shop/upgrade art; quest-item system; multi-item collection set",
+      "notes": "No existing Phase 3 prepared asset cleanly maps to collectible/progression without confusing goal or obstacle semantics."
+    },
+    {
+      "required_asset_id": "REQ-P4B-003",
+      "role": "goal",
+      "asset_name": "goal_marker",
+      "phase4b_required": true,
+      "purpose": "Mark the final destination after the player completes the progression requirement.",
+      "review_need": "BK must judge whether the existing prepared goal marker still reads as destination in the more complex Phase 4B scene.",
+      "implementation_need": "Can be used as visual marker only; the goal trigger and progression check remain separate implementation concerns.",
+      "reviewability_rule": "Must not be confused with collectible or hazard. Trigger area should remain visually and technically separable.",
+      "reuse_decision": "reuse_candidate_recommended",
+      "existing_source_path": "art_candidates/phase3e/prepared/P3E-goal-marker-v1-transparent.png",
+      "excluded_for_phase4b": "level-complete animation; portal system; reward chest; narrative destination art",
+      "notes": "Best existing reuse candidate for satisfying imported gameplay-readable art with minimal new asset risk."
+    },
+    {
+      "required_asset_id": "REQ-P4B-004",
+      "role": "section_landmark",
+      "asset_name": "section_transition_or_surface_landmark",
+      "phase4b_required": false,
+      "purpose": "Support readability between section 1 traversal and section 2 hazard/progression challenge.",
+      "review_need": "BK may approve reuse if it helps distinguish playable surfaces or transition space without implying new platform mechanics.",
+      "implementation_need": "Can be used as static surface/landmark art only; collision should remain simple and should not be changed to match decorative edges.",
+      "reviewability_rule": "Must not imply moving platform, slope, destructible surface, or background-only decoration if used on a gameplay surface.",
+      "reuse_decision": "reuse_candidate_available_with_collision_alignment_risk",
+      "existing_source_path": "art_candidates/phase3e/prepared/P3E-floor-platform-v1-transparent.png",
+      "excluded_for_phase4b": "full tileset; slope tiles; moving platform art; parallax background system",
+      "notes": "Useful if implementation needs one imported visual category beyond goal marker, but collision/readability risk is higher than goal marker."
+    }
+  ],
+  "package_limits": [
+    "No new image generation was performed.",
+    "No final art direction or production/public use approval is implied.",
+    "No Godot import or game/** mutation is authorized by this package.",
+    "Owner review must approve, redirect, or reject each asset role before implementation treats it as approved input."
+  ]
+}

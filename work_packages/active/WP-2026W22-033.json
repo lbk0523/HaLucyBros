@@ -1,0 +1,101 @@
+{
+  "id": "WP-2026W22-033",
+  "type": "learning",
+  "status": "active",
+  "goal": "Create the Korean Phase 4B owner review gate for the approved scope, visual research snapshot, and WP-032 art reuse package so BK/Human Creative Owner can approve, redirect, or reject asset-role reuse before implementation planning.",
+  "owner_agent": "learning_librarian",
+  "inputs": [
+    "owner_reviews/OWNER_REVIEW_BRIEF_RULES_KR.md",
+    "plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md",
+    "research_notes/RN-2026W22-003-phase4b-complex-prototype-reference.md",
+    "art_notes/AN-2026W22-006-phase4b-art-requirements-candidate-package.md",
+    "art_candidates/phase4b/reuse_preview.md",
+    "art_candidates/phase4b/asset_requirements.json",
+    "art_candidates/phase4b/asset_manifest.json",
+    "work_packages/active/WP-2026W22-032.json",
+    "runs/RUN-20260613-002.json",
+    "BK/Human Creative Owner chat approval on 2026-06-13 to proceed after reviewing the visualized Research reference"
+  ],
+  "targets": [
+    "owner_reviews/OR-2026W22-005-phase4b-scope-art-KR.md",
+    "work_packages/active/WP-2026W22-033.json",
+    "runs/RUN-20260613-003.json"
+  ],
+  "forbidden_changes": [
+    "game/**",
+    "game/.godot/**",
+    "game/assets/**",
+    "game/scenes/**",
+    "game/scripts/**",
+    "art_candidates/**",
+    "art_notes/**",
+    "research_notes/**",
+    "implementation_notes/**",
+    "reviews/**",
+    "learning_cards/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "Godot implementation",
+    "art asset creation or editing",
+    "new image generation",
+    "QA review execution",
+    "Learning Card creation or promotion",
+    "final game concept approval",
+    "final art direction approval",
+    "production asset approval",
+    "launch readiness approval",
+    "external tester workflow",
+    "Work Package lifecycle moves",
+    "commit, stage, or push"
+  ],
+  "outputs": [
+    "owner_reviews/OR-2026W22-005-phase4b-scope-art-KR.md",
+    "runs/RUN-20260613-003.json"
+  ],
+  "verify": [
+    {
+      "name": "Owner review artifact exists",
+      "method": "artifact_check",
+      "expected_artifact": "owner_reviews/OR-2026W22-005-phase4b-scope-art-KR.md"
+    },
+    {
+      "name": "Owner review contains required Korean decision sections",
+      "method": "command",
+      "command": "rg -n \"BK가 지금 검수할 것|검수 대상 artifact|화면 요약|Asset Role 검수|지금 판단하면 안 되는 것|승인 기준|Redirect 기준|Reject 기준|승인하면 다음 agent가 할 수 있는 일|승인하지 않으면 멈출 일|BK 결정 기록란|Decision: approve with constraints|Implementation authorization: not authorized\" owner_reviews/OR-2026W22-005-phase4b-scope-art-KR.md"
+    },
+    {
+      "name": "WP-033 validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-033.json"
+    },
+    {
+      "name": "Phase 4B Owner Review Run record validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260613-003.json"
+    },
+    {
+      "name": "Only authorized WP-033 artifacts changed",
+      "method": "command",
+      "command": "bash -lc 'extra=$(git status --short --untracked-files=all | sed \"s/^...//\" | grep -Ev \"^(AGENTS.md|research_notes/RN-2026W22-003-phase4b-complex-prototype-reference.md|work_packages/active/WP-2026W22-031.json|runs/RUN-20260613-001.json|art_candidates/phase4b/asset_requirements.json|art_candidates/phase4b/asset_requirements.csv|art_candidates/phase4b/asset_manifest.json|art_candidates/phase4b/asset_manifest.csv|art_candidates/phase4b/reuse_preview.md|art_notes/AN-2026W22-006-phase4b-art-requirements-candidate-package.md|work_packages/active/WP-2026W22-032.json|runs/RUN-20260613-002.json|owner_reviews/OR-2026W22-005-phase4b-scope-art-KR.md|work_packages/active/WP-2026W22-033.json|runs/RUN-20260613-003.json)$\" || true); test -z \"$extra\"'"
+    }
+  ],
+  "handoff_to": [
+    "human_creative_owner",
+    "implementation",
+    "qa",
+    "learning_librarian"
+  ],
+  "human_decision_required": true,
+  "human_decision_reason": "BK/Human Creative Owner must approve, redirect, or reject the Phase 4B scope/art review gate before any Implementation Work Package may authorize Godot changes.",
+  "acceptance_criteria": [
+    "The owner review is Korean and self-contained enough for BK to judge without relying on English-only workflow text.",
+    "The review summarizes the Phase 4B screen, selected gameplay-readable asset roles, WP-032 reuse candidates, gaps, and risks.",
+    "The review clearly separates prototype scope/art reuse approval from final game concept, final art direction, production asset approval, launch readiness, and implementation authorization.",
+    "The review records BK's Decision as approve with constraints while keeping Implementation authorization as not authorized until a separate Implementation Work Package is approved.",
+    "The review lets BK approve, redirect, reject, or allow placeholder-only handling for hazard, collectible/progression item, goal marker, and section landmark roles.",
+    "No Godot files, art assets, research notes, QA reviews, Learning Cards, schemas, agent profiles, lifecycle moves, or git operations are changed by WP-033 execution."
+  ],
+  "created_at": "2026-06-13",
+  "notes": "This Work Package creates the Phase 4B Korean owner review gate and records BK/Human Creative Owner's approve-with-constraints decision. It does not itself approve Godot implementation, final art direction, production asset usage, launch readiness, or external testing."
+}

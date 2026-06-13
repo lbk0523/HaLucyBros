@@ -1,0 +1,102 @@
+{
+  "id": "WP-2026W22-031",
+  "type": "research",
+  "status": "active",
+  "goal": "Produce Phase 4B Research Constraints for the approved two-section complex platformer prototype, covering layout, hazard or moving obstacle behavior, collectible or progression state, UI state, camera/readability, feel constraints, and Art/Implementation/QA handoffs without starting art production or Godot implementation.",
+  "owner_agent": "research",
+  "inputs": [
+    "plans/PHASE4B_COMPLEX_PROTOTYPE_VALIDATION_PLAN.md",
+    "plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md",
+    "production_retrospectives/PR-2026W22-001-phase4a-production-system-retrospective-KR.md",
+    "agents/profiles/research_agent.yaml",
+    "work_packages/active/WP-2026W22-030.json",
+    "BK/Human Creative Owner chat approval on 2026-06-13 to accept WP-030 scope and proceed to WP-031"
+  ],
+  "targets": [
+    "research_notes/RN-2026W22-003-phase4b-complex-prototype-reference.md",
+    "work_packages/active/WP-2026W22-031.json",
+    "runs/RUN-20260613-001.json"
+  ],
+  "forbidden_changes": [
+    "game/**",
+    "game/.godot/**",
+    "game/assets/**",
+    "game/scenes/**",
+    "game/scripts/**",
+    "art_candidates/**",
+    "art_notes/**",
+    "implementation_notes/**",
+    "owner_reviews/**",
+    "reviews/**",
+    "learning_cards/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "PHASE4B_CLOSEOUT.md",
+    "Godot implementation",
+    "art asset creation or editing",
+    "owner approval artifact creation",
+    "QA review execution",
+    "Learning Card creation or promotion",
+    "final game concept approval",
+    "final art direction approval",
+    "launch readiness approval",
+    "external tester workflow",
+    "Work Package lifecycle moves",
+    "commit, stage, or push"
+  ],
+  "outputs": [
+    "research_notes/RN-2026W22-003-phase4b-complex-prototype-reference.md",
+    "runs/RUN-20260613-001.json"
+  ],
+  "verify": [
+    {
+      "name": "Phase 4B research note artifact exists",
+      "method": "artifact_check",
+      "expected_artifact": "research_notes/RN-2026W22-003-phase4b-complex-prototype-reference.md"
+    },
+    {
+      "name": "Research note covers selected complexity constraints",
+      "method": "command",
+      "command": "rg -n \"Layout Constraints|Hazard|Moving Obstacle|Collectible|Progression State|UI State|Camera|Readability|Feel Constraints|Art Handoff|Implementation Handoff|QA Handoff|Uncertainty\" research_notes/RN-2026W22-003-phase4b-complex-prototype-reference.md"
+    },
+    {
+      "name": "WP-031 validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-031.json"
+    },
+    {
+      "name": "Phase 4B Research Run record validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260613-001.json"
+    },
+    {
+      "name": "Research note remains narrow",
+      "method": "manual_check",
+      "description": "Confirm the note translates the approved Phase 4B brief into production constraints only, does not select a final game concept or market position, and does not authorize Art, Godot implementation, QA pass, owner play approval, Learning Card promotion, launch, or external testing."
+    },
+    {
+      "name": "Only authorized WP-031 artifacts changed",
+      "method": "command",
+      "command": "bash -lc 'extra=$(git diff --name-only HEAD -- | grep -Ev \"^(AGENTS.md|research_notes/RN-2026W22-003-phase4b-complex-prototype-reference.md|work_packages/active/WP-2026W22-031.json|runs/RUN-20260613-001.json)$\" || true); test -z \"$extra\"'"
+    }
+  ],
+  "handoff_to": [
+    "art",
+    "implementation",
+    "qa",
+    "learning_librarian",
+    "human_creative_owner"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "The Research note maps directly to the approved Phase 4B scope: two-section level flow, one hazard or moving obstacle, collectible or progression state, UI state, camera behavior, imported gameplay-readable art needs, and player-facing feel gate.",
+    "The note gives Art Agent enough constraints to define asset requirements and review surfaces without selecting final art direction or producing assets in this slice.",
+    "The note gives Implementation Agent enough constraints for later Godot planning without editing Godot files or approving implementation in this slice.",
+    "The note gives QA Agent concrete risks and checks for reachability, hazard readability, progression reset behavior, UI state, camera framing, and owner-play readiness.",
+    "The note includes source or rationale, uncertainty, and explicit handoffs.",
+    "No Godot files, art assets, owner review artifacts, QA reviews, Learning Cards, schemas, agent profiles, lifecycle moves, or git operations are changed by WP-031 execution."
+  ],
+  "created_at": "2026-06-13",
+  "notes": "BK/Human Creative Owner approved the WP-030 Phase 4B scope in chat on 2026-06-13 and instructed Codex to proceed to WP-031 creation. This Work Package authorizes Research Constraints only and stops before Art requirements, owner review, Godot implementation, QA, learning capture, closeout, staging, committing, or pushing."
+}

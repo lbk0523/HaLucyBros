@@ -1,0 +1,131 @@
+{
+  "id": "WP-2026W22-032",
+  "type": "art",
+  "status": "active",
+  "goal": "Define Phase 4B imported gameplay-readable asset requirements and produce a reviewable candidate package using explicit reuse decisions from existing Phase 3 prepared assets, without generating new images, editing Godot, approving final art direction, or authorizing implementation.",
+  "owner_agent": "art",
+  "inputs": [
+    "plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md",
+    "plans/PHASE4B_COMPLEX_PROTOTYPE_VALIDATION_PLAN.md",
+    "research_notes/RN-2026W22-003-phase4b-complex-prototype-reference.md",
+    "work_packages/active/WP-2026W22-031.json",
+    "runs/RUN-20260613-001.json",
+    "agents/profiles/art_agent.yaml",
+    "art_candidates/phase3e/prepared_manifest.json",
+    "art_candidates/phase3e/prepared_preview.png"
+  ],
+  "targets": [
+    "art_candidates/phase4b/asset_requirements.json",
+    "art_candidates/phase4b/asset_requirements.csv",
+    "art_candidates/phase4b/asset_manifest.json",
+    "art_candidates/phase4b/asset_manifest.csv",
+    "art_candidates/phase4b/reuse_preview.md",
+    "art_notes/AN-2026W22-006-phase4b-art-requirements-candidate-package.md",
+    "work_packages/active/WP-2026W22-032.json",
+    "runs/RUN-20260613-002.json"
+  ],
+  "forbidden_changes": [
+    "game/**",
+    "game/.godot/**",
+    "game/assets/**",
+    "game/scenes/**",
+    "game/scripts/**",
+    "art_candidates/phase3b/**",
+    "art_candidates/phase3e/**",
+    "research_notes/**",
+    "implementation_notes/**",
+    "owner_reviews/**",
+    "reviews/**",
+    "learning_cards/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "new image generation",
+    "new binary asset creation",
+    "Godot implementation",
+    "owner approval artifact creation",
+    "QA review execution",
+    "Learning Card creation or promotion",
+    "final game concept approval",
+    "final art direction approval",
+    "production asset approval",
+    "launch readiness approval",
+    "external tester workflow",
+    "Work Package lifecycle moves",
+    "commit, stage, or push"
+  ],
+  "outputs": [
+    "art_candidates/phase4b/asset_requirements.json",
+    "art_candidates/phase4b/asset_requirements.csv",
+    "art_candidates/phase4b/asset_manifest.json",
+    "art_candidates/phase4b/asset_manifest.csv",
+    "art_candidates/phase4b/reuse_preview.md",
+    "art_notes/AN-2026W22-006-phase4b-art-requirements-candidate-package.md",
+    "runs/RUN-20260613-002.json"
+  ],
+  "verify": [
+    {
+      "name": "Phase 4B Art requirements exist",
+      "method": "artifact_check",
+      "expected_artifact": "art_candidates/phase4b/asset_requirements.json"
+    },
+    {
+      "name": "Phase 4B Art manifest exists",
+      "method": "artifact_check",
+      "expected_artifact": "art_candidates/phase4b/asset_manifest.json"
+    },
+    {
+      "name": "Phase 4B preview surface exists",
+      "method": "artifact_check",
+      "expected_artifact": "art_candidates/phase4b/reuse_preview.md"
+    },
+    {
+      "name": "Requirement and manifest JSON parse",
+      "method": "command",
+      "command": "jq empty art_candidates/phase4b/asset_requirements.json art_candidates/phase4b/asset_manifest.json"
+    },
+    {
+      "name": "CSV review surfaces parse",
+      "method": "command",
+      "command": "python3 - <<'PY'\nimport csv\nfor path in ['art_candidates/phase4b/asset_requirements.csv','art_candidates/phase4b/asset_manifest.csv']:\n    with open(path, newline='') as f:\n        rows = list(csv.DictReader(f))\n    assert rows, path\n    assert 'required_asset_id' in rows[0], path\nprint('csv ok')\nPY"
+    },
+    {
+      "name": "Reuse package records required fields",
+      "method": "command",
+      "command": "rg -n \"required_asset_id|candidate_id|existing_source_path|reuse_decision|owner_review_status|implementation_handoff_note|hazard|collectible|goal|section_landmark\" art_candidates/phase4b/asset_requirements.json art_candidates/phase4b/asset_manifest.json art_candidates/phase4b/reuse_preview.md"
+    },
+    {
+      "name": "WP-032 validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-032.json"
+    },
+    {
+      "name": "Phase 4B Art Run record validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260613-002.json"
+    },
+    {
+      "name": "Only authorized WP-032 artifacts changed",
+      "method": "command",
+      "command": "bash -lc 'extra=$(git status --short --untracked-files=all | sed \"s/^...//\" | grep -Ev \"^(AGENTS.md|research_notes/RN-2026W22-003-phase4b-complex-prototype-reference.md|work_packages/active/WP-2026W22-031.json|runs/RUN-20260613-001.json|art_candidates/phase4b/asset_requirements.json|art_candidates/phase4b/asset_requirements.csv|art_candidates/phase4b/asset_manifest.json|art_candidates/phase4b/asset_manifest.csv|art_candidates/phase4b/reuse_preview.md|art_notes/AN-2026W22-006-phase4b-art-requirements-candidate-package.md|work_packages/active/WP-2026W22-032.json|runs/RUN-20260613-002.json)$\" || true); test -z \"$extra\"'"
+    }
+  ],
+  "handoff_to": [
+    "human_creative_owner",
+    "qa",
+    "implementation",
+    "learning_librarian"
+  ],
+  "human_decision_required": true,
+  "human_decision_reason": "BK/Human Creative Owner must approve, redirect, or reject the Phase 4B asset roles and reuse candidates before any owner review gate can authorize implementation.",
+  "acceptance_criteria": [
+    "The package defines Phase 4B gameplay-readable asset needs for hazard, collectible or progression item, goal marker, and section landmark.",
+    "The package explicitly records whether each need reuses an existing Phase 3 prepared asset, has no acceptable reuse candidate, or requires future new art generation.",
+    "The CSV and JSON review surfaces are human-readable and map each required asset role to candidate evidence or a reuse gap.",
+    "The preview surface lets BK approve, redirect, or reject each asset role without inspecting raw JSON.",
+    "The Art note separates prototype review utility from final art direction, production asset approval, and implementation authorization.",
+    "No new images, Godot files, owner review artifacts, QA reviews, Learning Cards, schema files, agent profiles, lifecycle moves, or git operations are changed by WP-032 execution."
+  ],
+  "created_at": "2026-06-13",
+  "notes": "This Work Package chooses explicit reuse from Phase 3 prepared assets because Phase 4B needs a gameplay-readable imported asset category but does not require new image generation before owner review. It stops before owner review, Godot implementation, QA, learning capture, closeout, staging, committing, or pushing."
+}

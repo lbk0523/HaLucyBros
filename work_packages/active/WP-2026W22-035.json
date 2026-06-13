@@ -1,0 +1,111 @@
+{
+  "id": "WP-2026W22-035",
+  "type": "qa",
+  "status": "active",
+  "goal": "Independently QA the WP-034 Phase 4B local playable Godot slice for scope compliance, deterministic verification, gameplay readability, UI/reset behavior, camera framing, imported asset validity, and readiness for BK/Human Creative Owner play/feel review.",
+  "owner_agent": "qa",
+  "inputs": [
+    "work_packages/active/WP-2026W22-034.json",
+    "runs/RUN-20260613-004.json",
+    "plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md",
+    "owner_reviews/OR-2026W22-005-phase4b-scope-art-KR.md",
+    "agents/profiles/qa_agent.yaml",
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd",
+    "game/assets/phase3e/goal_marker.png",
+    "game/assets/phase3e/goal_marker.png.import",
+    "game/assets/phase3e/obstacle.png",
+    "game/assets/phase3e/obstacle.png.import",
+    "scripts/smoke_test.sh"
+  ],
+  "targets": [
+    "reviews/RV-20260613-001.json",
+    "runs/RUN-20260613-005.json"
+  ],
+  "forbidden_changes": [
+    "game/**",
+    "plans/**",
+    "research_notes/**",
+    "art_notes/**",
+    "art_candidates/**",
+    "owner_reviews/**",
+    "learning_cards/**",
+    "agents/**",
+    "schemas/**",
+    "scripts/**",
+    "Work Package lifecycle moves",
+    "implementation edits",
+    "QA self-editing implementation under review",
+    "final BK/Human Creative Owner play-feel approval",
+    "Learning Card promotion",
+    "commit, stage, or push"
+  ],
+  "outputs": [
+    "reviews/RV-20260613-001.json",
+    "runs/RUN-20260613-005.json"
+  ],
+  "verify": [
+    {
+      "name": "QA Work Package validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-035.json"
+    },
+    {
+      "name": "Implementation Run record validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260613-004.json"
+    },
+    {
+      "name": "Godot import cache can be regenerated",
+      "method": "command",
+      "command": "godot --headless --path game --import"
+    },
+    {
+      "name": "Smoke output is clean",
+      "method": "command",
+      "command": "bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"'"
+    },
+    {
+      "name": "Headless scene runtime output is clean",
+      "method": "command",
+      "command": "bash -lc 'out=$(godot --headless --path game --scene res://scenes/main.tscn --quit-after 3 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR|Parse Error|Failed\" <<< \"$out\"'"
+    },
+    {
+      "name": "Phase 4B feature markers exist",
+      "method": "command",
+      "command": "rg -n \"HazardArea|CollectibleArea|RetryButton|Camera2D|has_collectible|_reset_run|SECTION 1|SECTION 2|ITEM|Goal\" game/scenes/main.tscn game/scripts/player.gd"
+    },
+    {
+      "name": "Approved existing asset references are present",
+      "method": "command",
+      "command": "rg -n \"res://assets/phase3e/(obstacle|goal_marker)\\.png|ExtResource\\(\\\"[23]_(obstacle|goal)_texture\\\"\\)\" game/scenes/main.tscn"
+    },
+    {
+      "name": "QA Review validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/review.schema.json -d reviews/RV-20260613-001.json"
+    },
+    {
+      "name": "QA Run validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260613-005.json"
+    }
+  ],
+  "handoff_to": [
+    "implementation",
+    "learning_librarian",
+    "human_creative_owner"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "QA does not modify implementation files under review.",
+    "QA checks WP-034 implementation against the Phase 4B brief and owner-approved constraints.",
+    "QA validates smoke/runtime output after Godot import-cache regeneration and records whether generated game/.godot cache remains non-evidence.",
+    "QA confirms the two-section flow, hazard fail, placeholder collectible/progression gate, goal, UI, retry, and camera framing are represented in the scene/script.",
+    "QA confirms imported Phase 3E asset references are prototype-only and do not imply final art approval.",
+    "QA identifies actionable rework issues if deterministic checks, scope, or playability-readiness fail.",
+    "QA recommendation does not replace BK/Human Creative Owner direct play/feel approval."
+  ],
+  "created_at": "2026-06-13",
+  "notes": "This Work Package is the independent QA handoff for the WP-034 implementation slice. It may recommend pass, rework, or blocked, but it cannot approve final play/feel or edit implementation files."
+}
