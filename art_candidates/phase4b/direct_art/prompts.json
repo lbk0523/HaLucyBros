@@ -1,0 +1,79 @@
+{
+  "package_id": "P4B-direct-art-v1",
+  "work_package_id": "WP-2026W22-036",
+  "generation_date": "2026-06-14",
+  "tool_policy": {
+    "primary_path": "built_in_image_gen",
+    "skill": "/Users/byung/.codex/skills/.system/imagegen/SKILL.md",
+    "cli_fallback_used": false,
+    "openai_api_key_required": false,
+    "paid_tool_fallback": "Adobe or other paid tools were not used; they remain optional quality/final-pass fallback paths only with explicit BK approval.",
+    "transparent_asset_method": "Sprite and UI assets were generated on chroma_key #00ff00 and processed with the imagegen remove_chroma_key helper via uv run --with pillow."
+  },
+  "prompts": [
+    {
+      "asset_id": "background_section_one_v1",
+      "role": "section_1_background",
+      "tool_or_model": "built_in_image_gen",
+      "prompt": "Use case: stylized-concept. Asset type: 2D side-scrolling platformer background, Section 1 warmup. Primary request: Create an original launch-quality candidate background for a 2D indie platformer prototype. This is Section 1, a calm warmup traversal area. Scene/backdrop: a lucid-dream workshop ruin with simple stone floor silhouettes, soft teal twilight, distant soft geometric arches, subtle painterly depth, clear horizontal side-scroller readability, no characters. Style/medium: polished hand-painted 2D game background, clean silhouettes, production-candidate quality, original visual language, not imitating any named artist or franchise. Composition/framing: wide 16:9 side-scrolling game background, stable horizon, playable floor area visually clear along the lower third, parallax-friendly layers, no UI. Lighting/mood: calm, readable, inviting, low contrast behind gameplay area. Color palette: cool teal, muted blue, soft moss-gray stone, gentle warm highlights. Constraints: no text, no logos, no watermark, no famous characters, no copyrighted IP, no photorealism, no extreme detail clutter, no foreground objects blocking the lower gameplay band. Avoid: menus, icons, text labels, player character, enemies, weapons, gore, brand marks.",
+      "source_generated_file": "/Users/byung/.codex/generated_images/019ebecb-4701-7c63-a11b-838833381278/ig_04eae4a4d37dbe43016a2e400f01d081919b4a0b13847fa951.png",
+      "output_png": "game/assets/phase4b/direct_art/background_section_one_v1.png"
+    },
+    {
+      "asset_id": "background_section_two_v1",
+      "role": "section_2_background",
+      "tool_or_model": "built_in_image_gen",
+      "prompt": "Use case: stylized-concept. Asset type: 2D side-scrolling platformer background, Section 2 hazard and item area. Primary request: Create an original launch-quality candidate background for a 2D indie platformer prototype. This is Section 2, a more dangerous hazard/item area that visually contrasts with Section 1. Scene/backdrop: a lucid-dream workshop ruin after sunset, fractured stone machinery, warm amber warning lights, distant red-orange glow, subtle hazard atmosphere, no characters. Style/medium: polished hand-painted 2D game background, clean silhouettes, production-candidate quality, original visual language, not imitating any named artist or franchise. Composition/framing: wide 16:9 side-scrolling game background, stable horizon, clear lower gameplay band, parallax-friendly layers, no UI, no text. Lighting/mood: tense but readable, danger is suggested through lighting and color, background kept low contrast behind gameplay. Color palette: deep teal shadows, muted purple stone, amber warning lights, restrained red accents. Constraints: no text, no logos, no watermark, no famous characters, no copyrighted IP, no photorealism, no foreground objects blocking the lower gameplay band, no gore, no monsters. Avoid: menus, icons, text labels, player character, enemies, weapons, brand marks, clutter that hides hazards.",
+      "source_generated_file": "/Users/byung/.codex/generated_images/019ebecb-4701-7c63-a11b-838833381278/ig_04eae4a4d37dbe43016a2e4046a62481919d6fc999efd79637.png",
+      "output_png": "game/assets/phase4b/direct_art/background_section_two_v1.png"
+    },
+    {
+      "asset_id": "player_avatar_v1",
+      "role": "player_avatar",
+      "tool_or_model": "built_in_image_gen",
+      "prompt": "Use case: stylized-concept. Asset type: 2D platformer controllable player sprite candidate. Primary request: Create a single original controllable player avatar for a 2D indie platformer, readable at small scale. Subject: a compact dream-workshop traveler character with a simple blue cloak, small lantern charm, round readable silhouette, friendly but adventurous, no weapon. Style/medium: polished hand-painted 2D game sprite, clean silhouette, production-candidate quality, original design, not imitating any named artist or franchise. Composition/framing: single full-body character centered, neutral standing pose facing right three-quarter side view, generous padding, no ground plane. Lighting/mood: soft readable rim light, simple forms, strong contrast against background. Color palette: blue cloak, muted warm accent, no bright green. Transparent workflow source: Create the subject on a perfectly flat solid #00ff00 chroma-key background for background removal. The background must be one uniform #00ff00 color with no shadows, gradients, texture, reflections, floor plane, or lighting variation. Do not use #00ff00 anywhere in the subject. Constraints: no text, no logos, no watermark, no weapon, no combat pose, no famous characters, no copyrighted IP, no cast shadow, no contact shadow, no reflection. Avoid: extra characters, enemies, UI, background scenery, photorealism, tiny details that disappear at small scale.",
+      "source_generated_file": "/Users/byung/.codex/generated_images/019ebecb-4701-7c63-a11b-838833381278/ig_04eae4a4d37dbe43016a2e407c47c88191a540325eeb716afa.png",
+      "output_png": "game/assets/phase4b/direct_art/player_avatar_v1.png"
+    },
+    {
+      "asset_id": "ground_platform_tile_v1",
+      "role": "ground_platform_tile",
+      "tool_or_model": "built_in_image_gen",
+      "prompt": "Use case: stylized-concept. Asset type: 2D platformer ground/platform tile sprite candidate. Primary request: Create a single original ground/platform tile asset for a 2D indie platformer, readable as safe traversal terrain. Subject: a rectangular stone platform tile from a lucid-dream workshop ruin, beveled stone blocks, subtle brass inlay, simple moss-free edges, safe walkable top surface. Style/medium: polished hand-painted 2D game sprite, clean silhouette, production-candidate quality, original design, not imitating any named artist or franchise. Composition/framing: one horizontal platform tile centered, side view, generous padding, no ground plane, no surrounding background. Lighting/mood: readable top plane, clear edge contrast, not too noisy. Color palette: muted slate stone, warm brass accent, no bright green. Transparent workflow source: Create the subject on a perfectly flat solid #00ff00 chroma-key background for background removal. The background must be one uniform #00ff00 color with no shadows, gradients, texture, reflections, floor plane, or lighting variation. Do not use #00ff00 anywhere in the subject. Constraints: no text, no logos, no watermark, no slopes, no moving platform parts, no destructible cracks implying gameplay, no spikes, no hazard markings, no cast shadow, no contact shadow. Avoid: full tileset sheet, background scenery, UI, characters, enemies, weapons, photorealism.",
+      "source_generated_file": "/Users/byung/.codex/generated_images/019ebecb-4701-7c63-a11b-838833381278/ig_04eae4a4d37dbe43016a2e40c431b481919d325930b93dac97.png",
+      "output_png": "game/assets/phase4b/direct_art/ground_platform_tile_v1.png"
+    },
+    {
+      "asset_id": "collectible_progression_item_v1",
+      "role": "collectible_progression_item",
+      "tool_or_model": "built_in_image_gen",
+      "prompt": "Use case: stylized-concept. Asset type: 2D platformer collectible/progression item sprite candidate. Primary request: Create a single original progression item for a 2D indie platformer, readable as something the player should collect to unlock the goal. Subject: a small floating dream-key crystal, star-shaped inner glow, brass ring, clearly collectible but not a coin, not a goal marker, not a hazard. Style/medium: polished hand-painted 2D game sprite, clean silhouette, production-candidate quality, original design, not imitating any named artist or franchise. Composition/framing: single object centered, three-quarter view, generous padding, no ground plane, no surrounding background. Lighting/mood: inviting, clear glow contained inside the object, readable at small scale. Color palette: warm gold, pale cyan crystal, small violet accent, no bright green. Transparent workflow source: Create the subject on a perfectly flat solid #00ff00 chroma-key background for background removal. The background must be one uniform #00ff00 color with no shadows, gradients, texture, reflections, floor plane, or lighting variation. Do not use #00ff00 anywhere in the subject. Constraints: no text, no logos, no watermark, no coin, no currency symbol, no skull, no spikes, no red danger cues, no cast shadow, no contact shadow. Avoid: goal portal, enemy, weapon, shop item, inventory icon sheet, UI panel, photorealism.",
+      "source_generated_file": "/Users/byung/.codex/generated_images/019ebecb-4701-7c63-a11b-838833381278/ig_04eae4a4d37dbe43016a2e40dee0dc819191256e88a496c403.png",
+      "output_png": "game/assets/phase4b/direct_art/collectible_progression_item_v1.png"
+    },
+    {
+      "asset_id": "hazard_warning_marker_v1",
+      "role": "hazard_warning_marker",
+      "tool_or_model": "built_in_image_gen",
+      "prompt": "Use case: stylized-concept. Asset type: 2D platformer hazard readability marker sprite candidate. Primary request: Create a single original hazard cue for a 2D indie platformer, readable as danger/avoidance support but not an enemy. Subject: a compact red-orange warning crystal spike cluster with brass warning frame, glowing inner danger core, clear avoid-this silhouette, static obstacle cue. Style/medium: polished hand-painted 2D game sprite, clean silhouette, production-candidate quality, original design, not imitating any named artist or franchise. Composition/framing: single object centered, side-view readable, generous padding, no ground plane, no surrounding background. Lighting/mood: high danger readability, controlled glow, sharp but not gory. Color palette: red-orange glow, dark violet stone, brass edge, no bright green. Transparent workflow source: Create the subject on a perfectly flat solid #00ff00 chroma-key background for background removal. The background must be one uniform #00ff00 color with no shadows, gradients, texture, reflections, floor plane, or lighting variation. Do not use #00ff00 anywhere in the subject. Constraints: no text, no logos, no watermark, no enemy face, no creature, no blood, no weapon, no combat effect, no cast shadow, no contact shadow. Avoid: coin, collectible, goal portal, character, UI panel, photorealism, excessive particles.",
+      "source_generated_file": "/Users/byung/.codex/generated_images/019ebecb-4701-7c63-a11b-838833381278/ig_04eae4a4d37dbe43016a2e411684e4819193e230a3d9c26200.png",
+      "output_png": "game/assets/phase4b/direct_art/hazard_warning_marker_v1.png"
+    },
+    {
+      "asset_id": "goal_marker_v1",
+      "role": "goal_marker",
+      "tool_or_model": "built_in_image_gen",
+      "prompt": "Use case: stylized-concept. Asset type: 2D platformer goal marker sprite candidate. Primary request: Create a single original goal marker for a 2D indie platformer, readable as the destination/end point, not a collectible. Subject: a tall standing moon-gate marker with a circular brass frame, blue-white vertical crystal light, base pedestal, clearly a destination checkpoint-like object but not a save point UI. Style/medium: polished hand-painted 2D game sprite, clean silhouette, production-candidate quality, original design, not imitating any named artist or franchise. Composition/framing: single upright object centered, side-view readable, generous padding, no ground plane, no surrounding background. Lighting/mood: calm success/readable destination cue, controlled glow, strong silhouette. Color palette: blue-white light, brass frame, muted stone base, no bright green. Transparent workflow source: Create the subject on a perfectly flat solid #00ff00 chroma-key background for background removal. The background must be one uniform #00ff00 color with no shadows, gradients, texture, reflections, floor plane, or lighting variation. Do not use #00ff00 anywhere in the subject. Constraints: no text, no logos, no watermark, no coin shape, no hazard red spikes, no enemy features, no cast shadow, no contact shadow. Avoid: collectible key, shop icon, menu frame, UI panel, portal with huge environment, photorealism.",
+      "source_generated_file": "/Users/byung/.codex/generated_images/019ebecb-4701-7c63-a11b-838833381278/ig_04eae4a4d37dbe43016a2e414852e8819182574e62fcc4e30c.png",
+      "output_png": "game/assets/phase4b/direct_art/goal_marker_v1.png"
+    },
+    {
+      "asset_id": "ui_status_panel_v1",
+      "role": "ui_status_panel",
+      "tool_or_model": "built_in_image_gen",
+      "prompt": "Use case: stylized-concept. Asset type: 2D platformer UI status/result/retry panel art candidate. Primary request: Create a single original UI panel background for a 2D indie platformer HUD/status/result/retry area. No text, just the panel art. Subject: a clean horizontal fantasy-workshop UI status panel frame, dark translucent-looking center area, brass and blue stone trim, small simple icon sockets but no actual icons or letters. Style/medium: polished hand-painted 2D game UI asset, clean readable silhouette, production-candidate quality, original design, not imitating any named artist or franchise. Composition/framing: one wide horizontal rounded-rectangle panel centered, generous padding, no surrounding background, no drop shadow. Lighting/mood: readable, quiet, functional, not ornate enough to distract. Color palette: dark blue-gray center, muted brass trim, small cyan accents, no bright green. Transparent workflow source: Create the subject on a perfectly flat solid #00ff00 chroma-key background for background removal. The background must be one uniform #00ff00 color with no shadows, gradients, texture, reflections, floor plane, or lighting variation. Do not use #00ff00 anywhere in the subject. Constraints: no text, no numbers, no letters, no logos, no watermark, no buttons labeled, no menu layout, no inventory slots, no cast shadow, no contact shadow. Avoid: full menu screen, settings screen, dialogue box with text, health hearts, coin counters, branded HUD, photorealism.",
+      "source_generated_file": "/Users/byung/.codex/generated_images/019ebecb-4701-7c63-a11b-838833381278/ig_04eae4a4d37dbe43016a2e417f92e48191a089b96b5975dfa9.png",
+      "output_png": "game/assets/phase4b/direct_art/ui_status_panel_v1.png"
+    }
+  ]
+}
