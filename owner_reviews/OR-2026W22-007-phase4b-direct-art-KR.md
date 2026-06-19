@@ -111,28 +111,78 @@ approve만으로 직접 Godot 구현을 시작하지 않는다.
 ## BK 결정 기록란
 
 ```text
-Decision: pending
+Decision: approve for Phase 4B prototype testing
 Deciding authority: BK / Human Creative Owner
-Decision date:
+Decision date: 2026-06-19
+Review status: prototype-only / production-candidate review only
+Production approval: not approved; production_approved remains false for all assets
 
 Reviewed artifacts:
 - art_candidates/phase4b/direct_art/contact_sheet.md
 - art_candidates/phase4b/direct_art/manifest.json
 - art_notes/AN-2026W22-007-phase4b-direct-art-production-report.md
+- game/assets/phase4b/direct_art/background_section_one_v1.png
+- game/assets/phase4b/direct_art/background_section_two_v1.png
+- game/assets/phase4b/direct_art/player_avatar_v1.png
+- game/assets/phase4b/direct_art/ground_platform_tile_v1.png
+- game/assets/phase4b/direct_art/collectible_progression_item_v1.png
+- game/assets/phase4b/direct_art/hazard_warning_marker_v1.png
+- game/assets/phase4b/direct_art/goal_marker_v1.png
+- game/assets/phase4b/direct_art/ui_status_panel_v1.png
 
 Asset role decisions:
-- background_section_one_v1:
-- background_section_two_v1:
-- player_avatar_v1:
-- ground_platform_tile_v1:
-- collectible_progression_item_v1:
-- hazard_warning_marker_v1:
-- goal_marker_v1:
-- ui_status_panel_v1:
+- background_section_one_v1: approve for Phase 4B prototype-candidate use. It
+  has a clear lower gameplay band, calm Section 1 contrast, and does not add a
+  new game concept by itself. Implementation must still check scale/crop so it
+  stays behind gameplay objects.
+- background_section_two_v1: approve for Phase 4B prototype testing. The mood
+  and palette fit the Section 2 hazard/item area well enough to test with the
+  full direct-art set. Constraint: because the image includes strong foreground
+  platforms, lamps, spike-like shapes, and destination-like props, implementation
+  and QA must verify that real hazard, item, platform, and goal objects remain
+  readable over it.
+- player_avatar_v1: approve for Phase 4B prototype-candidate use. It reads as a
+  controllable character, has no weapon/combat pose, and is visually distinct
+  from hazard, collectible, and goal. Constraint: do not treat this as final
+  character/story direction; check small-scale readability after import.
+- ground_platform_tile_v1: approve for Phase 4B prototype-candidate use as
+  visual terrain support only. It reads as safe walkable stone. Constraint:
+  collision remains simple and explicit; no slope, moving-platform,
+  destructible-terrain, or full tileset scope is approved.
+- collectible_progression_item_v1: approve for Phase 4B prototype-candidate
+  use. It reads as a key/star pickup rather than a hazard, goal, enemy, or
+  currency economy item. Constraint: keep it smaller than the goal and verify
+  it stays readable against the selected Section 2 background.
+- hazard_warning_marker_v1: approve for Phase 4B prototype-candidate use. The
+  red-orange spike/crystal silhouette reads as danger and does not imply enemy
+  AI or combat. Constraint: implementation still needs explicit trigger/framing
+  so the hazard is readable before contact.
+- goal_marker_v1: approve for Phase 4B prototype-candidate use. The tall
+  gate/portal silhouette reads as a destination and is distinct from the
+  collectible by shape and scale. Constraint: goal trigger and progression
+  logic remain separate from the image.
+- ui_status_panel_v1: approve for Phase 4B prototype-candidate use. It has no
+  baked text and can support status/result/retry copy without becoming a full
+  menu. Constraint: place/scale it so it does not cover player, hazard,
+  collectible, landing path, or goal.
 
 Decision summary:
+- The direct Art Agent production test produced a meaningful full PNG asset
+  set and can proceed as prototype-candidate material.
+- BK reviewed the asset paths and approves the full direct-art set as sufficient
+  for Phase 4B prototype testing.
+- All eight assets are approved for possible use in a later, separate
+  Implementation WP.
+- `background_section_two_v1` carries a readability caution, not a redirect:
+  QA must check whether foreground detail interferes with hazard/item/goal
+  readability after implementation.
+- No asset is production-approved. Final art direction, rights review, launch
+  use, and any human final pass remain separate gates.
 
 Approved for next step:
+- A later Implementation WP may propose importing the approved direct-art asset
+  set, with scale/crop/placement constraints and QA readability checks.
+- QA must re-check gameplay readability after any approved art is implemented.
 
 Not approved:
 - final game concept
