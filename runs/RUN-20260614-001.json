@@ -1,0 +1,183 @@
+{
+  "run_id": "RUN-20260614-001",
+  "work_package_id": "WP-2026W22-036",
+  "agent": "art",
+  "agent_profile": "agents/profiles/art_agent.yaml",
+  "started_at": "2026-06-14T15:02:22+09:00",
+  "ended_at": "2026-06-14T15:16:40+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "image_gen built-in",
+      "purpose": "Generate the full Phase 4B prototype art resource set with the Codex imagegen skill default path.",
+      "inputs": [
+        "WP-2026W22-036",
+        "Phase 4B playable slice brief",
+        "imagegen skill built-in mode",
+        "eight asset-specific prompts"
+      ],
+      "outputs": [
+        "Two section backgrounds",
+        "Player avatar",
+        "Ground/platform tile",
+        "Collectible/progression item",
+        "Hazard warning marker",
+        "Goal marker",
+        "UI status panel"
+      ],
+      "evidence": [
+        "Generated source files saved under /Users/byung/.codex/generated_images/019ebecb-4701-7c63-a11b-838833381278.",
+        "No Adobe or paid external art tool was used.",
+        "No CLI imagegen fallback or OPENAI_API_KEY workflow was used."
+      ]
+    },
+    {
+      "tool_name": "Codex shell",
+      "purpose": "Move/copy selected generated outputs into the workspace and process chroma-key sprite/UI sources into alpha PNG assets.",
+      "inputs": [
+        "Generated background PNGs",
+        "Generated chroma-key sprite/UI PNGs",
+        "imagegen remove_chroma_key.py helper"
+      ],
+      "outputs": [
+        "game/assets/phase4b/direct_art/*.png"
+      ],
+      "evidence": [
+        "Initial helper attempts failed because Pillow was absent in default Python.",
+        "uv run --with pillow python remove_chroma_key.py completed for six chroma-key assets.",
+        "PNG header validation confirmed expected dimensions and alpha-capable color type for sprite/UI assets."
+      ]
+    },
+    {
+      "tool_name": "Godot CLI",
+      "purpose": "Generate Godot .png.import metadata for the new direct art assets.",
+      "inputs": [
+        "game/assets/phase4b/direct_art/*.png"
+      ],
+      "outputs": [
+        "game/assets/phase4b/direct_art/*.png.import"
+      ],
+      "evidence": [
+        "godot --headless --path game --import exit code 0.",
+        "Godot import output listed all eight direct art PNG files.",
+        "game/.godot cache remains ignored and is not used as evidence."
+      ]
+    },
+    {
+      "tool_name": "apply_patch",
+      "purpose": "Create Art Agent handoff metadata, production report, Korean owner review brief, and Run record.",
+      "inputs": [
+        "Prompt records",
+        "Generated file mapping",
+        "PNG validation evidence",
+        "Godot import evidence",
+        "Owner review rules"
+      ],
+      "outputs": [
+        "art_candidates/phase4b/direct_art/prompts.json",
+        "art_candidates/phase4b/direct_art/manifest.json",
+        "art_candidates/phase4b/direct_art/manifest.csv",
+        "art_candidates/phase4b/direct_art/contact_sheet.md",
+        "art_notes/AN-2026W22-007-phase4b-direct-art-production-report.md",
+        "owner_reviews/OR-2026W22-007-phase4b-direct-art-KR.md",
+        "runs/RUN-20260614-001.json"
+      ],
+      "evidence": [
+        "Manifest records built_in_image_gen, chroma_key, paid_tool_fallback, license_or_usage_note, prototype_only, production_approved, owner_review_status, implementation_handoff_note, and human_final_pass_required.",
+        "Owner review brief records Decision: pending and separates prototype art review from production asset approval."
+      ]
+    }
+  ],
+  "artifacts": [
+    "art_candidates/phase4b/direct_art/prompts.json",
+    "art_candidates/phase4b/direct_art/manifest.json",
+    "art_candidates/phase4b/direct_art/manifest.csv",
+    "art_candidates/phase4b/direct_art/contact_sheet.md",
+    "art_notes/AN-2026W22-007-phase4b-direct-art-production-report.md",
+    "owner_reviews/OR-2026W22-007-phase4b-direct-art-KR.md",
+    "game/assets/phase4b/direct_art/background_section_one_v1.png",
+    "game/assets/phase4b/direct_art/background_section_one_v1.png.import",
+    "game/assets/phase4b/direct_art/background_section_two_v1.png",
+    "game/assets/phase4b/direct_art/background_section_two_v1.png.import",
+    "game/assets/phase4b/direct_art/player_avatar_v1.png",
+    "game/assets/phase4b/direct_art/player_avatar_v1.png.import",
+    "game/assets/phase4b/direct_art/ground_platform_tile_v1.png",
+    "game/assets/phase4b/direct_art/ground_platform_tile_v1.png.import",
+    "game/assets/phase4b/direct_art/collectible_progression_item_v1.png",
+    "game/assets/phase4b/direct_art/collectible_progression_item_v1.png.import",
+    "game/assets/phase4b/direct_art/hazard_warning_marker_v1.png",
+    "game/assets/phase4b/direct_art/hazard_warning_marker_v1.png.import",
+    "game/assets/phase4b/direct_art/goal_marker_v1.png",
+    "game/assets/phase4b/direct_art/goal_marker_v1.png.import",
+    "game/assets/phase4b/direct_art/ui_status_panel_v1.png",
+    "game/assets/phase4b/direct_art/ui_status_panel_v1.png.import",
+    "runs/RUN-20260614-001.json"
+  ],
+  "commands": [
+    {
+      "command": "find ${CODEX_HOME:-$HOME/.codex} -path '*generated_images*' -type f -mmin -30 | sort",
+      "exit_code": 0,
+      "notes": "Located eight generated source PNG files."
+    },
+    {
+      "command": "python3 ${CODEX_HOME:-$HOME/.codex}/skills/.system/imagegen/scripts/remove_chroma_key.py --help",
+      "exit_code": 0,
+      "notes": "Confirmed the imagegen helper is present."
+    },
+    {
+      "command": "python3 ${CODEX_HOME:-$HOME/.codex}/skills/.system/imagegen/scripts/remove_chroma_key.py ...",
+      "exit_code": 1,
+      "notes": "Initial chroma-key removal failed because Pillow was not available in default Python."
+    },
+    {
+      "command": "uv run --with pillow python ${CODEX_HOME:-$HOME/.codex}/skills/.system/imagegen/scripts/remove_chroma_key.py ...",
+      "exit_code": 0,
+      "notes": "Processed six chroma-key sprite/UI sources into alpha PNG assets."
+    },
+    {
+      "command": "python3 - <<'PY' ... PNG header validation ... PY",
+      "exit_code": 0,
+      "notes": "Confirmed backgrounds are parseable PNGs and sprite/UI files are alpha-capable PNGs."
+    },
+    {
+      "command": "godot --headless --path game --import",
+      "exit_code": 0,
+      "notes": "Generated .png.import metadata for all eight direct art assets."
+    },
+    {
+      "command": "shasum -a 256 game/assets/phase4b/direct_art/* | sort",
+      "exit_code": 0,
+      "notes": "Recorded file hashes for PNG and .png.import artifacts."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "art_candidates/phase4b/direct_art/prompts.json",
+      "art_candidates/phase4b/direct_art/manifest.json",
+      "art_candidates/phase4b/direct_art/manifest.csv",
+      "art_candidates/phase4b/direct_art/contact_sheet.md",
+      "art_notes/AN-2026W22-007-phase4b-direct-art-production-report.md",
+      "owner_reviews/OR-2026W22-007-phase4b-direct-art-KR.md",
+      "game/assets/phase4b/direct_art/background_section_one_v1.png",
+      "game/assets/phase4b/direct_art/background_section_one_v1.png.import",
+      "game/assets/phase4b/direct_art/background_section_two_v1.png",
+      "game/assets/phase4b/direct_art/background_section_two_v1.png.import",
+      "game/assets/phase4b/direct_art/player_avatar_v1.png",
+      "game/assets/phase4b/direct_art/player_avatar_v1.png.import",
+      "game/assets/phase4b/direct_art/ground_platform_tile_v1.png",
+      "game/assets/phase4b/direct_art/ground_platform_tile_v1.png.import",
+      "game/assets/phase4b/direct_art/collectible_progression_item_v1.png",
+      "game/assets/phase4b/direct_art/collectible_progression_item_v1.png.import",
+      "game/assets/phase4b/direct_art/hazard_warning_marker_v1.png",
+      "game/assets/phase4b/direct_art/hazard_warning_marker_v1.png.import",
+      "game/assets/phase4b/direct_art/goal_marker_v1.png",
+      "game/assets/phase4b/direct_art/goal_marker_v1.png.import",
+      "game/assets/phase4b/direct_art/ui_status_panel_v1.png",
+      "game/assets/phase4b/direct_art/ui_status_panel_v1.png.import",
+      "runs/RUN-20260614-001.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "WP-036 completed as a direct Art Agent production capability test. Art Agent produced a full Phase 4B prototype art resource set using built_in_image_gen as the default path. The package includes two backgrounds, player, platform, collectible, hazard, goal, UI panel, prompt/manifest/contact-sheet metadata, a Korean owner review brief, and Godot import metadata. Assets are prototype-only pending BK review and are not production-approved. No Godot scene, script, project config, Phase 3 assets, schemas, profiles, reviews, learning cards, lifecycle moves, staging, committing, or pushing were changed."
+}

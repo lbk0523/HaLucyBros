@@ -1,0 +1,132 @@
+{
+  "id": "WP-2026W22-034",
+  "type": "implementation",
+  "status": "active",
+  "goal": "Implement the owner-approved Phase 4B local playable Godot slice: a two-section platformer with one readable hazard, placeholder-only collectible/progression state, simple status/result/retry UI, camera framing, and approved prototype-only imported visual reuse without final art polish or gameplay expansion.",
+  "owner_agent": "implementation",
+  "inputs": [
+    "plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md",
+    "research_notes/RN-2026W22-003-phase4b-complex-prototype-reference.md",
+    "art_notes/AN-2026W22-006-phase4b-art-requirements-candidate-package.md",
+    "art_candidates/phase4b/reuse_preview.md",
+    "owner_reviews/OR-2026W22-005-phase4b-scope-art-KR.md",
+    "agents/profiles/implementation_agent.yaml",
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd",
+    "scripts/smoke_test.sh",
+    "game/assets/phase3e/goal_marker.png",
+    "game/assets/phase3e/goal_marker.png.import",
+    "game/assets/phase3e/obstacle.png",
+    "game/assets/phase3e/floor_platform.png"
+  ],
+  "targets": [
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd",
+    "runs/RUN-20260613-004.json"
+  ],
+  "forbidden_changes": [
+    "game/project.godot",
+    "game/.godot/**",
+    "game/assets/**",
+    "game/scripts/*.gd.uid",
+    "scripts/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "research_notes/**",
+    "art_notes/**",
+    "art_candidates/**",
+    "owner_reviews/**",
+    "reviews/**",
+    "learning_cards/**",
+    "PHASE4B_CLOSEOUT.md",
+    "new image generation",
+    "new binary asset creation",
+    "final art direction approval",
+    "production asset approval",
+    "combat, enemy AI, health, lives, checkpoints, boss, inventory, economy, quests, dialogue, save/load, settings, platform export, web deployment, or external tester workflow",
+    "double jump, wall jump, dash, attack, coyote time, jump buffer, variable jump height, moving platforms, slopes, or broad movement verb expansion",
+    "QA self-approval",
+    "Learning Card creation or promotion",
+    "Work Package lifecycle moves",
+    "commit, stage, or push"
+  ],
+  "outputs": [
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd",
+    "runs/RUN-20260613-004.json"
+  ],
+  "verify": [
+    {
+      "name": "Owner approval recorded",
+      "method": "manual_check",
+      "description": "Confirm owner_reviews/OR-2026W22-005-phase4b-scope-art-KR.md records Decision: approve with constraints and keeps implementation authorization bounded to this separate Implementation Work Package."
+    },
+    {
+      "name": "Main scene artifact exists",
+      "method": "artifact_check",
+      "expected_artifact": "game/scenes/main.tscn"
+    },
+    {
+      "name": "Player script artifact exists",
+      "method": "artifact_check",
+      "expected_artifact": "game/scripts/player.gd"
+    },
+    {
+      "name": "Implementation Run record exists",
+      "method": "artifact_check",
+      "expected_artifact": "runs/RUN-20260613-004.json"
+    },
+    {
+      "name": "Implementation Run record validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260613-004.json"
+    },
+    {
+      "name": "Phase 4B feature markers exist",
+      "method": "command",
+      "command": "rg -n \"HazardArea|CollectibleArea|Retry|Camera2D|has_collectible|_reset_run|SECTION|ITEM|Goal\" game/scenes/main.tscn game/scripts/player.gd"
+    },
+    {
+      "name": "Godot smoke test passes",
+      "method": "command",
+      "command": "scripts/smoke_test.sh"
+    },
+    {
+      "name": "Smoke test output is clean",
+      "method": "command",
+      "command": "bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"'"
+    },
+    {
+      "name": "Headless scene runtime loads",
+      "method": "command",
+      "command": "godot --headless --path game --scene res://scenes/main.tscn --quit-after 3"
+    },
+    {
+      "name": "Only authorized WP-034 implementation artifacts changed",
+      "method": "command",
+      "command": "bash -lc 'extra=$(git diff --name-only HEAD -- game/scenes/main.tscn game/scripts/player.gd runs/RUN-20260613-004.json | grep -Ev \"^(game/scenes/main.tscn|game/scripts/player.gd|runs/RUN-20260613-004.json)$\" || true); test -z \"$extra\"'"
+    }
+  ],
+  "handoff_to": [
+    "qa",
+    "learning_librarian",
+    "human_creative_owner"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "The scene contains two readable local sections in one Godot scene.",
+    "The implementation preserves Phase 2 movement verbs: left, right, and fixed-height single ground jump only.",
+    "One hazard or moving obstacle is readable before punishment and can trigger a fail/retry state without adding health, lives, enemies, combat, or checkpoints.",
+    "One collectible/progression item is implemented as placeholder-only geometry and visibly changes UI/progression state.",
+    "The approved Phase 3E goal marker is reused as prototype-only goal visual without approving final art or production asset usage.",
+    "The approved Phase 3E obstacle/floor visuals may be reused only as prototype visual cues; collision remains simple and explicit.",
+    "Simple start/status/result/retry UI communicates state and does not become a full menu/settings/save system.",
+    "Camera framing or Camera2D follow keeps the player, hazard, collectible/progression feedback, and goal readable.",
+    "No new binary assets, Godot project config, scripts UID sidecars, schemas, profiles, owner reviews, QA reviews, Learning Cards, lifecycle moves, staging, committing, or pushing are introduced.",
+    "scripts/smoke_test.sh and headless scene runtime pass or blockers are recorded honestly in RUN-20260613-004.json.",
+    "The result is handed off to QA for independent review before Phase 4B implementation pass is claimed."
+  ],
+  "created_at": "2026-06-13",
+  "notes": "This Work Package authorizes only the Phase 4B Godot implementation slice after BK/Human Creative Owner approved the scope/art gate with constraints. Because this is Godot implementation, execution must go through the workspace Samantha Gate unless a task-specific Samantha bypass is explicitly approved."
+}

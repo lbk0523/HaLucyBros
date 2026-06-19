@@ -1,0 +1,139 @@
+{
+  "run_id": "RUN-20260613-005",
+  "work_package_id": "WP-2026W22-035",
+  "agent": "qa",
+  "agent_profile": "agents/profiles/qa_agent.yaml",
+  "started_at": "2026-06-13T19:57:35+09:00",
+  "ended_at": "2026-06-13T20:02:10+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "Codex shell",
+      "purpose": "Inspect QA profile, Phase 4B brief, WP-034 implementation contract, run evidence, target scene/script, and schema requirements before writing QA artifacts.",
+      "inputs": [
+        "agents/profiles/qa_agent.yaml",
+        "plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md",
+        "work_packages/active/WP-2026W22-034.json",
+        "runs/RUN-20260613-004.json",
+        "game/scenes/main.tscn",
+        "game/scripts/player.gd",
+        "schemas/work_package.schema.json",
+        "schemas/review.schema.json",
+        "schemas/run.schema.json"
+      ],
+      "outputs": [
+        "Confirmed QA must not modify implementation files under review.",
+        "Confirmed QA may recommend pass/rework/blocked but cannot replace BK/Human Creative Owner play-feel judgment.",
+        "Confirmed WP-035 target artifacts are reviews/RV-20260613-001.json and runs/RUN-20260613-005.json."
+      ],
+      "evidence": [
+        "agents/profiles/qa_agent.yaml forbids modifying implementation files under review and making final creative/product decisions.",
+        "plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md requires QA to check implementation correctness, scope preservation, playability, UI state, camera/readability, asset import validity, and owner play-readiness.",
+        "WP-034 acceptance criteria require QA handoff before Phase 4B implementation pass is claimed."
+      ]
+    },
+    {
+      "tool_name": "Codex shell",
+      "purpose": "Run deterministic QA verification commands for schema, import cache regeneration, smoke/runtime cleanliness, feature markers, and approved asset references.",
+      "inputs": [
+        "work_packages/active/WP-2026W22-035.json",
+        "runs/RUN-20260613-004.json",
+        "game/scenes/main.tscn",
+        "game/scripts/player.gd",
+        "scripts/smoke_test.sh"
+      ],
+      "outputs": [
+        "WP-035 schema validation passed.",
+        "Godot import cache regeneration passed.",
+        "Smoke output clean check passed.",
+        "Headless scene runtime clean check passed.",
+        "Feature marker and asset-reference checks passed."
+      ],
+      "evidence": [
+        "godot --headless --path game --import exit code 0.",
+        "bash clean smoke check exit code 0.",
+        "bash clean headless scene runtime check exit code 0.",
+        "rg marker and asset-reference checks exit code 0."
+      ]
+    },
+    {
+      "tool_name": "apply_patch",
+      "purpose": "Create independent QA review and QA run records without modifying implementation files.",
+      "inputs": [
+        "QA inspection findings",
+        "Verification command results",
+        "Review and Run schemas"
+      ],
+      "outputs": [
+        "reviews/RV-20260613-001.json",
+        "runs/RUN-20260613-005.json"
+      ],
+      "evidence": [
+        "QA review decision is pass with human_decision_required=true.",
+        "QA notes the limitation that no automated input playback was used.",
+        "QA preserves the BK/Human Creative Owner play-feel gate."
+      ]
+    }
+  ],
+  "artifacts": [
+    "reviews/RV-20260613-001.json",
+    "runs/RUN-20260613-005.json"
+  ],
+  "commands": [
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-035.json",
+      "exit_code": 0,
+      "notes": "QA Work Package validates; AJV date format warnings are expected in this repo."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260613-004.json",
+      "exit_code": 0,
+      "notes": "Implementation Run record validates after post-harness verification updates."
+    },
+    {
+      "command": "godot --headless --path game --import",
+      "exit_code": 0,
+      "notes": "Godot regenerated or confirmed local ignored imported texture cache for tracked Phase 3E PNG assets."
+    },
+    {
+      "command": "bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"'",
+      "exit_code": 0,
+      "notes": "Smoke test output is clean."
+    },
+    {
+      "command": "bash -lc 'out=$(godot --headless --path game --scene res://scenes/main.tscn --quit-after 3 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR|Parse Error|Failed\" <<< \"$out\"'",
+      "exit_code": 0,
+      "notes": "Headless scene runtime output is clean."
+    },
+    {
+      "command": "rg -n \"HazardArea|CollectibleArea|RetryButton|Camera2D|has_collectible|_reset_run|SECTION 1|SECTION 2|ITEM|Goal\" game/scenes/main.tscn game/scripts/player.gd",
+      "exit_code": 0,
+      "notes": "Phase 4B implementation markers are present."
+    },
+    {
+      "command": "rg -n \"res://assets/phase3e/(obstacle|goal_marker)\\.png|ExtResource\\(\\\"[23]_(obstacle|goal)_texture\\\"\\)\" game/scenes/main.tscn",
+      "exit_code": 0,
+      "notes": "Approved existing Phase 3E obstacle and goal marker texture references are present."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/review.schema.json -d reviews/RV-20260613-001.json",
+      "exit_code": 0,
+      "notes": "QA Review record validates."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260613-005.json",
+      "exit_code": 0,
+      "notes": "QA Run record validates."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "work_packages/active/WP-2026W22-035.json",
+      "reviews/RV-20260613-001.json",
+      "runs/RUN-20260613-005.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "QA recommends technical pass for the WP-034 Phase 4B implementation slice. The two-section flow, bounded movement verbs, readable hazard fail, placeholder collectible/progression gate, goal, status/result/retry UI, Camera2D framing, and approved prototype-only Phase 3E asset references are present. Deterministic schema, smoke, import, marker, and headless runtime checks passed. QA did not modify implementation files. This does not close the BK/Human Creative Owner play-feel gate; direct owner play remains required before claiming Phase 4B implementation pass or closeout."
+}

@@ -1,0 +1,185 @@
+{
+  "id": "WP-2026W22-036",
+  "type": "art",
+  "status": "active",
+  "goal": "Test whether the Art Agent can directly produce the full Phase 4B prototype art resource set, including backgrounds and gameplay-readable assets, with prompt/tool/license evidence and Godot-import-ready handoff, without editing gameplay implementation or approving final art direction.",
+  "owner_agent": "art",
+  "inputs": [
+    "plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md",
+    "research_notes/RN-2026W22-003-phase4b-complex-prototype-reference.md",
+    "art_notes/AN-2026W22-006-phase4b-art-requirements-candidate-package.md",
+    "art_candidates/phase4b/asset_requirements.json",
+    "art_candidates/phase4b/asset_manifest.json",
+    "owner_reviews/OR-2026W22-005-phase4b-scope-art-KR.md",
+    "owner_reviews/OR-2026W22-006-phase4b-playtest-approval-KR.md",
+    "reviews/RV-20260613-001.json",
+    "agents/profiles/art_agent.yaml",
+    "/Users/byung/.codex/skills/.system/imagegen/SKILL.md"
+  ],
+  "targets": [
+    "work_packages/active/WP-2026W22-036.json",
+    "art_candidates/phase4b/direct_art/prompts.json",
+    "art_candidates/phase4b/direct_art/manifest.json",
+    "art_candidates/phase4b/direct_art/manifest.csv",
+    "art_candidates/phase4b/direct_art/contact_sheet.md",
+    "art_notes/AN-2026W22-007-phase4b-direct-art-production-report.md",
+    "owner_reviews/OR-2026W22-007-phase4b-direct-art-KR.md",
+    "game/assets/phase4b/direct_art/background_section_one_v1.png",
+    "game/assets/phase4b/direct_art/background_section_one_v1.png.import",
+    "game/assets/phase4b/direct_art/background_section_two_v1.png",
+    "game/assets/phase4b/direct_art/background_section_two_v1.png.import",
+    "game/assets/phase4b/direct_art/player_avatar_v1.png",
+    "game/assets/phase4b/direct_art/player_avatar_v1.png.import",
+    "game/assets/phase4b/direct_art/ground_platform_tile_v1.png",
+    "game/assets/phase4b/direct_art/ground_platform_tile_v1.png.import",
+    "game/assets/phase4b/direct_art/collectible_progression_item_v1.png",
+    "game/assets/phase4b/direct_art/collectible_progression_item_v1.png.import",
+    "game/assets/phase4b/direct_art/hazard_warning_marker_v1.png",
+    "game/assets/phase4b/direct_art/hazard_warning_marker_v1.png.import",
+    "game/assets/phase4b/direct_art/goal_marker_v1.png",
+    "game/assets/phase4b/direct_art/goal_marker_v1.png.import",
+    "game/assets/phase4b/direct_art/ui_status_panel_v1.png",
+    "game/assets/phase4b/direct_art/ui_status_panel_v1.png.import",
+    "runs/RUN-20260614-001.json"
+  ],
+  "forbidden_changes": [
+    "game/scenes/**",
+    "game/scripts/**",
+    "game/project.godot",
+    "game/.godot/**",
+    "game/assets/phase3e/**",
+    "art_candidates/phase3b/**",
+    "art_candidates/phase3e/**",
+    "research_notes/**",
+    "reviews/**",
+    "learning_cards/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "Godot gameplay implementation",
+    "collision or level layout edits",
+    "final game concept approval",
+    "final art direction approval",
+    "production asset approval",
+    "platform export or web deployment",
+    "external tester workflow",
+    "Learning Card creation or promotion",
+    "Adobe or other paid external tool as a hard dependency without explicit BK approval",
+    "imagegen CLI fallback or OPENAI_API_KEY workflow without explicit BK approval",
+    "Work Package lifecycle moves",
+    "commit, stage, or push"
+  ],
+  "outputs": [
+    "art_candidates/phase4b/direct_art/prompts.json",
+    "art_candidates/phase4b/direct_art/manifest.json",
+    "art_candidates/phase4b/direct_art/manifest.csv",
+    "art_candidates/phase4b/direct_art/contact_sheet.md",
+    "art_notes/AN-2026W22-007-phase4b-direct-art-production-report.md",
+    "owner_reviews/OR-2026W22-007-phase4b-direct-art-KR.md",
+    "game/assets/phase4b/direct_art/background_section_one_v1.png",
+    "game/assets/phase4b/direct_art/background_section_one_v1.png.import",
+    "game/assets/phase4b/direct_art/background_section_two_v1.png",
+    "game/assets/phase4b/direct_art/background_section_two_v1.png.import",
+    "game/assets/phase4b/direct_art/player_avatar_v1.png",
+    "game/assets/phase4b/direct_art/player_avatar_v1.png.import",
+    "game/assets/phase4b/direct_art/ground_platform_tile_v1.png",
+    "game/assets/phase4b/direct_art/ground_platform_tile_v1.png.import",
+    "game/assets/phase4b/direct_art/collectible_progression_item_v1.png",
+    "game/assets/phase4b/direct_art/collectible_progression_item_v1.png.import",
+    "game/assets/phase4b/direct_art/hazard_warning_marker_v1.png",
+    "game/assets/phase4b/direct_art/hazard_warning_marker_v1.png.import",
+    "game/assets/phase4b/direct_art/goal_marker_v1.png",
+    "game/assets/phase4b/direct_art/goal_marker_v1.png.import",
+    "game/assets/phase4b/direct_art/ui_status_panel_v1.png",
+    "game/assets/phase4b/direct_art/ui_status_panel_v1.png.import",
+    "runs/RUN-20260614-001.json"
+  ],
+  "verify": [
+    {
+      "name": "WP-036 validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-036.json"
+    },
+    {
+      "name": "Direct art files exist",
+      "method": "command",
+      "command": "for asset in background_section_one_v1 background_section_two_v1 player_avatar_v1 ground_platform_tile_v1 collectible_progression_item_v1 hazard_warning_marker_v1 goal_marker_v1 ui_status_panel_v1; do test -f \"game/assets/phase4b/direct_art/${asset}.png\" && test -f \"game/assets/phase4b/direct_art/${asset}.png.import\"; done"
+    },
+    {
+      "name": "Direct art metadata exists",
+      "method": "command",
+      "command": "test -f art_candidates/phase4b/direct_art/prompts.json && test -f art_candidates/phase4b/direct_art/manifest.json && test -f art_candidates/phase4b/direct_art/manifest.csv && test -f art_candidates/phase4b/direct_art/contact_sheet.md && test -f art_notes/AN-2026W22-007-phase4b-direct-art-production-report.md && test -f owner_reviews/OR-2026W22-007-phase4b-direct-art-KR.md"
+    },
+    {
+      "name": "PNG files are parseable prototype assets",
+      "method": "command",
+      "command": "python3 - <<'PY'\nimport struct\nassets = {\n    'background_section_one_v1': {'min_w': 640, 'min_h': 360, 'alpha_required': False},\n    'background_section_two_v1': {'min_w': 640, 'min_h': 360, 'alpha_required': False},\n    'player_avatar_v1': {'min_w': 128, 'min_h': 128, 'alpha_required': True},\n    'ground_platform_tile_v1': {'min_w': 128, 'min_h': 128, 'alpha_required': True},\n    'collectible_progression_item_v1': {'min_w': 128, 'min_h': 128, 'alpha_required': True},\n    'hazard_warning_marker_v1': {'min_w': 128, 'min_h': 128, 'alpha_required': True},\n    'goal_marker_v1': {'min_w': 128, 'min_h': 128, 'alpha_required': True},\n    'ui_status_panel_v1': {'min_w': 256, 'min_h': 96, 'alpha_required': True},\n}\nfor asset_id, rule in assets.items():\n    path = f'game/assets/phase4b/direct_art/{asset_id}.png'\n    with open(path, 'rb') as f:\n        sig = f.read(8)\n        assert sig == b'\\x89PNG\\r\\n\\x1a\\n', path\n        length = struct.unpack('>I', f.read(4))[0]\n        chunk = f.read(4)\n        assert chunk == b'IHDR', path\n        data = f.read(length)\n        width, height, bit_depth, color_type = struct.unpack('>IIBB', data[:10])[:4]\n        assert width >= rule['min_w'] and height >= rule['min_h'], (path, width, height)\n        if rule['alpha_required']:\n            assert color_type in (4, 6), (path, 'expected alpha-capable PNG color type', color_type)\nprint('png ok')\nPY"
+    },
+    {
+      "name": "Prompt and manifest JSON parse",
+      "method": "command",
+      "command": "jq empty art_candidates/phase4b/direct_art/prompts.json art_candidates/phase4b/direct_art/manifest.json"
+    },
+    {
+      "name": "Manifest CSV parses",
+      "method": "command",
+      "command": "python3 - <<'PY'\nimport csv\nrequired = {'background_section_one_v1','background_section_two_v1','player_avatar_v1','ground_platform_tile_v1','collectible_progression_item_v1','hazard_warning_marker_v1','goal_marker_v1','ui_status_panel_v1'}\npath = 'art_candidates/phase4b/direct_art/manifest.csv'\nwith open(path, newline='') as f:\n    rows = list(csv.DictReader(f))\nseen = {row.get('asset_id') for row in rows}\nassert required <= seen, (required - seen)\nfor row in rows:\n    assert row.get('asset_id') and row.get('role') and row.get('source_png') and row.get('tool_or_model') and row.get('usage_status')\nprint('csv ok')\nPY"
+    },
+    {
+      "name": "Generated asset evidence is recorded",
+      "method": "command",
+      "command": "rg -n \"asset_id|background_section_one|background_section_two|player_avatar|ground_platform_tile|collectible_progression_item|hazard_warning_marker|goal_marker|ui_status_panel|prompt|tool_or_model|generation_date|license_or_usage_note|prototype_only|production_approved|owner_review_status|implementation_handoff_note|built_in_image_gen|chroma_key|human_final_pass_required|paid_tool_fallback\" art_candidates/phase4b/direct_art/prompts.json art_candidates/phase4b/direct_art/manifest.json art_candidates/phase4b/direct_art/contact_sheet.md art_notes/AN-2026W22-007-phase4b-direct-art-production-report.md"
+    },
+    {
+      "name": "Godot import metadata is generated without treating .godot as evidence",
+      "method": "command",
+      "command": "godot --headless --path game --import && for asset in background_section_one_v1 background_section_two_v1 player_avatar_v1 ground_platform_tile_v1 collectible_progression_item_v1 hazard_warning_marker_v1 goal_marker_v1 ui_status_panel_v1; do test -f \"game/assets/phase4b/direct_art/${asset}.png.import\"; done"
+    },
+    {
+      "name": "Owner review brief is decision-ready but not pre-approved",
+      "method": "command",
+      "command": "rg -n \"Decision: pending|BK가 검수할 것|승인 기준|Redirect 기준|Reject 기준|지금 승인하지 않는 것|prototype-only|production asset 승인 아님\" owner_reviews/OR-2026W22-007-phase4b-direct-art-KR.md"
+    },
+    {
+      "name": "Art Run record validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260614-001.json"
+    },
+    {
+      "name": "No implementation files changed",
+      "method": "command",
+      "command": "bash -lc 'changed=$(git diff --name-only HEAD -- game/scenes game/scripts game/project.godot); test -z \"$changed\"'"
+    }
+  ],
+  "handoff_to": [
+    "human_creative_owner",
+    "qa",
+    "implementation",
+    "learning_librarian"
+  ],
+  "human_decision_required": true,
+  "human_decision_reason": "BK/Human Creative Owner must approve, redirect, or reject the newly produced prototype art assets before any implementation Work Package may replace the current placeholder/reused visuals with them.",
+  "acceptance_criteria": [
+    "Art Agent directly produces the full Phase 4B prototype art resource set: two section backgrounds, player avatar, ground/platform tile, collectible/progression item, hazard readability marker or obstacle cue, goal marker, and UI status panel art.",
+    "The default generation path is the Codex imagegen skill using built-in image_gen, because BK already has ChatGPT Pro access; ordinary generation must not require OPENAI_API_KEY or a paid Adobe workflow.",
+    "For sprite-like transparent assets, the default path is built-in image_gen on a removable flat chroma-key background followed by local chroma-key removal with the imagegen helper; CLI true-transparency fallback requires explicit BK approval.",
+    "Adobe Firefly or another paid/professional art tool may be recommended as a quality fallback or final production pass option, but WP-036 must not make it a hard dependency or incur a new subscription without explicit BK approval.",
+    "At least eight new PNG assets are produced under game/assets/phase4b/direct_art/**, with matching .png.import files after Godot import.",
+    "Each produced asset is gameplay-readable at prototype scale and is not final production art; sprite-like gameplay assets must have alpha-capable PNG format, while backgrounds may be opaque.",
+    "The two backgrounds must help distinguish Section 1 warmup from Section 2 hazard/item without becoming a full final environment painting or implying a different game concept.",
+    "The player asset must read as the controllable character without adding new movement verbs, weapons, combat, health, lives, or character-story commitments.",
+    "The ground/platform tile must support traversal readability without implying slopes, moving platforms, destructible terrain, or a tileset production system.",
+    "The collectible asset must not look like a goal, hazard, enemy, currency economy item, or final reward system.",
+    "The hazard asset must read as danger or avoidance support without implying enemy AI, combat, health, lives, damage systems, or moving-platform scope.",
+    "The goal marker must read as the destination and must not be confused with the collectible or hazard.",
+    "The UI status panel art must support start/status/result/retry readability without becoming a full menu, settings, save system, or branded HUD direction.",
+    "Prompts, tool/model identity, generation date, source/output mapping, license or usage uncertainty, and prototype-only status are recorded for each asset.",
+    "Each asset records whether it is prototype-only, production-candidate, or production-approved; imagegen output alone cannot be marked production-approved without separate BK review and, if needed, human art final pass.",
+    "Godot import metadata for the new PNG files is generated or confirmed, while game/.godot/** remains ignored and is not used as evidence.",
+    "A Korean owner review brief is created so BK can approve, redirect, or reject the generated assets without reading raw JSON.",
+    "No Godot scene, script, project config, Phase 3 assets, schemas, profiles, QA reviews, Learning Cards, lifecycle moves, staging, committing, or pushing are performed by WP-036 execution.",
+    "The result is a direct Art production capability test and does not approve final art direction, production/public asset usage, launch readiness, web export, or external testing."
+  ],
+  "created_at": "2026-06-14",
+  "notes": "This Work Package intentionally differs from WP-032. WP-032 tested Art Agent reuse packaging. WP-036 tests direct prototype art production by requiring a full newly produced Phase 4B prototype art resource set, including backgrounds, gameplay sprites, platform/readability art, goal, and UI support art, plus prompt/tool/license evidence and a Korean owner review surface. The preferred execution path is the Codex imagegen skill with built-in image_gen because BK has ChatGPT Pro access; transparent sprite output should use chroma-key generation plus local removal first. Adobe or other paid tools are quality fallback/final-pass options only, not hard dependencies. If no acceptable image generation or editing path is available, WP-036 should be marked blocked rather than replaced with prose-only mock assets."
+}

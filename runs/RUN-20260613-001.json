@@ -1,0 +1,126 @@
+{
+  "run_id": "RUN-20260613-001",
+  "work_package_id": "WP-2026W22-031",
+  "agent": "research",
+  "agent_profile": "agents/profiles/research_agent.yaml",
+  "started_at": "2026-06-13T11:30:43+09:00",
+  "ended_at": "2026-06-13T19:15:01+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "Codex shell",
+      "purpose": "Inspect WP-031, the Research Agent profile, Phase 4B scope brief, Run schema, and existing Research Run pattern before creating Research artifacts.",
+      "inputs": [
+        "work_packages/active/WP-2026W22-031.json",
+        "agents/profiles/research_agent.yaml",
+        "plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md",
+        "schemas/run.schema.json",
+        "runs/RUN-20260528-006.json",
+        "research_notes/RN-2026W22-002-platformer-greybox-reference.md"
+      ],
+      "outputs": [
+        "research_notes/RN-2026W22-003-phase4b-complex-prototype-reference.md",
+        "runs/RUN-20260613-001.json"
+      ],
+      "evidence": [
+        "Preflight confirmed research_notes/RN-2026W22-003-phase4b-complex-prototype-reference.md and runs/RUN-20260613-001.json did not already exist.",
+        "WP-031 authorizes only Research Constraints and forbids Godot, art, owner review, QA, Learning Card, lifecycle, staging, commit, and push work."
+      ]
+    },
+    {
+      "tool_name": "External web research",
+      "purpose": "Gather official engine and accessibility references for hazard/collectible detection, camera/framing, UI layering, and gameplay readability constraints.",
+      "inputs": [
+        "Godot stable Area2D class reference",
+        "Godot stable Camera2D class reference",
+        "Godot latest Canvas layers documentation",
+        "Game Accessibility Guidelines basic list",
+        "Game Accessibility Guidelines color-only information guidance"
+      ],
+      "outputs": [
+        "Area2D overlap/signal rationale for hazard, collectible, and goal zones",
+        "Camera2D rationale for follow/framing constraints",
+        "CanvasLayer rationale for fixed screen-space UI while world camera moves",
+        "Readability rationale for high contrast, clear text, and avoiding color-only state communication"
+      ],
+      "evidence": [
+        "https://docs.godotengine.org/en/stable/classes/class_area2d.html",
+        "https://docs.godotengine.org/en/stable/classes/class_camera2d.html",
+        "https://docs.godotengine.org/en/latest/tutorials/2d/canvas_layers.html",
+        "https://gameaccessibilityguidelines.com/basic/",
+        "https://gameaccessibilityguidelines.com/ensure-no-essential-information-is-conveyed-by-a-fixed-colour-alone/"
+      ]
+    },
+    {
+      "tool_name": "apply_patch",
+      "purpose": "Create and then owner-feedback-revise the bounded Phase 4B Research Constraints note and Research Run record without mutating forbidden surfaces.",
+      "inputs": [
+        "WP-031",
+        "Phase 4B scope brief",
+        "Phase 2 movement reference note",
+        "official Godot documentation references",
+        "Game Accessibility Guidelines references",
+        "BK/Human Creative Owner feedback that the reference needed a clearer visual explanation of what game screen is being made"
+      ],
+      "outputs": [
+        "research_notes/RN-2026W22-003-phase4b-complex-prototype-reference.md",
+        "runs/RUN-20260613-001.json"
+      ],
+      "evidence": [
+        "The Research note records source/rationale, uncertainty, Art/Implementation/QA handoffs, an owner-readable prototype snapshot, a screen sketch, a 30-second play story, and visual production targets.",
+        "No Godot implementation, art production, owner approval artifact, QA review, Learning Card, lifecycle move, staging, commit, or push was performed."
+      ]
+    }
+  ],
+  "artifacts": [
+    "research_notes/RN-2026W22-003-phase4b-complex-prototype-reference.md",
+    "work_packages/active/WP-2026W22-031.json",
+    "runs/RUN-20260613-001.json"
+  ],
+  "commands": [
+    {
+      "command": "date '+%Y-%m-%dT%H:%M:%S%z'",
+      "exit_code": 0,
+      "notes": "Recorded the local run start timestamp as 2026-06-13T11:30:43+0900."
+    },
+    {
+      "command": "test -e research_notes/RN-2026W22-003-phase4b-complex-prototype-reference.md; test -e runs/RUN-20260613-001.json",
+      "exit_code": 1,
+      "notes": "Preflight confirmed the two WP-031 output files did not already exist."
+    },
+    {
+      "command": "git status --short --untracked-files=all",
+      "exit_code": 0,
+      "notes": "Before WP-031 execution, git status showed the pre-existing AGENTS.md modification and the newly created WP-031 file."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-031.json",
+      "exit_code": 0,
+      "notes": "WP-031 validated before Research execution. AJV ignored the date format because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "rg -n \"Owner-Readable Prototype Snapshot|Screen Sketch|30-Second Play Story|Visual Production Target|Not The Game Yet|Layout Constraints|Hazard|Moving Obstacle|Collectible|Progression State|UI State|Camera|Readability|Feel Constraints|Art Handoff|Implementation Handoff|QA Handoff|Uncertainty\" research_notes/RN-2026W22-003-phase4b-complex-prototype-reference.md",
+      "exit_code": 0,
+      "notes": "Coverage check confirmed the Research note includes the required Phase 4B visual snapshot, screen sketch, constraint, uncertainty, and handoff sections after BK/Human Creative Owner readability feedback."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260613-001.json",
+      "exit_code": 0,
+      "notes": "RUN-20260613-001 validated against the Run schema. AJV ignored date-time formats because no format plugin is bundled, matching existing project validation practice."
+    },
+    {
+      "command": "bash -lc 'extra=$(git diff --name-only HEAD -- | grep -Ev \"^(AGENTS.md|research_notes/RN-2026W22-003-phase4b-complex-prototype-reference.md|work_packages/active/WP-2026W22-031.json|runs/RUN-20260613-001.json)$\" || true); test -z \"$extra\"'",
+      "exit_code": 0,
+      "notes": "Changed-file scope is limited to the pre-existing AGENTS.md change plus WP-031-authorized Research note, Work Package, and Run artifacts."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "research_notes/RN-2026W22-003-phase4b-complex-prototype-reference.md",
+      "runs/RUN-20260613-001.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "Phase 4B Research Constraints completed and then revised after BK/Human Creative Owner feedback that the first version was too abstract to understand visually. The note now translates the owner-approved WP-030 scope into an owner-readable prototype snapshot, screen sketch, 30-second play story, visual production targets, layout, hazard/progression, UI, camera/readability, feel, imported-asset, and Art/Implementation/QA handoff constraints. This run does not authorize Art production, owner review, Godot implementation, QA pass, Learning Card promotion, closeout, staging, committing, or pushing."
+}

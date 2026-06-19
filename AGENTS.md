@@ -3,6 +3,19 @@
 This file is a startup contract for agents working in this repository. It is
 not the canonical project context or a separate policy source.
 
+## Workspace Policy Inheritance
+
+This repo lives under `/Users/byung/agent-workspace` and inherits the workspace
+startup contract at `/Users/byung/agent-workspace/AGENTS.md`.
+
+Before implementation, repo structure changes, build/test workflow changes, or
+multi-file code edits, follow the workspace Codex execution model: scope the
+work, protect existing changes, run deterministic verification, and report
+changed files, commands, results, failures, and decisions needed.
+
+If Halucy-specific rules conflict with workspace policy, follow the stricter
+rule.
+
 ## Read First
 
 For execution work, read:
