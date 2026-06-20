@@ -1,0 +1,167 @@
+{
+  "id": "WP-2026W22-037",
+  "type": "implementation",
+  "status": "active",
+  "goal": "Integrate the BK-approved Phase 4B direct art asset set into the existing Godot playable slice as a full playable-art implementation pass, while preserving gameplay logic, movement, progression, retry behavior, and QA separation.",
+  "owner_agent": "implementation",
+  "inputs": [
+    "plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md",
+    "research_notes/RN-2026W22-003-phase4b-complex-prototype-reference.md",
+    "owner_reviews/OR-2026W22-006-phase4b-playtest-approval-KR.md",
+    "owner_reviews/OR-2026W22-007-phase4b-direct-art-KR.md",
+    "art_candidates/phase4b/direct_art/contact_sheet.md",
+    "art_candidates/phase4b/direct_art/manifest.json",
+    "art_candidates/phase4b/direct_art/manifest.csv",
+    "art_notes/AN-2026W22-007-phase4b-direct-art-production-report.md",
+    "agents/profiles/implementation_agent.yaml",
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd",
+    "game/assets/phase4b/direct_art/background_section_one_v1.png",
+    "game/assets/phase4b/direct_art/background_section_one_v1.png.import",
+    "game/assets/phase4b/direct_art/background_section_two_v1.png",
+    "game/assets/phase4b/direct_art/background_section_two_v1.png.import",
+    "game/assets/phase4b/direct_art/player_avatar_v1.png",
+    "game/assets/phase4b/direct_art/player_avatar_v1.png.import",
+    "game/assets/phase4b/direct_art/ground_platform_tile_v1.png",
+    "game/assets/phase4b/direct_art/ground_platform_tile_v1.png.import",
+    "game/assets/phase4b/direct_art/collectible_progression_item_v1.png",
+    "game/assets/phase4b/direct_art/collectible_progression_item_v1.png.import",
+    "game/assets/phase4b/direct_art/hazard_warning_marker_v1.png",
+    "game/assets/phase4b/direct_art/hazard_warning_marker_v1.png.import",
+    "game/assets/phase4b/direct_art/goal_marker_v1.png",
+    "game/assets/phase4b/direct_art/goal_marker_v1.png.import",
+    "game/assets/phase4b/direct_art/ui_status_panel_v1.png",
+    "game/assets/phase4b/direct_art/ui_status_panel_v1.png.import",
+    "scripts/smoke_test.sh"
+  ],
+  "targets": [
+    "work_packages/active/WP-2026W22-037.json",
+    "game/scenes/main.tscn",
+    "runs/RUN-20260620-001.json"
+  ],
+  "forbidden_changes": [
+    "game/scripts/player.gd",
+    "game/project.godot",
+    "game/.godot/**",
+    "game/assets/phase4b/direct_art/*.png",
+    "game/assets/phase3e/**",
+    "game/scripts/*.gd.uid",
+    "scripts/**",
+    "schemas/**",
+    "agents/**",
+    "context/**",
+    "research_notes/**",
+    "art_notes/**",
+    "art_candidates/**",
+    "owner_reviews/**",
+    "reviews/**",
+    "learning_cards/**",
+    "PHASE4B_CLOSEOUT.md",
+    "new image generation",
+    "new gameplay object creation beyond replacing existing visual roles",
+    "movement tuning or movement verb expansion",
+    "hazard, collectible/progression, goal, retry, or timer logic changes",
+    "collision behavior changes beyond preserving existing simple collision nodes",
+    "final art direction approval",
+    "production asset approval",
+    "launch/public release usage approval",
+    "paid tool adoption",
+    "QA self-approval",
+    "Learning Card creation or promotion",
+    "Work Package lifecycle moves",
+    "push, merge, or deploy"
+  ],
+  "outputs": [
+    "work_packages/active/WP-2026W22-037.json",
+    "game/scenes/main.tscn",
+    "runs/RUN-20260620-001.json"
+  ],
+  "verify": [
+    {
+      "name": "WP-037 validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-037.json"
+    },
+    {
+      "name": "Owner approval recorded",
+      "method": "command",
+      "command": "rg -n \"Decision: approve for Phase 4B prototype testing|All eight assets are approved|implementation without separate WP\" owner_reviews/OR-2026W22-007-phase4b-direct-art-KR.md"
+    },
+    {
+      "name": "Direct art files exist",
+      "method": "command",
+      "command": "for asset in background_section_one_v1 background_section_two_v1 player_avatar_v1 ground_platform_tile_v1 collectible_progression_item_v1 hazard_warning_marker_v1 goal_marker_v1 ui_status_panel_v1; do test -f \"game/assets/phase4b/direct_art/${asset}.png\" && test -f \"game/assets/phase4b/direct_art/${asset}.png.import\"; done"
+    },
+    {
+      "name": "Direct art manifest parses",
+      "method": "command",
+      "command": "jq empty art_candidates/phase4b/direct_art/manifest.json"
+    },
+    {
+      "name": "Scene references direct art resources",
+      "method": "command",
+      "command": "rg -n \"background_section_one_v1|background_section_two_v1|player_avatar_v1|ground_platform_tile_v1|collectible_progression_item_v1|hazard_warning_marker_v1|goal_marker_v1|ui_status_panel_v1\" game/scenes/main.tscn"
+    },
+    {
+      "name": "Gameplay markers and labels remain",
+      "method": "command",
+      "command": "rg -n \"HazardArea|CollectibleArea|GoalArea|RetryButton|Camera2D|SECTION 1 WARMUP|SECTION 2 HAZARD \\+ ITEM|HAZARD|ITEM|Goal\" game/scenes/main.tscn"
+    },
+    {
+      "name": "Player script is unchanged from HEAD",
+      "method": "command",
+      "command": "bash -lc 'test -z \"$(git diff --name-only HEAD -- game/scripts/player.gd)\"'"
+    },
+    {
+      "name": "Godot import succeeds",
+      "method": "command",
+      "command": "godot --headless --path game --import"
+    },
+    {
+      "name": "Godot smoke test passes",
+      "method": "command",
+      "command": "scripts/smoke_test.sh"
+    },
+    {
+      "name": "Smoke test output is clean",
+      "method": "command",
+      "command": "bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"'"
+    },
+    {
+      "name": "Headless scene runtime loads",
+      "method": "command",
+      "command": "godot --headless --path game --scene res://scenes/main.tscn --quit-after 3"
+    },
+    {
+      "name": "Run record validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260620-001.json"
+    },
+    {
+      "name": "Only authorized WP-037 artifacts changed",
+      "method": "command",
+      "command": "bash -lc 'extra=$(git status --short --untracked-files=all | sed \"s/^...//\" | grep -Ev \"^(work_packages/active/WP-2026W22-037.json|game/scenes/main.tscn|runs/RUN-20260620-001.json)$\" || true); test -z \"$extra\"'"
+    }
+  ],
+  "handoff_to": [
+    "qa",
+    "learning_librarian",
+    "human_creative_owner"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "A single meaningful direct-art playable integration pass is performed; the work is not split asset-by-asset.",
+    "The scene references all eight approved Phase 4B direct art assets: two backgrounds, player, platform tile, collectible, hazard marker, goal marker, and UI status panel.",
+    "Section 1 and Section 2 backgrounds are used as world-space visual backdrops only; background-internal platforms, spikes, lamps, or gate-like props are not treated as gameplay objects.",
+    "Existing platform, hazard, collectible, goal, HUD, and retry gameplay nodes remain separate and inspectable.",
+    "Core labels remain available for first-pass QA readability: HAZARD, ITEM, Goal, and section/status labels may be repositioned but not fully removed.",
+    "Limited visual alignment is allowed: position, scale, z-index, background crop or layering, camera limits, and label/HUD placement.",
+    "Player movement, hazard fail behavior, collectible/progression gating, goal success behavior, timer behavior, and retry behavior are not changed.",
+    "game/scripts/player.gd remains unchanged.",
+    "No new generated art, final art direction, production asset approval, launch/public usage approval, paid tool adoption, QA review, Learning Card, lifecycle move, push, merge, or deployment is performed.",
+    "WP, Run, Godot import, smoke test, clean-output check, headless runtime, direct-art scene references, player-script unchanged check, and scope-diff verification pass or failures are recorded honestly.",
+    "The result is handed off to a separate QA Work Package for independent readability, import stability, playability, and scope review."
+  ],
+  "created_at": "2026-06-20",
+  "notes": "This Work Package implements BK-approved direct art into the existing Phase 4B playable slice as one bounded implementation pass. It intentionally broadens beyond a tiny integration-only slice by covering the full direct-art set, while preserving the core boundaries agreed in the grill session: QA remains separate, labels remain, backgrounds are visual-only, scene alignment may be adjusted, and gameplay logic is not changed. Codex is the execution path under the current workspace policy; Samantha harness routing is not required or used."
+}

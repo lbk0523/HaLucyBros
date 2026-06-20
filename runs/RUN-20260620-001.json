@@ -1,0 +1,185 @@
+{
+  "run_id": "RUN-20260620-001",
+  "work_package_id": "WP-2026W22-037",
+  "agent": "implementation",
+  "agent_profile": "agents/profiles/implementation_agent.yaml",
+  "started_at": "2026-06-20T13:40:00+09:00",
+  "ended_at": "2026-06-20T14:00:03+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "Codex shell",
+      "purpose": "Inspect repository policy, implementation profile, Work Package and Run schemas, Phase 4B owner approval, direct art manifest, current Godot scene, and player script before editing.",
+      "inputs": [
+        "AGENTS.md",
+        "/Users/byung/agent-workspace/AGENTS.md",
+        "/Users/byung/agent-workspace/policies/codex-rules.md",
+        "agents/profiles/implementation_agent.yaml",
+        "schemas/work_package.schema.json",
+        "schemas/run.schema.json",
+        "owner_reviews/OR-2026W22-007-phase4b-direct-art-KR.md",
+        "art_candidates/phase4b/direct_art/manifest.json",
+        "game/scenes/main.tscn",
+        "game/scripts/player.gd"
+      ],
+      "outputs": [
+        "Confirmed Codex direct execution is the current workspace path and Samantha harness routing is not required.",
+        "Confirmed BK approved all eight direct art assets for Phase 4B prototype testing.",
+        "Confirmed player.gd can remain unchanged because gameplay logic references existing Area2D and HUD nodes rather than visual-node types."
+      ],
+      "evidence": [
+        "owner_reviews/OR-2026W22-007-phase4b-direct-art-KR.md records Decision: approve for Phase 4B prototype testing.",
+        "game/scripts/player.gd references GoalArea, HazardArea, CollectibleArea, HUD labels, and RetryButton; it does not require visual ColorRect nodes.",
+        "Workspace policy says Codex is the default execution path and not to route ordinary work through Samantha harness."
+      ]
+    },
+    {
+      "tool_name": "git",
+      "purpose": "Start the implementation from the merged PR #8 state on a fresh branch.",
+      "inputs": [
+        "origin/main"
+      ],
+      "outputs": [
+        "codex/phase4b-direct-art-integration"
+      ],
+      "evidence": [
+        "git switch -c codex/phase4b-direct-art-integration origin/main succeeded."
+      ]
+    },
+    {
+      "tool_name": "apply_patch",
+      "purpose": "Create the active Implementation Work Package before Godot edits and then integrate the approved direct art set into the scene only.",
+      "inputs": [
+        "User-approved grill decisions for full direct art playable integration, separate QA, limited visual alignment, core labels retained, backgrounds as visual-only backdrops, and merged-main branch.",
+        "work_packages/active/WP-2026W22-037.json",
+        "game/scenes/main.tscn"
+      ],
+      "outputs": [
+        "work_packages/active/WP-2026W22-037.json",
+        "game/scenes/main.tscn",
+        "runs/RUN-20260620-001.json"
+      ],
+      "evidence": [
+        "main.tscn now references all eight game/assets/phase4b/direct_art PNG files.",
+        "main.tscn uses AtlasTexture crops for transparent sprite/UI assets so visual bounds are not dominated by source padding.",
+        "Section 1 and Section 2 direct art backgrounds are used behind gameplay nodes with readability washes.",
+        "Ground/platform, player, collectible, hazard, goal, and HUD backing visuals now use direct art textures.",
+        "Core labels remain: SECTION 1 WARMUP, SECTION 2 HAZARD + ITEM, START, HAZARD, ITEM, Goal, HUD status/result labels, and RetryButton."
+      ]
+    },
+    {
+      "tool_name": "Godot CLI",
+      "purpose": "Verify import, smoke, and headless runtime after scene integration.",
+      "inputs": [
+        "game/project.godot",
+        "game/scenes/main.tscn",
+        "game/assets/phase4b/direct_art/*.png"
+      ],
+      "outputs": [
+        "Godot import completed.",
+        "Smoke test completed.",
+        "Headless scene runtime completed."
+      ],
+      "evidence": [
+        "godot --headless --path game --import exited 0.",
+        "scripts/smoke_test.sh exited 0.",
+        "clean smoke output check found no SCRIPT ERROR or ERROR lines.",
+        "godot --headless --path game --scene res://scenes/main.tscn --quit-after 3 exited 0."
+      ]
+    },
+    {
+      "tool_name": "Codex temporary visual preview",
+      "purpose": "Perform a non-artifact gross visual check for scale and overlap without editing source assets.",
+      "inputs": [
+        "game/assets/phase4b/direct_art/*.png",
+        "game/scenes/main.tscn placement values"
+      ],
+      "outputs": [
+        "/tmp/halucy_wp037_direct_art_scene_preview.png",
+        "/tmp/halucy_wp037_direct_art_scene_preview_v2.png"
+      ],
+      "evidence": [
+        "Initial preview showed HUD text and section label overlap plus transparent padding in platform art.",
+        "Scene was adjusted to use AtlasTexture crops and move section labels below the HUD.",
+        "Temporary preview files are not repo artifacts and are not used as acceptance evidence beyond gross layout inspection."
+      ]
+    }
+  ],
+  "artifacts": [
+    "work_packages/active/WP-2026W22-037.json",
+    "game/scenes/main.tscn",
+    "runs/RUN-20260620-001.json"
+  ],
+  "commands": [
+    {
+      "command": "git switch -c codex/phase4b-direct-art-integration origin/main",
+      "exit_code": 0,
+      "notes": "Created the implementation branch from the merged main state."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-037.json",
+      "exit_code": 0,
+      "notes": "WP-037 validates. AJV ignored date formats because the project does not bundle the format plugin, matching existing validation behavior."
+    },
+    {
+      "command": "jq empty work_packages/active/WP-2026W22-037.json",
+      "exit_code": 0,
+      "notes": "WP JSON parses."
+    },
+    {
+      "command": "rg -n \"background_section_one_v1|background_section_two_v1|player_avatar_v1|ground_platform_tile_v1|collectible_progression_item_v1|hazard_warning_marker_v1|goal_marker_v1|ui_status_panel_v1|HazardArea|CollectibleArea|GoalArea|RetryButton|Camera2D|HAZARD|ITEM|Goal\" game/scenes/main.tscn",
+      "exit_code": 0,
+      "notes": "Scene contains direct art references, gameplay nodes, and retained labels."
+    },
+    {
+      "command": "bash -lc 'test -z \"$(git diff --name-only HEAD -- game/scripts/player.gd)\"'",
+      "exit_code": 0,
+      "notes": "player.gd remained unchanged."
+    },
+    {
+      "command": "godot --headless --path game --import",
+      "exit_code": 0,
+      "notes": "Godot import completed for the direct art integration scene."
+    },
+    {
+      "command": "godot --headless --path game --scene res://scenes/main.tscn --quit-after 3",
+      "exit_code": 0,
+      "notes": "Headless scene runtime loaded after direct art integration."
+    },
+    {
+      "command": "scripts/smoke_test.sh",
+      "exit_code": 0,
+      "notes": "Godot smoke test passed."
+    },
+    {
+      "command": "bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"'",
+      "exit_code": 0,
+      "notes": "Smoke output was clean."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260620-001.json",
+      "exit_code": 0,
+      "notes": "Run record validates. AJV ignored date-time formats because the project does not bundle the format plugin, matching existing validation behavior."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "notes": "No whitespace errors in tracked diffs."
+    },
+    {
+      "command": "bash -lc 'extra=$(git status --short --untracked-files=all | sed \"s/^...//\" | grep -Ev \"^(work_packages/active/WP-2026W22-037.json|game/scenes/main.tscn|runs/RUN-20260620-001.json)$\" || true); test -z \"$extra\"'",
+      "exit_code": 0,
+      "notes": "Scope check includes untracked files and found only WP-037 targets."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "work_packages/active/WP-2026W22-037.json",
+      "game/scenes/main.tscn",
+      "runs/RUN-20260620-001.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "Implemented WP-037 as one full direct art playable integration pass rather than one WP per asset. The scene now uses the approved Phase 4B direct art backgrounds, player avatar, platform tile, collectible, hazard marker, goal marker, and UI panel. Gameplay logic was preserved: game/scripts/player.gd was not modified, and existing Area2D collision, hazard, collectible/progression, goal, timer, retry, movement, and HUD label logic remains intact. Limited visual alignment was performed in scene only: z-index/background washes, AtlasTexture crops for transparent padding, direct art visual nodes, HUD text wash, and section label repositioning. The backgrounds remain visual-only; collision and gameplay objects remain separate. This run does not approve final art direction, production asset usage, launch/public use, QA pass, Learning Card promotion, push, merge, or deployment. Handoff is to a separate QA Work Package."
+}
