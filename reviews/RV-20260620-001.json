@@ -1,0 +1,104 @@
+{
+  "review_id": "RV-20260620-001",
+  "run_id": "RUN-20260620-001",
+  "work_package_id": "WP-2026W22-038",
+  "reviewer_agent": "qa",
+  "review_type": "qa",
+  "started_at": "2026-06-21T08:08:00+09:00",
+  "ended_at": "2026-06-21T08:21:21+09:00",
+  "checks": [
+    {
+      "name": "QA contract and implementation evidence validate",
+      "status": "pass",
+      "evidence": [
+        "work_packages/active/WP-2026W22-038.json validates against schemas/work_package.schema.json",
+        "work_packages/active/WP-2026W22-037.json validates against schemas/work_package.schema.json",
+        "runs/RUN-20260620-001.json validates against schemas/run.schema.json",
+        "agents/profiles/qa_agent.yaml limits QA to independent review and forbids implementation edits or final creative/product decisions"
+      ],
+      "notes": "AJV date and date-time format warnings are expected in this repo because the format plugin is not bundled; all three artifacts were reported valid."
+    },
+    {
+      "name": "QA scope separation is preserved",
+      "status": "pass",
+      "evidence": [
+        "WP-037 implementation commit 523015955f78f4a2c6a87423086cc4c87ec9d348 changed only game/scenes/main.tscn, runs/RUN-20260620-001.json, and work_packages/active/WP-2026W22-037.json",
+        "game/scripts/player.gd has no diff from origin/main",
+        "No implementation, Godot project, script, schema, agent, art, owner review, or work package files were modified during this QA pass"
+      ],
+      "notes": "This review creates only the QA review/run artifacts requested by WP-038."
+    },
+    {
+      "name": "All direct art assets are present, imported, and prototype-only",
+      "status": "pass",
+      "evidence": [
+        "All eight game/assets/phase4b/direct_art PNG files and matching .png.import files exist",
+        "game/scenes/main.tscn references background_section_one_v1, background_section_two_v1, player_avatar_v1, ground_platform_tile_v1, collectible_progression_item_v1, hazard_warning_marker_v1, goal_marker_v1, and ui_status_panel_v1",
+        "art_candidates/phase4b/direct_art/manifest.json reports production_approved=false and production_status=production_candidate_not_approved for every asset",
+        "owner_reviews/OR-2026W22-007-phase4b-direct-art-KR.md approves the set only for Phase 4B prototype testing"
+      ],
+      "notes": "QA does not promote these assets to production-approved or final art direction."
+    },
+    {
+      "name": "Godot import, smoke, and headless runtime are clean",
+      "status": "pass",
+      "evidence": [
+        "godot --headless --path game --import exited 0 using Godot 4.6.3",
+        "bash clean smoke output check exited 0 and printed no SCRIPT ERROR or ERROR lines",
+        "bash clean headless scene runtime check for res://scenes/main.tscn exited 0 and printed no SCRIPT ERROR, ERROR, Parse Error, or Failed lines"
+      ],
+      "notes": "Runtime verification covers import stability and scene load stability after the direct art integration."
+    },
+    {
+      "name": "Backgrounds remain visual-only backdrops",
+      "status": "pass",
+      "evidence": [
+        "SectionOneBackdrop and SectionTwoBackdrop are TextureRect nodes at z_index -25",
+        "SectionOneBand and SectionTwoBand are ColorRect readability washes at z_index -20",
+        "Ground, WarmupStep, Platform, HazardArea, CollectibleArea, GoalArea, Player, and HUD remain separate gameplay or UI nodes",
+        "HazardCollision, CollectibleCollision, GoalCollision, and platform collision shapes remain explicit RectangleShape2D resources"
+      ],
+      "notes": "The detailed Section 2 background still carries a human playtest readability risk, but it is not used as collision, hazard, item, platform, or goal logic."
+    },
+    {
+      "name": "Gameplay role readability is sufficient for owner play",
+      "status": "pass",
+      "evidence": [
+        "HazardArea contains a red HazardWarning ColorRect, hazard_warning_marker_v1 visual, and HAZARD label",
+        "CollectibleArea contains collectible_progression_item_v1 visual and ITEM label",
+        "GoalArea contains goal_marker_v1 visual and Goal label",
+        "Static preview inspection of /tmp/halucy_wp037_direct_art_scene_preview_v2.png shows the player, hazard, collectible, and goal as distinct foreground objects over the direct art backgrounds"
+      ],
+      "notes": "Hazard, collectible, and goal are distinguishable by color, silhouette, scale, position, and retained labels. BK should still judge in-motion play feel and whether the Section 2 background detail distracts during actual play."
+    },
+    {
+      "name": "Core labels, HUD, and retry affordance remain readable enough for first pass",
+      "status": "pass",
+      "evidence": [
+        "game/scenes/main.tscn retains SECTION 1 WARMUP, SECTION 2 HAZARD + ITEM, HAZARD, ITEM, Goal, TIME, ITEM 0/1, RUNNING, and Retry labels or text",
+        "HUD remains in a CanvasLayer with HudBacking from ui_status_panel_v1 and a HudTextWash readability layer",
+        "RetryButton remains present and hidden until the script exposes it in a finished state"
+      ],
+      "notes": "The HUD stays within status/result/retry scope and does not become a full menu, settings screen, save flow, or launch UI."
+    },
+    {
+      "name": "Gameplay regression risk is low and owner gate remains open",
+      "status": "pass",
+      "evidence": [
+        "game/scripts/player.gd was not changed by WP-037",
+        "The script still implements left/right movement, one floor-gated jump, hazard fail, collectible progression, goal success gating, timer, retry, and reset behavior",
+        "plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md requires BK/Human Creative Owner direct play/feel review after QA"
+      ],
+      "notes": "QA did not run an automated input-playback completion test. The unchanged script plus scene/runtime checks support technical pass, but BK direct play is still required before phase pass or closeout claims."
+    }
+  ],
+  "scope_findings": {
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "issues": [],
+  "decision": "pass",
+  "human_decision_required": true,
+  "human_decision_reason": "Phase 4B requires BK/Human Creative Owner direct play/feel judgment after QA; this QA pass is technical, scope, import, and readability-readiness only.",
+  "notes": "QA recommends pass for WP-038 with no rework issues. The direct art integration is technically stable, scoped, and readable enough for BK manual owner play. Residual risk to watch in playtest: Section 2 background detail may visually compete with foreground gameplay cues, but current labels, warning rect, distinct art roles, and explicit gameplay nodes keep it acceptable for prototype-owner review. This review does not approve final art direction, production asset usage, launch/public use, Learning Card promotion, push, merge, deployment, or Phase 4B closeout."
+}
