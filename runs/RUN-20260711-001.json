@@ -1,0 +1,126 @@
+{
+  "run_id": "RUN-20260711-001",
+  "work_package_id": "WP-2026W28-040",
+  "agent": "implementation",
+  "agent_profile": "agents/profiles/implementation_agent.yaml",
+  "started_at": "2026-07-11T07:20:00+09:00",
+  "ended_at": "2026-07-11T07:33:17+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "Codex repository inspection",
+      "purpose": "Inspect the approved v2 art package, existing v1 scene integration, implementation/QA profiles, and repository execution rules before editing.",
+      "inputs": [
+        "owner_reviews/OR-2026W28-008-phase4b-direct-art-v2-KR.md",
+        "art_candidates/phase4b/direct_art_v2/manifest.json",
+        "game/scenes/main.tscn",
+        "game/scripts/player.gd",
+        "agents/profiles/implementation_agent.yaml",
+        "agents/profiles/qa_agent.yaml"
+      ],
+      "outputs": [
+        "A bounded visual-only integration plan with separate WP-040 and WP-041 contracts."
+      ],
+      "evidence": [
+        "BK approved all seven direct_art_v2 roles for prototype integration planning.",
+        "player.gd binds to gameplay Area2D, collision, HUD, and retry nodes rather than specific art resources, allowing a scene-resource-only visual swap."
+      ]
+    },
+    {
+      "tool_name": "apply_patch",
+      "purpose": "Replace the scene's v1 art references with all seven approved v2 assets while preserving gameplay nodes, collision resources, labels, and script behavior.",
+      "inputs": [
+        "work_packages/active/WP-2026W28-040.json",
+        "art_candidates/phase4b/direct_art_v2/manifest.json",
+        "game/scenes/main.tscn"
+      ],
+      "outputs": [
+        "game/scenes/main.tscn"
+      ],
+      "evidence": [
+        "The scene now references exactly the seven direct_art_v2 textures and no v1 direct-art texture.",
+        "SectionOneBackdrop and SectionTwoBackdrop were replaced by one full-world BackgroundWorldLayer plus one uniform readability wash.",
+        "AtlasTexture crops use the validated alpha bounds for player, platform, item, hazard, goal, and HUD assets.",
+        "Ground, WarmupStep, Platform, HazardArea, CollectibleArea, GoalArea, Player, Camera2D, HUD, and RetryButton remain present."
+      ]
+    },
+    {
+      "tool_name": "Godot CLI",
+      "purpose": "Verify import stability, smoke startup, clean headless runtime, and actual rendered scene composition.",
+      "inputs": [
+        "game/project.godot",
+        "game/scenes/main.tscn",
+        "game/assets/phase4b/direct_art_v2/*.png"
+      ],
+      "outputs": [
+        "Godot import pass",
+        "Smoke pass",
+        "Headless scene runtime pass",
+        "/private/tmp/halucy_wp040_preview00000001.png",
+        "/private/tmp/halucy_wp040_right_view.png"
+      ],
+      "evidence": [
+        "Godot 4.6.3 imported and loaded the scene without script, resource, parse, or runtime errors.",
+        "A macOS OpenGL Movie Maker frame shows the left/start view with player, platforms, HUD, and low-priority background.",
+        "A temporary external capture script shows the right view with hazard, item, player, goal, platform, HUD, and background visibly separated."
+      ]
+    }
+  ],
+  "artifacts": [
+    "work_packages/active/WP-2026W28-040.json",
+    "game/scenes/main.tscn",
+    "runs/RUN-20260711-001.json"
+  ],
+  "commands": [
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W28-040.json",
+      "exit_code": 0,
+      "notes": "WP-040 validates; the repository's expected missing date-format plugin warning is informational."
+    },
+    {
+      "command": "Static v2 reference, no-v1, single-background, gameplay-node, and protected-file checks",
+      "exit_code": 0,
+      "notes": "All seven v2 resources are referenced, no v1 art remains, exactly one BackgroundWorldLayer exists, gameplay/collision nodes remain, and player.gd/project.godot are unchanged."
+    },
+    {
+      "command": "godot --headless --path game --import",
+      "exit_code": 0,
+      "notes": "Godot import completed."
+    },
+    {
+      "command": "scripts/smoke_test.sh with clean-output guard",
+      "exit_code": 0,
+      "notes": "Smoke test passed with no SCRIPT ERROR or ERROR output."
+    },
+    {
+      "command": "godot --headless --path game --scene res://scenes/main.tscn --quit-after 3 with clean-output guard",
+      "exit_code": 0,
+      "notes": "Headless runtime loaded cleanly."
+    },
+    {
+      "command": "godot --headless --path game --write-movie /tmp/halucy_wp040_preview.png --quit-after 1",
+      "exit_code": 134,
+      "notes": "Godot 4.6.3 headless Movie Maker crashed in the dummy renderer at texture_2d_get. This is a capture-path engine failure, not a game runtime failure; ordinary headless import/smoke/runtime remained green."
+    },
+    {
+      "command": "godot --path game --display-driver macos --rendering-method gl_compatibility --write-movie /tmp/halucy_wp040_preview.png --quit-after 2",
+      "exit_code": 0,
+      "notes": "Recovered visual capture through the macOS OpenGL renderer and produced two PNG frames."
+    },
+    {
+      "command": "godot --path game --display-driver macos --rendering-method gl_compatibility --script /private/tmp/halucy_wp040_capture.gd",
+      "exit_code": 0,
+      "notes": "Temporary non-repository capture script produced a right-side integration frame for visual inspection."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "work_packages/active/WP-2026W28-040.json",
+      "game/scenes/main.tscn",
+      "runs/RUN-20260711-001.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "WP-040 completed as a scene-resource-only playable-art integration. The approved v2 player, goal, hazard, item, platform, HUD, and single Background World Layer are now used by the scene. The background remains visual-only, labels remain secondary aids, and the original collision/gameplay nodes and player.gd behavior are unchanged. Rendered left and right views show the intended hierarchy and silhouette separation at the configured scene scale. This implementation does not self-approve QA, production usage, final art direction, push, merge, or deployment; it hands off to WP-041."
+}

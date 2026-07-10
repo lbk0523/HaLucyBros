@@ -1,0 +1,98 @@
+{
+  "run_id": "RUN-20260711-003",
+  "work_package_id": "WP-2026W28-042",
+  "agent": "implementation",
+  "agent_profile": "agents/profiles/implementation_agent.yaml",
+  "started_at": "2026-07-11T07:38:00+09:00",
+  "ended_at": "2026-07-11T07:42:54+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "TDD runtime regression",
+      "purpose": "Use the WP-041 failing live-scene test as red evidence, implement a minimal bounded reset-overlap grace, and run the same test to green.",
+      "inputs": [
+        "reviews/RV-20260711-001.json",
+        "/private/tmp/halucy_wp041_runtime_qa.gd",
+        "game/scripts/player.gd"
+      ],
+      "outputs": [
+        "game/scripts/player.gd"
+      ],
+      "evidence": [
+        "Red: hazard failure followed by reset immediately re-entered FAIL because HazardArea retained the old overlap.",
+        "First bounded attempt proved one physics frame was insufficient; the overlap remained stale through the next frame.",
+        "Green: a two-physics-frame reset_overlap_grace_frames counter passed goal gating, item collection, success, success reset, hazard failure, hazard retry stability, and timer expiry in one live-scene run."
+      ]
+    },
+    {
+      "tool_name": "Godot CLI",
+      "purpose": "Verify the minimal gameplay rework does not break import, smoke startup, or scene runtime.",
+      "inputs": [
+        "game/project.godot",
+        "game/scenes/main.tscn",
+        "game/scripts/player.gd"
+      ],
+      "outputs": [
+        "Import pass",
+        "Smoke pass",
+        "Headless runtime pass"
+      ],
+      "evidence": [
+        "Godot 4.6.3 imported and parsed the revised script.",
+        "Smoke and main-scene clean-output guards exited 0."
+      ]
+    }
+  ],
+  "artifacts": [
+    "work_packages/active/WP-2026W28-042.json",
+    "game/scripts/player.gd",
+    "runs/RUN-20260711-003.json"
+  ],
+  "commands": [
+    {
+      "command": "godot --headless --path game --script /private/tmp/halucy_wp041_runtime_qa.gd",
+      "exit_code": 1,
+      "notes": "Red evidence from WP-041: hazard reset reused stale overlap."
+    },
+    {
+      "command": "godot --headless --path game --script /private/tmp/halucy_wp041_runtime_qa.gd",
+      "exit_code": 1,
+      "notes": "The one-frame grace trial kept the first post-reset frame active but the second frame still observed stale overlap, proving one frame was insufficient."
+    },
+    {
+      "command": "godot --headless --path game --script /private/tmp/halucy_wp041_runtime_qa.gd",
+      "exit_code": 0,
+      "notes": "Green regression: all progression, success, reset, hazard, hazard-retry, and timer checks passed with a bounded two-frame grace."
+    },
+    {
+      "command": "godot --headless --path game --import",
+      "exit_code": 0,
+      "notes": "Import completed with revised player script."
+    },
+    {
+      "command": "scripts/smoke_test.sh with clean-output guard",
+      "exit_code": 0,
+      "notes": "Smoke test remained clean."
+    },
+    {
+      "command": "godot --headless --path game --scene res://scenes/main.tscn --quit-after 3 with clean-output guard",
+      "exit_code": 0,
+      "notes": "Headless scene runtime remained clean."
+    },
+    {
+      "command": "git diff --check and protected scene/assets/project diff guard",
+      "exit_code": 0,
+      "notes": "No whitespace error and no scene, asset, or project-setting change occurred in WP-042."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "work_packages/active/WP-2026W28-042.json",
+      "game/scripts/player.gd",
+      "runs/RUN-20260711-003.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "WP-042 fixed the QA-discovered hazard-retry defect with one integer counter and one bounded early-return gate. Reset now skips stale Area2D overlap queries for exactly two physics frames; normal hazard contact, timer expiry, progression, goal gating, success, and retry/reset remain verified. Scene, collision, level layout, art, project settings, and constants remain unchanged. The rework hands off to fresh QA WP-043."
+}

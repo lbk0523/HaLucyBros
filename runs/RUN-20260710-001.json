@@ -1,0 +1,163 @@
+{
+  "run_id": "RUN-20260710-001",
+  "work_package_id": "WP-2026W28-039",
+  "agent": "art",
+  "agent_profile": "agents/profiles/art_agent.yaml",
+  "started_at": "2026-07-10T09:20:00+09:00",
+  "ended_at": "2026-07-10T20:39:00+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "PerfectPixel Studio verification",
+      "purpose": "Establish the preferred OpenAI-capable generation path before fallback use.",
+      "inputs": [
+        "/Users/byung/agent-workspace/tools/perfectpixel-studio-openai-gpt-image-2-support",
+        "openai-gpt-image-2-support branch"
+      ],
+      "outputs": [
+        "PerfectPixel branch/tool verification evidence"
+      ],
+      "evidence": [
+        "The branch was verified outside this repository and Go tests passed after its frontend build.",
+        "OPENAI_API_KEY was absent, so this path could not generate project assets without exposing or fabricating a key."
+      ]
+    },
+    {
+      "tool_name": "built-in image_gen",
+      "purpose": "Generate the complete v2 art set using the BK-authorized built-in fallback.",
+      "inputs": [
+        "WP-039 visual hierarchy and silhouette-first contract",
+        "Background World Layer constraints",
+        "flat #ff00ff chroma-key constraints for sprite and UI outputs"
+      ],
+      "outputs": [
+        "/Users/byung/.codex/generated_images/019f4bc2-7bbe-74b2-9512-545cf63538e8/exec-5ddc5a50-e9c1-40c7-9f9d-e29208ca0fbf.png",
+        "/Users/byung/.codex/generated_images/019f4bc2-7bbe-74b2-9512-545cf63538e8/exec-3465910f-ac4f-49f9-8b06-45455374a1db.png",
+        "/Users/byung/.codex/generated_images/019f4bc2-7bbe-74b2-9512-545cf63538e8/exec-02cde3cc-a391-4437-be36-a236c3594125.png",
+        "/Users/byung/.codex/generated_images/019f4bc2-7bbe-74b2-9512-545cf63538e8/exec-153522a3-633c-42c6-a0cb-98e0d875bd84.png",
+        "/Users/byung/.codex/generated_images/019f4bc2-7bbe-74b2-9512-545cf63538e8/exec-9f9d6369-5c4a-4281-a604-b7932d3b1814.png",
+        "/Users/byung/.codex/generated_images/019f4bc2-7bbe-74b2-9512-545cf63538e8/exec-aa38e3b3-c7eb-4012-ac37-2fd200f1c84f.png",
+        "/Users/byung/.codex/generated_images/019f4bc2-7bbe-74b2-9512-545cf63538e8/exec-18d66c0f-75b2-4775-93cd-0f75df90e9c8.png"
+      ],
+      "evidence": [
+        "The generated source files were persisted under CODEX_HOME and copied or processed into every required project-bound v2 output.",
+        "Prompt/source/output mapping is recorded in art_candidates/phase4b/direct_art_v2/prompts.json."
+      ]
+    },
+    {
+      "tool_name": "imagegen chroma-key helper",
+      "purpose": "Convert six sprite/UI sources into alpha-capable PNGs without using a CLI image-generation fallback.",
+      "inputs": [
+        "Six #ff00ff chroma-key source PNGs",
+        "remove_chroma_key.py through uv run --with pillow"
+      ],
+      "outputs": [
+        "player_avatar_v2.png",
+        "goal_marker_v2.png",
+        "hazard_marker_v2.png",
+        "collectible_item_v2.png",
+        "safe_platform_tile_v2.png",
+        "ui_status_panel_v2.png"
+      ],
+      "evidence": [
+        "Each output is RGBA with a transparent top-left corner, non-empty alpha bounds, and non-trivial alpha coverage.",
+        "The generated background intentionally remains RGB because it is an opaque world layer."
+      ]
+    },
+    {
+      "tool_name": "Godot headless import",
+      "purpose": "Generate .png.import metadata for all project-bound v2 art files.",
+      "inputs": [
+        "game/assets/phase4b/direct_art_v2/*.png"
+      ],
+      "outputs": [
+        "Seven matching .png.import files"
+      ],
+      "evidence": [
+        "Godot 4.6.3 imported all seven assets successfully."
+      ]
+    }
+  ],
+  "artifacts": [
+    "work_packages/active/WP-2026W28-039.json",
+    "art_candidates/phase4b/direct_art_v2/prompts.json",
+    "art_candidates/phase4b/direct_art_v2/manifest.json",
+    "art_candidates/phase4b/direct_art_v2/manifest.csv",
+    "art_candidates/phase4b/direct_art_v2/contact_sheet.md",
+    "art_notes/AN-2026W28-008-phase4b-direct-art-v2-readability-report.md",
+    "owner_reviews/OR-2026W28-008-phase4b-direct-art-v2-KR.md",
+    "game/assets/phase4b/direct_art_v2/background_world_layer_v2.png",
+    "game/assets/phase4b/direct_art_v2/player_avatar_v2.png",
+    "game/assets/phase4b/direct_art_v2/goal_marker_v2.png",
+    "game/assets/phase4b/direct_art_v2/hazard_marker_v2.png",
+    "game/assets/phase4b/direct_art_v2/collectible_item_v2.png",
+    "game/assets/phase4b/direct_art_v2/safe_platform_tile_v2.png",
+    "game/assets/phase4b/direct_art_v2/ui_status_panel_v2.png"
+  ],
+  "commands": [
+    {
+      "command": "test -n \"$OPENAI_API_KEY\"",
+      "exit_code": 1,
+      "notes": "The preferred provider key was unavailable; no secret was printed."
+    },
+    {
+      "command": "uv run --with pillow python $CODEX_HOME/skills/.system/imagegen/scripts/remove_chroma_key.py --input <generated-source> --out <v2-output> --auto-key border --soft-matte --transparent-threshold 12 --opaque-threshold 220 --despill",
+      "exit_code": 0,
+      "notes": "Completed once for each of the six chroma-key sprite/UI source images."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W28-039.json",
+      "exit_code": 0,
+      "notes": "WP-039 validates; AJV reports the repository's existing missing date-format plugin warning only."
+    },
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260710-001.json",
+      "exit_code": 0,
+      "notes": "The completed Art Run validates; AJV reports the repository's existing missing date-time-format plugin warning only."
+    },
+    {
+      "command": "jq empty art_candidates/phase4b/direct_art_v2/prompts.json art_candidates/phase4b/direct_art_v2/manifest.json; Python PNG/CSV checks",
+      "exit_code": 0,
+      "notes": "Prompt and manifest JSON parse, CSV covers exactly seven v2 assets, every PNG is parseable and meets the required dimensions, and all non-background PNGs are alpha-capable."
+    },
+    {
+      "command": "cd /Users/byung/agent-workspace/tools/perfectpixel-studio-openai-gpt-image-2-support && go test ./... && go run ./cmd/ppgen -help",
+      "exit_code": 0,
+      "notes": "The preferred external tool remains installed on openai-gpt-image-2-support and its Go tests/CLI help pass; no provider key was available for its generation path."
+    },
+    {
+      "command": "godot --headless --path game --import",
+      "exit_code": 0,
+      "notes": "Generated import metadata for all seven v2 PNGs."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "runs/RUN-20260710-001.json",
+      "work_packages/active/WP-2026W28-039.json",
+      "art_candidates/phase4b/direct_art_v2/prompts.json",
+      "art_candidates/phase4b/direct_art_v2/manifest.json",
+      "art_candidates/phase4b/direct_art_v2/manifest.csv",
+      "art_candidates/phase4b/direct_art_v2/contact_sheet.md",
+      "art_notes/AN-2026W28-008-phase4b-direct-art-v2-readability-report.md",
+      "owner_reviews/OR-2026W28-008-phase4b-direct-art-v2-KR.md",
+      "game/assets/phase4b/direct_art_v2/background_world_layer_v2.png",
+      "game/assets/phase4b/direct_art_v2/background_world_layer_v2.png.import",
+      "game/assets/phase4b/direct_art_v2/player_avatar_v2.png",
+      "game/assets/phase4b/direct_art_v2/player_avatar_v2.png.import",
+      "game/assets/phase4b/direct_art_v2/goal_marker_v2.png",
+      "game/assets/phase4b/direct_art_v2/goal_marker_v2.png.import",
+      "game/assets/phase4b/direct_art_v2/hazard_marker_v2.png",
+      "game/assets/phase4b/direct_art_v2/hazard_marker_v2.png.import",
+      "game/assets/phase4b/direct_art_v2/collectible_item_v2.png",
+      "game/assets/phase4b/direct_art_v2/collectible_item_v2.png.import",
+      "game/assets/phase4b/direct_art_v2/safe_platform_tile_v2.png",
+      "game/assets/phase4b/direct_art_v2/safe_platform_tile_v2.png.import",
+      "game/assets/phase4b/direct_art_v2/ui_status_panel_v2.png",
+      "game/assets/phase4b/direct_art_v2/ui_status_panel_v2.png.import"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "The original PerfectPixel provider-key path remained unavailable, but BK had explicitly authorized the built-in imagegen fallback. The fallback now persisted a complete v2 project-bound art set with prompt/source/hash evidence and Godot import metadata. No v1 direct art, Godot scene, script, gameplay logic, project setting, review, Learning Card, lifecycle status, staging, commit, push, merge, or deployment was changed. The v2 assets remain prototype-only pending BK/Human Creative Owner review."
+}

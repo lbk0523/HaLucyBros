@@ -21,6 +21,7 @@ const START_POSITION := Vector2(72, 320)
 var time_left := TIME_LIMIT
 var finished := false
 var has_collectible := false
+var reset_overlap_grace_frames := 0
 
 func _ready() -> void:
 	retry_button.pressed.connect(_reset_run)
@@ -41,6 +42,9 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 	time_left = max(time_left - delta, 0.0)
+	if reset_overlap_grace_frames > 0:
+		reset_overlap_grace_frames -= 1
+		return
 	if hazard_area.overlaps_body(self):
 		_finish(false, "FAIL: hazard touched - press Retry")
 	elif collectible_area.overlaps_body(self) and not has_collectible:
@@ -88,6 +92,7 @@ func _reset_run() -> void:
 	time_left = TIME_LIMIT
 	finished = false
 	has_collectible = false
+	reset_overlap_grace_frames = 2
 	collectible_area.visible = true
 	collectible_collision.disabled = false
 	retry_button.visible = false

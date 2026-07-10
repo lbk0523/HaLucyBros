@@ -1,0 +1,78 @@
+{
+  "run_id": "RUN-20260711-002",
+  "work_package_id": "WP-2026W28-041",
+  "agent": "qa",
+  "agent_profile": "agents/profiles/qa_agent.yaml",
+  "started_at": "2026-07-11T07:34:00+09:00",
+  "ended_at": "2026-07-11T07:37:29+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "Codex independent QA inspection",
+      "purpose": "Review the frozen WP-040 implementation against its Work Package, approved v2 manifest, game brief, and QA contract without modifying game files.",
+      "inputs": [
+        "work_packages/active/WP-2026W28-040.json",
+        "runs/RUN-20260711-001.json",
+        "game/scenes/main.tscn",
+        "game/scripts/player.gd",
+        "art_candidates/phase4b/direct_art_v2/manifest.json"
+      ],
+      "outputs": [
+        "reviews/RV-20260711-001.json"
+      ],
+      "evidence": [
+        "Implementation scope, v2 references, single background layer, protected files, and visual hierarchy checks passed.",
+        "Implementation commit 467b5ba contains only its three WP-040 target files."
+      ]
+    },
+    {
+      "tool_name": "Godot runtime transition QA",
+      "purpose": "Exercise progression, success, reset, hazard, and timer states through the live scene using a temporary non-repository test script.",
+      "inputs": [
+        "/private/tmp/halucy_wp041_runtime_qa.gd",
+        "res://scenes/main.tscn"
+      ],
+      "outputs": [
+        "Runtime pass evidence for initial state, goal gate, item, success, success reset, and hazard fail.",
+        "Runtime failure evidence for hazard retry stability."
+      ],
+      "evidence": [
+        "The first run used an insufficient hazard teleport overlap and was corrected after overlap instrumentation.",
+        "The instrumented run proved the hazard failure and then proved that the retry path immediately re-entered hazard failure from a stale Area2D overlap.",
+        "QA did not edit game/scripts/player.gd or any other implementation file."
+      ]
+    }
+  ],
+  "artifacts": [
+    "work_packages/active/WP-2026W28-041.json",
+    "reviews/RV-20260711-001.json",
+    "runs/RUN-20260711-002.json"
+  ],
+  "commands": [
+    {
+      "command": "godot --headless --path game --script /private/tmp/halucy_wp041_runtime_qa.gd",
+      "exit_code": 1,
+      "notes": "Initial QA run passed progression/success/reset but used a hazard teleport position that did not yet overlap after physics resolution; the script was instrumented rather than changing the game."
+    },
+    {
+      "command": "godot --headless --path game --script /private/tmp/halucy_wp041_runtime_qa.gd",
+      "exit_code": 1,
+      "notes": "Instrumented QA run passed hazard failure and exposed the real post-hazard retry defect: the next physics frame reuses the stale hazard overlap and immediately fails again."
+    },
+    {
+      "command": "git show --name-only --format= 467b5ba",
+      "exit_code": 0,
+      "notes": "Implementation commit scope matches WP-040 targets."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "work_packages/active/WP-2026W28-041.json",
+      "reviews/RV-20260711-001.json",
+      "runs/RUN-20260711-002.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "Independent QA completed with a rework recommendation. All art-integration and static/runtime-loading checks passed, but hazard retry is not stable because the first post-reset physics frame can observe a stale HazardArea overlap. QA preserved separation and made no implementation edit."
+}

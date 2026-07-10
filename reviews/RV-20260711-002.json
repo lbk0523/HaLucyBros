@@ -1,0 +1,87 @@
+{
+  "review_id": "RV-20260711-002",
+  "run_id": "RUN-20260711-003",
+  "work_package_id": "WP-2026W28-043",
+  "reviewer_agent": "qa",
+  "review_type": "qa",
+  "started_at": "2026-07-11T07:43:00+09:00",
+  "ended_at": "2026-07-11T07:45:23+09:00",
+  "checks": [
+    {
+      "name": "Implementation, rework, and prior QA evidence validate",
+      "status": "pass",
+      "evidence": [
+        "WP-040, WP-041, WP-042, and WP-043 validate against schemas/work_package.schema.json.",
+        "RUN-20260711-001, RUN-20260711-002, and RUN-20260711-003 validate against schemas/run.schema.json.",
+        "RV-20260711-001 validates against schemas/review.schema.json.",
+        "Implementation commits 467b5ba and aab382e contain only their respective Work Package targets."
+      ],
+      "notes": "The QA-to-Implementation rework loop is fully traceable."
+    },
+    {
+      "name": "Prior hazard-retry defect is fixed",
+      "status": "pass",
+      "evidence": [
+        "The same live-scene runtime suite that produced RV-20260711-001 now exits 0.",
+        "Normal hazard contact still reports FAIL.",
+        "Hazard retry remains active after the bounded two-physics-frame overlap grace rather than immediately failing again.",
+        "The subsequent timer-expiry check reports FAIL: time expired, proving stale hazard overlap no longer masks later state transitions."
+      ],
+      "notes": "The fix is narrowly scoped to reset overlap timing and does not suppress ordinary hazard detection."
+    },
+    {
+      "name": "Complete gameplay state-transition suite passes",
+      "status": "pass",
+      "evidence": [
+        "Initial active/item/retry state passes.",
+        "Goal-before-item gating passes and retains RUNNING state.",
+        "Item collection sets progression, hides the item, and disables its collision.",
+        "Goal-after-item reports SUCCESS and exposes Retry.",
+        "Success reset restores the item and active HUD.",
+        "Hazard failure, hazard retry stability, and timer failure all pass."
+      ],
+      "notes": "The test exercises the instantiated production scene and player script through physics frames rather than checking strings alone."
+    },
+    {
+      "name": "Approved v2 art integration contract passes",
+      "status": "pass",
+      "evidence": [
+        "All seven direct_art_v2 PNG and .png.import files exist and are referenced by game/scenes/main.tscn.",
+        "No v1 direct-art path, _v1 identifier, SectionOneBackdrop, or SectionTwoBackdrop remains in the scene.",
+        "Exactly one BackgroundWorldLayer is present behind explicit gameplay and collision nodes.",
+        "The manifest reports approved_for_prototype_integration_planning and production_approved=false for every asset."
+      ],
+      "notes": "The result remains prototype-only and is not promoted to final or production art."
+    },
+    {
+      "name": "Rendered hierarchy and silhouette separation are readable",
+      "status": "pass",
+      "evidence": [
+        "/private/tmp/halucy_wp040_preview00000001.png shows a saturated teal player over safe slate/moss platforms and a subdued single background layer, with HUD text legible inside the v2 panel.",
+        "/private/tmp/halucy_wp040_right_view.png shows the red jagged hazard, rounded lime item, teal hooded player, tall gold-and-indigo goal, safe platform, HUD, and background as distinct visual roles.",
+        "Labels remain as prototype aids, but hazard/item/goal/player roles differ first by silhouette and then by color."
+      ],
+      "notes": "Static configured-scale readability passes. BK direct play remains the authority for in-motion feel."
+    },
+    {
+      "name": "Import, smoke, runtime, and final QA scope are clean",
+      "status": "pass",
+      "evidence": [
+        "godot --headless --path game --import exited 0.",
+        "Smoke clean-output guard exited 0.",
+        "Headless main-scene runtime clean-output guard exited 0.",
+        "Final QA modified no game, implementation Work Package, implementation Run, asset, schema, profile, or script file."
+      ],
+      "notes": "The earlier headless Movie Maker dummy-renderer crash is isolated to capture mode; macOS OpenGL rendering and all required runtime checks pass."
+    }
+  ],
+  "scope_findings": {
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "issues": [],
+  "decision": "pass",
+  "human_decision_required": true,
+  "human_decision_reason": "Technical QA proves the v2 playable-art integration, runtime states, retry fix, and static readability are ready for direct play, but BK/Human Creative Owner still owns final in-motion play/feel judgment and any production-art approval.",
+  "notes": "Final QA passes WP-043 with no open implementation issue. The seven approved v2 assets are integrated as one readable playable-art set, the prior hazard-retry defect is fixed and regression-tested, and import/smoke/runtime/state-transition checks are green. This pass does not approve final art direction, production/public use, push, merge, deployment, or Phase 4B closeout."
+}

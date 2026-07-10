@@ -1,0 +1,76 @@
+{
+  "review_id": "RV-20260711-001",
+  "run_id": "RUN-20260711-001",
+  "work_package_id": "WP-2026W28-041",
+  "reviewer_agent": "qa",
+  "review_type": "qa",
+  "started_at": "2026-07-11T07:34:00+09:00",
+  "ended_at": "2026-07-11T07:37:29+09:00",
+  "checks": [
+    {
+      "name": "Implementation contract and evidence validate",
+      "status": "pass",
+      "evidence": [
+        "WP-040 validates against schemas/work_package.schema.json.",
+        "RUN-20260711-001 validates against schemas/run.schema.json.",
+        "Implementation commit 467b5ba changes only game/scenes/main.tscn, runs/RUN-20260711-001.json, and work_packages/active/WP-2026W28-040.json."
+      ],
+      "notes": "Implementation scope is traceable and frozen before QA."
+    },
+    {
+      "name": "Approved v2 art is fully integrated without v1 residue",
+      "status": "pass",
+      "evidence": [
+        "The scene references all seven direct_art_v2 assets exactly once by role.",
+        "No res://assets/phase4b/direct_art/ or _v1 reference remains in game/scenes/main.tscn.",
+        "The scene uses one BackgroundWorldLayer node and no SectionOneBackdrop or SectionTwoBackdrop node.",
+        "The v2 manifest records owner approval for prototype integration planning and production_approved=false for every asset."
+      ],
+      "notes": "The approved visual hierarchy and production-use boundary are preserved."
+    },
+    {
+      "name": "Import, smoke, and headless scene runtime are clean",
+      "status": "pass",
+      "evidence": [
+        "godot --headless --path game --import exited 0.",
+        "scripts/smoke_test.sh clean-output guard exited 0.",
+        "Headless main-scene runtime clean-output guard exited 0."
+      ],
+      "notes": "The separate headless Movie Maker capture path crashed in Godot's dummy renderer, but ordinary import/smoke/runtime passed and macOS OpenGL capture succeeded."
+    },
+    {
+      "name": "Configured scene scale preserves gameplay object separation",
+      "status": "pass",
+      "evidence": [
+        "/private/tmp/halucy_wp040_preview00000001.png shows the start view with a saturated teal player, safe horizontal platforms, subdued background, and readable HUD.",
+        "/private/tmp/halucy_wp040_right_view.png shows the red jagged hazard, rounded lime item, teal player, tall gold-and-indigo goal, safe platform, HUD, and background as distinct roles.",
+        "AtlasTexture regions match the validated alpha bounds recorded for the six transparent v2 assets."
+      ],
+      "notes": "Labels remain secondary aids; player, goal, hazard, and item are already distinguishable by silhouette and supporting color."
+    },
+    {
+      "name": "Runtime progression and retry behavior are correct",
+      "status": "fail",
+      "evidence": [
+        "Automated runtime QA passed initial state, goal-before-item gating, item collection, item hiding/disable, goal success, success retry/reset, and hazard failure.",
+        "After hazard failure, calling the same _reset_run path used by Retry moves the player but the next physics frame still sees the prior HazardArea overlap.",
+        "The run immediately returns to FAIL: hazard touched, preventing a stable retry after hazard failure."
+      ],
+      "notes": "This is a functional retry defect. It is independent of the visual resource swap but blocks a complete QA pass for the playable slice."
+    }
+  ],
+  "scope_findings": {
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "issues": [
+    {
+      "severity": "major",
+      "description": "Hazard retry immediately fails again because HazardArea.overlaps_body(self) can retain the pre-reset overlap for the first physics frame after _reset_run teleports the player to START_POSITION. Add a bounded post-reset overlap grace or otherwise synchronize the hazard query, then re-run the full runtime transition suite.",
+      "suggested_owner": "implementation"
+    }
+  ],
+  "decision": "rework",
+  "human_decision_required": false,
+  "notes": "WP-041 recommends rework for one major functional retry defect. Art integration, asset status, scene scope, import, runtime loading, and visual hierarchy pass. QA made no implementation edits and hands the defect back to Implementation."
+}

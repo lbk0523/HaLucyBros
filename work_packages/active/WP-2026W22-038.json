@@ -1,0 +1,156 @@
+{
+  "id": "WP-2026W22-038",
+  "type": "qa",
+  "status": "active",
+  "goal": "Independently QA the WP-037 Phase 4B direct art Godot integration for scope compliance, deterministic verification, visual readability, import stability, gameplay regression risk, label/HUD readability, and readiness for BK/Human Creative Owner play/feel review.",
+  "owner_agent": "qa",
+  "inputs": [
+    "work_packages/active/WP-2026W22-037.json",
+    "runs/RUN-20260620-001.json",
+    "plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md",
+    "research_notes/RN-2026W22-003-phase4b-complex-prototype-reference.md",
+    "owner_reviews/OR-2026W22-006-phase4b-playtest-approval-KR.md",
+    "owner_reviews/OR-2026W22-007-phase4b-direct-art-KR.md",
+    "art_candidates/phase4b/direct_art/contact_sheet.md",
+    "art_candidates/phase4b/direct_art/manifest.json",
+    "art_notes/AN-2026W22-007-phase4b-direct-art-production-report.md",
+    "agents/profiles/qa_agent.yaml",
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd",
+    "game/assets/phase4b/direct_art/background_section_one_v1.png",
+    "game/assets/phase4b/direct_art/background_section_one_v1.png.import",
+    "game/assets/phase4b/direct_art/background_section_two_v1.png",
+    "game/assets/phase4b/direct_art/background_section_two_v1.png.import",
+    "game/assets/phase4b/direct_art/player_avatar_v1.png",
+    "game/assets/phase4b/direct_art/player_avatar_v1.png.import",
+    "game/assets/phase4b/direct_art/ground_platform_tile_v1.png",
+    "game/assets/phase4b/direct_art/ground_platform_tile_v1.png.import",
+    "game/assets/phase4b/direct_art/collectible_progression_item_v1.png",
+    "game/assets/phase4b/direct_art/collectible_progression_item_v1.png.import",
+    "game/assets/phase4b/direct_art/hazard_warning_marker_v1.png",
+    "game/assets/phase4b/direct_art/hazard_warning_marker_v1.png.import",
+    "game/assets/phase4b/direct_art/goal_marker_v1.png",
+    "game/assets/phase4b/direct_art/goal_marker_v1.png.import",
+    "game/assets/phase4b/direct_art/ui_status_panel_v1.png",
+    "game/assets/phase4b/direct_art/ui_status_panel_v1.png.import",
+    "scripts/smoke_test.sh"
+  ],
+  "targets": [
+    "reviews/RV-20260620-001.json",
+    "runs/RUN-20260620-002.json"
+  ],
+  "forbidden_changes": [
+    "game/**",
+    "plans/**",
+    "research_notes/**",
+    "art_notes/**",
+    "art_candidates/**",
+    "owner_reviews/**",
+    "learning_cards/**",
+    "agents/**",
+    "schemas/**",
+    "scripts/**",
+    "work_packages/**",
+    "implementation edits",
+    "QA self-editing implementation under review",
+    "final BK/Human Creative Owner play-feel approval",
+    "final art direction approval",
+    "production asset approval",
+    "launch/public release usage approval",
+    "paid tool adoption",
+    "Learning Card promotion",
+    "Work Package lifecycle moves",
+    "push, merge, or deploy"
+  ],
+  "outputs": [
+    "reviews/RV-20260620-001.json",
+    "runs/RUN-20260620-002.json"
+  ],
+  "verify": [
+    {
+      "name": "QA Work Package validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-038.json"
+    },
+    {
+      "name": "Implementation Work Package validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W22-037.json"
+    },
+    {
+      "name": "Implementation Run validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260620-001.json"
+    },
+    {
+      "name": "Direct art files exist",
+      "method": "command",
+      "command": "for asset in background_section_one_v1 background_section_two_v1 player_avatar_v1 ground_platform_tile_v1 collectible_progression_item_v1 hazard_warning_marker_v1 goal_marker_v1 ui_status_panel_v1; do test -f \"game/assets/phase4b/direct_art/${asset}.png\" && test -f \"game/assets/phase4b/direct_art/${asset}.png.import\"; done"
+    },
+    {
+      "name": "Godot import cache can be regenerated",
+      "method": "command",
+      "command": "godot --headless --path game --import"
+    },
+    {
+      "name": "Smoke output is clean",
+      "method": "command",
+      "command": "bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"'"
+    },
+    {
+      "name": "Headless scene runtime output is clean",
+      "method": "command",
+      "command": "bash -lc 'out=$(godot --headless --path game --scene res://scenes/main.tscn --quit-after 3 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR|Parse Error|Failed\" <<< \"$out\"'"
+    },
+    {
+      "name": "Scene references all direct art assets",
+      "method": "command",
+      "command": "rg -n \"background_section_one_v1|background_section_two_v1|player_avatar_v1|ground_platform_tile_v1|collectible_progression_item_v1|hazard_warning_marker_v1|goal_marker_v1|ui_status_panel_v1\" game/scenes/main.tscn"
+    },
+    {
+      "name": "Core gameplay markers and labels remain",
+      "method": "command",
+      "command": "rg -n \"HazardArea|CollectibleArea|GoalArea|RetryButton|Camera2D|SECTION 1 WARMUP|SECTION 2 HAZARD \\+ ITEM|HAZARD|ITEM|Goal|HudTextWash\" game/scenes/main.tscn"
+    },
+    {
+      "name": "Player script unchanged by WP-037",
+      "method": "command",
+      "command": "bash -lc 'test -z \"$(git diff origin/main -- game/scripts/player.gd)\"'"
+    },
+    {
+      "name": "WP-037 implementation touched only authorized files",
+      "method": "command",
+      "command": "git show --name-only --format= 523015955f78f4a2c6a87423086cc4c87ec9d348 | sed '/^$/d' | sort | diff -u <(printf '%s\\n' game/scenes/main.tscn runs/RUN-20260620-001.json work_packages/active/WP-2026W22-037.json | sort) -"
+    },
+    {
+      "name": "QA Review validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/review.schema.json -d reviews/RV-20260620-001.json"
+    },
+    {
+      "name": "QA Run validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260620-002.json"
+    }
+  ],
+  "handoff_to": [
+    "implementation",
+    "learning_librarian",
+    "human_creative_owner"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "QA does not modify implementation files under review.",
+    "QA checks WP-037 against the Phase 4B brief, BK direct art approval, and user-approved grill constraints.",
+    "QA validates Godot import, clean smoke output, and clean headless scene runtime after import-cache regeneration.",
+    "QA confirms all eight direct art assets are referenced by the scene and remain prototype-only / production-candidate, not production-approved.",
+    "QA confirms Section 1 and Section 2 backgrounds are visual-only backdrops and do not replace gameplay objects, collision, hazard, or goal logic.",
+    "QA confirms core labels remain visible enough for first-pass readability: HAZARD, ITEM, Goal, and section/status labels.",
+    "QA checks whether player, platform, collectible, hazard, goal, HUD text, and background detail remain readable at gameplay scale.",
+    "QA confirms player.gd was not changed by WP-037 and movement, hazard fail, collectible/progression, goal, timer, and retry behavior were not intentionally changed.",
+    "QA identifies actionable rework issues if deterministic checks, scope, readability, or playability-readiness fail.",
+    "QA recommendation does not replace BK/Human Creative Owner direct play/feel approval after the art-integrated version."
+  ],
+  "created_at": "2026-06-20",
+  "notes": "This Work Package is the independent QA handoff for WP-037. It should be executed by QA, not by the implementation pass. It may recommend pass, rework, or blocked, but it cannot approve final play/feel, final art direction, production asset usage, launch/public use, or edit implementation files."
+}

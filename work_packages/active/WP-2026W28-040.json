@@ -1,0 +1,127 @@
+{
+  "id": "WP-2026W28-040",
+  "type": "implementation",
+  "status": "active",
+  "goal": "Integrate the BK-approved Phase 4B direct_art_v2 set into the existing Godot playable slice as one bounded playable-art pass, using one coherent Background World Layer while preserving gameplay logic, collision, movement, progression, timer, retry behavior, and QA separation.",
+  "owner_agent": "implementation",
+  "inputs": [
+    "plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md",
+    "agents/profiles/implementation_agent.yaml",
+    "owner_reviews/OR-2026W28-008-phase4b-direct-art-v2-KR.md",
+    "art_candidates/phase4b/direct_art_v2/manifest.json",
+    "art_candidates/phase4b/direct_art_v2/contact_sheet.md",
+    "art_notes/AN-2026W28-008-phase4b-direct-art-v2-readability-report.md",
+    "work_packages/active/WP-2026W28-039.json",
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd",
+    "game/assets/phase4b/direct_art_v2/background_world_layer_v2.png",
+    "game/assets/phase4b/direct_art_v2/player_avatar_v2.png",
+    "game/assets/phase4b/direct_art_v2/goal_marker_v2.png",
+    "game/assets/phase4b/direct_art_v2/hazard_marker_v2.png",
+    "game/assets/phase4b/direct_art_v2/collectible_item_v2.png",
+    "game/assets/phase4b/direct_art_v2/safe_platform_tile_v2.png",
+    "game/assets/phase4b/direct_art_v2/ui_status_panel_v2.png"
+  ],
+  "targets": [
+    "work_packages/active/WP-2026W28-040.json",
+    "game/scenes/main.tscn",
+    "runs/RUN-20260711-001.json"
+  ],
+  "forbidden_changes": [
+    "game/scripts/**",
+    "game/project.godot",
+    "game/assets/**",
+    "art_candidates/**",
+    "art_notes/**",
+    "owner_reviews/**",
+    "reviews/**",
+    "learning_cards/**",
+    "schemas/**",
+    "agents/**",
+    "scripts/**",
+    "movement, jump, gravity, timer, retry, hazard, item, or goal logic changes",
+    "collision shape or trigger behavior changes",
+    "new game mechanics or level-layout expansion",
+    "final art direction or production asset approval",
+    "QA self-approval",
+    "Work Package lifecycle moves",
+    "stage or commit of files outside the approved art baseline and WP-040 targets",
+    "push, merge, or deploy"
+  ],
+  "outputs": [
+    "work_packages/active/WP-2026W28-040.json",
+    "game/scenes/main.tscn",
+    "runs/RUN-20260711-001.json"
+  ],
+  "verify": [
+    {
+      "name": "Implementation Work Package validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W28-040.json"
+    },
+    {
+      "name": "All seven approved v2 textures are referenced",
+      "method": "command",
+      "command": "for asset in background_world_layer_v2 player_avatar_v2 goal_marker_v2 hazard_marker_v2 collectible_item_v2 safe_platform_tile_v2 ui_status_panel_v2; do rg -q \"res://assets/phase4b/direct_art_v2/${asset}.png\" game/scenes/main.tscn; done"
+    },
+    {
+      "name": "No v1 direct art remains in the scene",
+      "method": "command",
+      "command": "! rg -n \"res://assets/phase4b/direct_art/|_v1\" game/scenes/main.tscn"
+    },
+    {
+      "name": "Single coherent background layer is used",
+      "method": "command",
+      "command": "test \"$(rg -c 'path=\\\"res://assets/phase4b/direct_art_v2/background_world_layer_v2.png\\\"' game/scenes/main.tscn)\" -eq 1 && test \"$(rg -c 'name=\\\"BackgroundWorldLayer\\\"' game/scenes/main.tscn)\" -eq 1 && ! rg -n \"SectionOneBackdrop|SectionTwoBackdrop\" game/scenes/main.tscn"
+    },
+    {
+      "name": "Gameplay nodes and labels remain",
+      "method": "command",
+      "command": "rg -n \"GroundCollision|WarmupStepCollision|PlatformCollision|HazardCollision|CollectibleCollision|GoalCollision|PlayerCollision|RetryButton|Camera2D|HAZARD|ITEM|Goal\" game/scenes/main.tscn"
+    },
+    {
+      "name": "Player script is unchanged",
+      "method": "command",
+      "command": "bash -lc 'test -z \"$(git diff --name-only HEAD -- game/scripts/player.gd)\"'"
+    },
+    {
+      "name": "Godot import succeeds",
+      "method": "command",
+      "command": "godot --headless --path game --import"
+    },
+    {
+      "name": "Smoke output is clean",
+      "method": "command",
+      "command": "bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"'"
+    },
+    {
+      "name": "Headless scene runtime is clean",
+      "method": "command",
+      "command": "bash -lc 'out=$(godot --headless --path game --scene res://scenes/main.tscn --quit-after 3 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR|Parse Error|Failed\" <<< \"$out\"'"
+    },
+    {
+      "name": "Implementation Run validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260711-001.json"
+    }
+  ],
+  "handoff_to": [
+    "qa",
+    "human_creative_owner"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "The scene references all seven BK-approved direct_art_v2 PNG assets and no v1 direct-art texture.",
+    "The scene uses exactly one BackgroundWorldLayer node spanning the full playable world; it remains behind gameplay and is not interpreted as collision or gameplay props.",
+    "Player, goal, hazard, collectible, platform, and HUD use AtlasTexture crops that remove transparent source padding and preserve the intended silhouette-first hierarchy.",
+    "Existing Ground, WarmupStep, Platform, HazardArea, CollectibleArea, GoalArea, Player, Camera2D, HUD, and RetryButton nodes remain inspectable.",
+    "Collision resources and gameplay logic remain unchanged, including movement, jump, hazard fail, collectible progression, goal gating, timer, retry, and reset behavior.",
+    "game/scripts/player.gd and game/project.godot remain unchanged.",
+    "Core prototype labels remain available as secondary aids rather than the primary visual distinction.",
+    "Godot import, smoke, clean headless runtime, schema, reference, no-v1, and scope checks pass or failures are recorded honestly.",
+    "A separate QA Work Package reviews the frozen implementation; implementation does not self-approve QA.",
+    "No production approval, final art direction, push, merge, or deployment occurs."
+  ],
+  "created_at": "2026-07-11",
+  "notes": "BK approved all seven v2 assets for prototype integration planning on 2026-07-10. This implementation replaces only the scene's visual references and alignment. TDD is not applicable to the resource-only swap because no behavior seam is changed; deterministic runtime state-transition QA is required in the separate QA Work Package. Transition authority note: commit b33cd5a occurred after BK approval as the WP-040 implementation prerequisite that made the approved art baseline available to the playable scene. It was not a commit performed during WP-039 art-generation execution and does not weaken WP-039's prohibition on staging or committing before its owner gate."
+}

@@ -1,0 +1,85 @@
+{
+  "id": "WP-2026W28-042",
+  "type": "implementation",
+  "status": "active",
+  "goal": "Fix the WP-041 hazard-retry stale-overlap defect with the smallest bounded gameplay change, preserving all approved v2 art integration, movement, jump, timer duration, progression, goal gating, collision shapes, level layout, and UI behavior.",
+  "owner_agent": "implementation",
+  "inputs": [
+    "reviews/RV-20260711-001.json",
+    "runs/RUN-20260711-002.json",
+    "agents/profiles/implementation_agent.yaml",
+    "game/scripts/player.gd",
+    "game/scenes/main.tscn",
+    "/private/tmp/halucy_wp041_runtime_qa.gd"
+  ],
+  "targets": [
+    "work_packages/active/WP-2026W28-042.json",
+    "game/scripts/player.gd",
+    "runs/RUN-20260711-003.json"
+  ],
+  "forbidden_changes": [
+    "game/scenes/**",
+    "game/project.godot",
+    "game/assets/**",
+    "art_candidates/**",
+    "art_notes/**",
+    "owner_reviews/**",
+    "reviews/**",
+    "learning_cards/**",
+    "schemas/**",
+    "agents/**",
+    "scripts/**",
+    "movement speed, acceleration, friction, gravity, jump, time limit, start position, collision, level layout, or v2 art changes",
+    "hazard behavior changes beyond preventing the stale pre-reset overlap from immediately failing a new run",
+    "final creative, product, art, or production approval",
+    "QA self-approval",
+    "Work Package lifecycle moves",
+    "push, merge, or deploy"
+  ],
+  "outputs": [
+    "work_packages/active/WP-2026W28-042.json",
+    "game/scripts/player.gd",
+    "runs/RUN-20260711-003.json"
+  ],
+  "verify": [
+    {
+      "name": "Rework Work Package validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W28-042.json"
+    },
+    {
+      "name": "Full runtime transition regression passes",
+      "method": "command",
+      "command": "godot --headless --path game --script /private/tmp/halucy_wp041_runtime_qa.gd"
+    },
+    {
+      "name": "Godot import and smoke remain clean",
+      "method": "command",
+      "command": "godot --headless --path game --import && bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"'"
+    },
+    {
+      "name": "Scene and approved v2 art remain unchanged",
+      "method": "command",
+      "command": "bash -lc 'test -z \"$(git diff --name-only HEAD -- game/scenes game/assets game/project.godot)\"'"
+    },
+    {
+      "name": "Rework Run validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260711-003.json"
+    }
+  ],
+  "handoff_to": [
+    "qa"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "The existing failing WP-041 runtime test is treated as the red test before implementation.",
+    "A reset creates a bounded two-physics-frame overlap grace so stale Area2D overlap data cannot immediately fail the new run.",
+    "Normal hazard contact still fails, goal-before-item remains blocked, item collection and success still work, success reset still works, hazard reset remains active, and timer expiry still fails.",
+    "Only game/scripts/player.gd changes in implementation; scene, assets, project settings, collision, level layout, and art remain unchanged.",
+    "Godot import, smoke, runtime transition, schema, and scope checks pass.",
+    "The rework is handed back to a new independent QA pass."
+  ],
+  "created_at": "2026-07-11",
+  "notes": "This is a TDD rework package: RV-20260711-001 and the failing /private/tmp runtime script provide the red evidence. Instrumentation showed that Godot's Area2D overlap can remain stale through two physics frames after the teleport, so the implementation adds only that bounded post-reset overlap grace and uses the same script as the green regression test."
+}

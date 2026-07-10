@@ -1,0 +1,68 @@
+{
+  "run_id": "RUN-20260711-007",
+  "work_package_id": "WP-2026W28-046",
+  "agent": "implementation",
+  "agent_profile": "agents/profiles/implementation_agent.yaml",
+  "started_at": "2026-07-11T08:16:00+09:00",
+  "ended_at": "2026-07-11T08:19:44+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "Foundation-to-brief scope propagation",
+      "purpose": "Resolve the final spec-review finding by aligning Phase 4B target surfaces with existing Foundation requirements for independent playability QA and explicit .gd.uid repository hygiene.",
+      "inputs": [
+        "HALUCY_FOUNDATION.md",
+        "plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md",
+        "work_packages/active/WP-2026W28-044.json",
+        "game/tests/qa_phase4b_traversal.gd",
+        "game/tests/qa_phase4b_traversal.gd.uid"
+      ],
+      "outputs": [
+        "plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md"
+      ],
+      "evidence": [
+        "The Foundation already requires QA to cover playability and says .gd.uid hygiene decisions must be explicit.",
+        "The phase brief now permits game/tests/** only for bounded non-shipping QA fixtures explicitly named by a later Phase 4B Work Package.",
+        "A matching test .gd.uid is allowed only when the same Work Package names both files as targets and verification artifacts.",
+        "The new permission explicitly excludes broad test frameworks, gameplay implementation, external testing, and .godot evidence."
+      ]
+    }
+  ],
+  "artifacts": [
+    "work_packages/active/WP-2026W28-046.json",
+    "plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md",
+    "runs/RUN-20260711-007.json"
+  ],
+  "commands": [
+    {
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W28-046.json",
+      "exit_code": 0,
+      "notes": "WP-046 validates."
+    },
+    {
+      "command": "rg -n \"game/tests/\\*\\*|non-shipping|QA fixture|\\.gd\\.uid|repository hygiene\" plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md",
+      "exit_code": 0,
+      "notes": "The bounded test and UID target-surface rules are present."
+    },
+    {
+      "command": "Protected foundation/implementation diff guard with the pre-existing CONTEXT.md diff excluded",
+      "exit_code": 0,
+      "notes": "No Foundation, game, script, asset, review, schema, profile, or lifecycle change occurred; the user-owned CONTEXT.md diff remains untouched."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "notes": "No whitespace error."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "work_packages/active/WP-2026W28-046.json",
+      "plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md",
+      "runs/RUN-20260711-007.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "WP-046 resolves the final review finding with a narrow phase-brief correction. It does not change Foundation decisions or implementation. Bounded QA fixtures and explicitly named UID sidecars are now authorized target surfaces; gameplay, broad testing infrastructure, external testing, and production scope remain forbidden."
+}

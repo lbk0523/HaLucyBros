@@ -1,0 +1,106 @@
+{
+  "id": "WP-2026W28-043",
+  "type": "qa",
+  "status": "active",
+  "goal": "Independently re-QA the Phase 4B v2 playable-art integration after WP-042, proving the prior hazard-retry defect is fixed and all art, gameplay, runtime, scope, and readability requirements pass together.",
+  "owner_agent": "qa",
+  "inputs": [
+    "work_packages/active/WP-2026W28-040.json",
+    "runs/RUN-20260711-001.json",
+    "work_packages/active/WP-2026W28-041.json",
+    "reviews/RV-20260711-001.json",
+    "runs/RUN-20260711-002.json",
+    "work_packages/active/WP-2026W28-042.json",
+    "runs/RUN-20260711-003.json",
+    "agents/profiles/qa_agent.yaml",
+    "owner_reviews/OR-2026W28-008-phase4b-direct-art-v2-KR.md",
+    "art_candidates/phase4b/direct_art_v2/manifest.json",
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd",
+    "/private/tmp/halucy_wp041_runtime_qa.gd",
+    "/private/tmp/halucy_wp040_preview00000001.png",
+    "/private/tmp/halucy_wp040_right_view.png"
+  ],
+  "targets": [
+    "work_packages/active/WP-2026W28-043.json",
+    "reviews/RV-20260711-002.json",
+    "runs/RUN-20260711-004.json"
+  ],
+  "forbidden_changes": [
+    "game/**",
+    "plans/**",
+    "art_candidates/**",
+    "art_notes/**",
+    "owner_reviews/**",
+    "learning_cards/**",
+    "agents/**",
+    "schemas/**",
+    "scripts/**",
+    "implementation Work Packages or Runs",
+    "implementation edits during QA",
+    "final BK/Human Creative Owner play-feel approval",
+    "final art direction or production asset approval",
+    "Work Package lifecycle moves",
+    "push, merge, or deploy"
+  ],
+  "outputs": [
+    "work_packages/active/WP-2026W28-043.json",
+    "reviews/RV-20260711-002.json",
+    "runs/RUN-20260711-004.json"
+  ],
+  "verify": [
+    {
+      "name": "Final QA Work Package validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W28-043.json"
+    },
+    {
+      "name": "All implementation and prior QA evidence validates",
+      "method": "command",
+      "command": "for wp in 040 041 042; do npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W28-${wp}.json; done && for run in 001 002 003; do npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260711-${run}.json; done && npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/review.schema.json -d reviews/RV-20260711-001.json"
+    },
+    {
+      "name": "Approved art integration contract passes",
+      "method": "command",
+      "command": "for asset in background_world_layer_v2 player_avatar_v2 goal_marker_v2 hazard_marker_v2 collectible_item_v2 safe_platform_tile_v2 ui_status_panel_v2; do test -f \"game/assets/phase4b/direct_art_v2/${asset}.png\" && test -f \"game/assets/phase4b/direct_art_v2/${asset}.png.import\" && rg -q \"res://assets/phase4b/direct_art_v2/${asset}.png\" game/scenes/main.tscn; done && ! rg -n \"res://assets/phase4b/direct_art/|_v1|SectionOneBackdrop|SectionTwoBackdrop\" game/scenes/main.tscn"
+    },
+    {
+      "name": "Full runtime transition suite passes",
+      "method": "command",
+      "command": "godot --headless --path game --script /private/tmp/halucy_wp041_runtime_qa.gd"
+    },
+    {
+      "name": "Import, smoke, and headless runtime pass",
+      "method": "command",
+      "command": "godot --headless --path game --import && bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"' && bash -lc 'out=$(godot --headless --path game --scene res://scenes/main.tscn --quit-after 3 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR|Parse Error|Failed\" <<< \"$out\"'"
+    },
+    {
+      "name": "Final QA Review validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/review.schema.json -d reviews/RV-20260711-002.json"
+    },
+    {
+      "name": "Final QA Run validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260711-004.json"
+    }
+  ],
+  "handoff_to": [
+    "human_creative_owner",
+    "learning_librarian"
+  ],
+  "human_decision_required": true,
+  "human_decision_reason": "A technical QA pass proves the playable slice is ready for direct play, but BK/Human Creative Owner still owns final play/feel judgment and any later production-art decision.",
+  "acceptance_criteria": [
+    "Final QA modifies no game or implementation evidence file.",
+    "The prior RV-20260711-001 hazard-retry issue is reproduced as fixed by the full runtime suite.",
+    "Goal-before-item gating, collection, success, success reset, hazard failure, hazard reset stability, and timer expiry all pass in one automated live-scene run.",
+    "All seven approved v2 assets remain present, imported, referenced, visually separated, prototype-only, and production_approved=false.",
+    "The scene still uses one coherent BackgroundWorldLayer and no v1 art or split backdrop.",
+    "Godot import, smoke, and clean headless runtime pass.",
+    "Rendered left and right frames support the static gameplay hierarchy/readability judgment.",
+    "Final QA emits a pass/rework/blocked decision with actionable evidence and does not replace BK play/feel approval."
+  ],
+  "created_at": "2026-07-11",
+  "notes": "This is the fresh QA pass after the QA-to-Implementation rework loop. It must independently execute the same runtime test that found the defect and treat any failure as rework."
+}

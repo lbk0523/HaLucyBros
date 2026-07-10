@@ -1,0 +1,194 @@
+{
+  "id": "WP-2026W28-039",
+  "type": "art",
+  "status": "active",
+  "goal": "Regenerate the full Phase 4B direct art set after the failed playable-readability direction, using PerfectPixel Studio on the openai-gpt-image-2-support branch when an OpenAI provider key is available, and using the built-in Codex imagegen fallback when BK explicitly authorizes continuation without an OpenAI key.",
+  "owner_agent": "art",
+  "inputs": [
+    "CONTEXT.md",
+    "plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md",
+    "research_notes/RN-2026W22-003-phase4b-complex-prototype-reference.md",
+    "work_packages/active/WP-2026W22-036.json",
+    "work_packages/active/WP-2026W22-037.json",
+    "work_packages/active/WP-2026W22-038.json",
+    "runs/RUN-20260620-001.json",
+    "reviews/RV-20260620-001.json",
+    "runs/RUN-20260620-002.json",
+    "owner_reviews/OR-2026W22-007-phase4b-direct-art-KR.md",
+    "art_candidates/phase4b/direct_art/manifest.json",
+    "art_notes/AN-2026W22-007-phase4b-direct-art-production-report.md",
+    "agents/profiles/art_agent.yaml",
+    "/Users/byung/.codex/skills/.system/imagegen/SKILL.md",
+    "https://github.com/Canine89/perfectpixel-studio/tree/openai-gpt-image-2-support",
+    "/Users/byung/agent-workspace/tools/perfectpixel-studio-openai-gpt-image-2-support"
+  ],
+  "targets": [
+    "work_packages/active/WP-2026W28-039.json",
+    "art_candidates/phase4b/direct_art_v2/prompts.json",
+    "art_candidates/phase4b/direct_art_v2/manifest.json",
+    "art_candidates/phase4b/direct_art_v2/manifest.csv",
+    "art_candidates/phase4b/direct_art_v2/contact_sheet.md",
+    "art_notes/AN-2026W28-008-phase4b-direct-art-v2-readability-report.md",
+    "owner_reviews/OR-2026W28-008-phase4b-direct-art-v2-KR.md",
+    "game/assets/phase4b/direct_art_v2/background_world_layer_v2.png",
+    "game/assets/phase4b/direct_art_v2/background_world_layer_v2.png.import",
+    "game/assets/phase4b/direct_art_v2/player_avatar_v2.png",
+    "game/assets/phase4b/direct_art_v2/player_avatar_v2.png.import",
+    "game/assets/phase4b/direct_art_v2/goal_marker_v2.png",
+    "game/assets/phase4b/direct_art_v2/goal_marker_v2.png.import",
+    "game/assets/phase4b/direct_art_v2/hazard_marker_v2.png",
+    "game/assets/phase4b/direct_art_v2/hazard_marker_v2.png.import",
+    "game/assets/phase4b/direct_art_v2/collectible_item_v2.png",
+    "game/assets/phase4b/direct_art_v2/collectible_item_v2.png.import",
+    "game/assets/phase4b/direct_art_v2/safe_platform_tile_v2.png",
+    "game/assets/phase4b/direct_art_v2/safe_platform_tile_v2.png.import",
+    "game/assets/phase4b/direct_art_v2/ui_status_panel_v2.png",
+    "game/assets/phase4b/direct_art_v2/ui_status_panel_v2.png.import",
+    "runs/RUN-20260710-001.json"
+  ],
+  "forbidden_changes": [
+    "game/scenes/**",
+    "game/scripts/**",
+    "game/project.godot",
+    "game/.godot/**",
+    "game/assets/phase4b/direct_art/**",
+    "game/assets/phase3e/**",
+    "art_candidates/phase4b/direct_art/**",
+    "research_notes/**",
+    "reviews/**",
+    "learning_cards/**",
+    "schemas/**",
+    "agents/**",
+    "scripts/**",
+    "Godot gameplay implementation",
+    "collision, level layout, movement, timer, retry, hazard, item, or goal logic changes",
+    "final game concept approval",
+    "final art direction approval",
+    "production asset approval",
+    "launch or public release usage approval",
+    "external tester workflow",
+    "Learning Card promotion",
+    "secret or API key material committed to the repo",
+    "PerfectPixel Studio vendored into this repository",
+    "Work Package lifecycle moves",
+    "stage, commit, push, merge, or deploy"
+  ],
+  "outputs": [
+    "art_candidates/phase4b/direct_art_v2/prompts.json",
+    "art_candidates/phase4b/direct_art_v2/manifest.json",
+    "art_candidates/phase4b/direct_art_v2/manifest.csv",
+    "art_candidates/phase4b/direct_art_v2/contact_sheet.md",
+    "art_notes/AN-2026W28-008-phase4b-direct-art-v2-readability-report.md",
+    "owner_reviews/OR-2026W28-008-phase4b-direct-art-v2-KR.md",
+    "game/assets/phase4b/direct_art_v2/background_world_layer_v2.png",
+    "game/assets/phase4b/direct_art_v2/background_world_layer_v2.png.import",
+    "game/assets/phase4b/direct_art_v2/player_avatar_v2.png",
+    "game/assets/phase4b/direct_art_v2/player_avatar_v2.png.import",
+    "game/assets/phase4b/direct_art_v2/goal_marker_v2.png",
+    "game/assets/phase4b/direct_art_v2/goal_marker_v2.png.import",
+    "game/assets/phase4b/direct_art_v2/hazard_marker_v2.png",
+    "game/assets/phase4b/direct_art_v2/hazard_marker_v2.png.import",
+    "game/assets/phase4b/direct_art_v2/collectible_item_v2.png",
+    "game/assets/phase4b/direct_art_v2/collectible_item_v2.png.import",
+    "game/assets/phase4b/direct_art_v2/safe_platform_tile_v2.png",
+    "game/assets/phase4b/direct_art_v2/safe_platform_tile_v2.png.import",
+    "game/assets/phase4b/direct_art_v2/ui_status_panel_v2.png",
+    "game/assets/phase4b/direct_art_v2/ui_status_panel_v2.png.import",
+    "runs/RUN-20260710-001.json"
+  ],
+  "verify": [
+    {
+      "name": "WP-039 validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W28-039.json"
+    },
+    {
+      "name": "PerfectPixel branch is installed outside the repo",
+      "method": "command",
+      "command": "bash -lc 'cd /Users/byung/agent-workspace/tools/perfectpixel-studio-openai-gpt-image-2-support && test \"$(git branch --show-current)\" = \"openai-gpt-image-2-support\" && git log -1 --oneline && rg -n \"ProviderOpenAI|gpt-image-2|OPENAI_API_KEY\" internal cmd frontend .env.example'"
+    },
+    {
+      "name": "PerfectPixel tests pass",
+      "method": "command",
+      "command": "bash -lc 'cd /Users/byung/agent-workspace/tools/perfectpixel-studio-openai-gpt-image-2-support && go test ./...'"
+    },
+    {
+      "name": "PerfectPixel CLI help is available",
+      "method": "command",
+      "command": "bash -lc 'cd /Users/byung/agent-workspace/tools/perfectpixel-studio-openai-gpt-image-2-support && go run ./cmd/ppgen -help'"
+    },
+    {
+      "name": "OpenAI provider key is available without printing the secret",
+      "method": "command",
+      "command": "bash -lc 'test -n \"$OPENAI_API_KEY\"'"
+    },
+    {
+      "name": "Generated v2 art files exist",
+      "method": "command",
+      "command": "for asset in background_world_layer_v2 player_avatar_v2 goal_marker_v2 hazard_marker_v2 collectible_item_v2 safe_platform_tile_v2 ui_status_panel_v2; do test -f \"game/assets/phase4b/direct_art_v2/${asset}.png\" && test -f \"game/assets/phase4b/direct_art_v2/${asset}.png.import\"; done"
+    },
+    {
+      "name": "Generated PNG files are parseable",
+      "method": "command",
+      "command": "python3 - <<'PY'\nimport struct\nassets = {\n    'background_world_layer_v2': {'min_w': 640, 'min_h': 360, 'alpha_required': False},\n    'player_avatar_v2': {'min_w': 128, 'min_h': 128, 'alpha_required': True},\n    'goal_marker_v2': {'min_w': 128, 'min_h': 128, 'alpha_required': True},\n    'hazard_marker_v2': {'min_w': 128, 'min_h': 128, 'alpha_required': True},\n    'collectible_item_v2': {'min_w': 128, 'min_h': 128, 'alpha_required': True},\n    'safe_platform_tile_v2': {'min_w': 128, 'min_h': 128, 'alpha_required': True},\n    'ui_status_panel_v2': {'min_w': 256, 'min_h': 96, 'alpha_required': True},\n}\nfor asset_id, rule in assets.items():\n    path = f'game/assets/phase4b/direct_art_v2/{asset_id}.png'\n    with open(path, 'rb') as f:\n        assert f.read(8) == b'\\x89PNG\\r\\n\\x1a\\n', path\n        length = struct.unpack('>I', f.read(4))[0]\n        assert f.read(4) == b'IHDR', path\n        data = f.read(length)\n        width, height, bit_depth, color_type = struct.unpack('>IIBB', data[:10])[:4]\n        assert width >= rule['min_w'] and height >= rule['min_h'], (path, width, height)\n        if rule['alpha_required']:\n            assert color_type in (4, 6), (path, 'expected alpha-capable PNG color type', color_type)\nprint('png ok')\nPY"
+    },
+    {
+      "name": "Prompt and manifest JSON parse",
+      "method": "command",
+      "command": "jq empty art_candidates/phase4b/direct_art_v2/prompts.json art_candidates/phase4b/direct_art_v2/manifest.json"
+    },
+    {
+      "name": "Manifest CSV parses and covers all v2 assets",
+      "method": "command",
+      "command": "python3 - <<'PY'\nimport csv\nrequired = {'background_world_layer_v2','player_avatar_v2','goal_marker_v2','hazard_marker_v2','collectible_item_v2','safe_platform_tile_v2','ui_status_panel_v2'}\nwith open('art_candidates/phase4b/direct_art_v2/manifest.csv', newline='') as f:\n    rows = list(csv.DictReader(f))\nseen = {row.get('asset_id') for row in rows}\nassert required <= seen, required - seen\nfor row in rows:\n    assert row.get('asset_id') and row.get('role') and row.get('source_png') and row.get('tool_or_model') and row.get('usage_status')\nprint('csv ok')\nPY"
+    },
+    {
+      "name": "Readability evidence is recorded",
+      "method": "command",
+      "command": "rg -n \"Visual Readability Fail|Gameplay Object Separation|Gameplay Visual Hierarchy|Silhouette-First Readability|Background World Layer|Player > Goal > Hazard = Item|prototype_only|production_approved|PerfectPixel|openai-gpt-image-2-support|gpt-image-2|OPENAI_API_KEY\" art_candidates/phase4b/direct_art_v2/prompts.json art_candidates/phase4b/direct_art_v2/manifest.json art_candidates/phase4b/direct_art_v2/contact_sheet.md art_notes/AN-2026W28-008-phase4b-direct-art-v2-readability-report.md owner_reviews/OR-2026W28-008-phase4b-direct-art-v2-KR.md"
+    },
+    {
+      "name": "Godot import metadata is generated without treating .godot as evidence",
+      "method": "command",
+      "command": "godot --headless --path game --import && for asset in background_world_layer_v2 player_avatar_v2 goal_marker_v2 hazard_marker_v2 collectible_item_v2 safe_platform_tile_v2 ui_status_panel_v2; do test -f \"game/assets/phase4b/direct_art_v2/${asset}.png.import\"; done"
+    },
+    {
+      "name": "Art Run record validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260710-001.json"
+    },
+    {
+      "name": "No implementation files or v1 direct art files changed",
+      "method": "command",
+      "command": "bash -lc 'changed=$(git diff --name-only HEAD -- game/scenes game/scripts game/project.godot game/assets/phase4b/direct_art art_candidates/phase4b/direct_art); test -z \"$changed\"'"
+    }
+  ],
+  "handoff_to": [
+    "human_creative_owner",
+    "qa",
+    "implementation",
+    "learning_librarian"
+  ],
+  "human_decision_required": true,
+  "human_decision_reason": "BK/Human Creative Owner must approve, redirect, or reject the regenerated v2 prototype art assets before any implementation Work Package may integrate them into the Godot playable scene.",
+  "acceptance_criteria": [
+    "All previous direct_art v1 assets are treated as failed playable-art direction evidence and are not overwritten.",
+    "A complete regenerated v2 prototype asset set is produced under game/assets/phase4b/direct_art_v2/**: one coherent background world layer, player avatar, goal marker, hazard marker, collectible item, safe platform tile, and UI status panel.",
+    "PerfectPixel Studio is installed from https://github.com/Canine89/perfectpixel-studio/tree/openai-gpt-image-2-support outside this repository and is treated as the preferred generation pipeline when a supported provider key is available.",
+    "PerfectPixel usage records provider, model, branch, commit, prompt, output path, and any post-processing or export path for each asset when it is used.",
+    "OpenAI GPT Image 2 support is used through PerfectPixel when OPENAI_API_KEY is available; the key must not be printed, committed, or stored in this repository.",
+    "Because BK explicitly authorized continuation without setting an OpenAI key, the built-in Codex imagegen skill may be used as the fallback generation path for WP-039.",
+    "Built-in imagegen fallback usage records prompt, generated source path, local chroma-key removal path where applicable, output path, and prototype-only status for each asset.",
+    "The v2 art direction prioritizes gameplay visual hierarchy: Player > Goal > Hazard = Item > Safe platform > HUD/status > Background.",
+    "Hazard and item have equal hierarchy but must be distinguishable by silhouette first, color second, and label last.",
+    "The background is a single coherent Background World Layer and must not include platform-like, hazard-like, collectible-like, or goal-like foreground props.",
+    "Gameplay roles are readable without depending on labels; labels may remain prototype aids but cannot be the primary readability mechanism.",
+    "The asset set may share one art style, but gameplay object separation must be visible at prototype scale.",
+    "The regenerated assets remain prototype-only / production-candidate and are not final art direction, production asset approval, launch usage, or public release approval.",
+    "No Godot scene, script, project config, gameplay logic, level layout, movement, collision, QA review, Learning Card promotion, staging, committing, pushing, merging, or deployment is performed by WP-039 execution.",
+    "A Korean owner review brief is created so BK can evaluate the regenerated v2 asset set before any implementation Work Package uses it.",
+    "The result is handed off to Implementation only after BK approves or conditionally approves the v2 art set for prototype integration."
+  ],
+  "created_at": "2026-07-10",
+  "notes": "BK/Human Creative Owner determined that the Phase 4B direct art integration technically passed art application but completely failed as a playable game because gameplay objects were not visually separated and the background did not behave as one coherent lower-priority world layer. WP-039 regenerates all assets rather than preserving v1 art, but does not reject the Direct Art Production Pipeline itself. PerfectPixel Studio on the openai-gpt-image-2-support branch was installed and verified first, but BK later authorized built-in Codex imagegen fallback because OPENAI_API_KEY cannot be configured in the current remote SSH context."
+}
