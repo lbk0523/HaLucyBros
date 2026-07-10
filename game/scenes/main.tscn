@@ -1,38 +1,37 @@
-[gd_scene load_steps=23 format=3]
+[gd_scene load_steps=22 format=3]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
-[ext_resource type="Texture2D" path="res://assets/phase4b/direct_art/background_section_one_v1.png" id="2_background_one_texture"]
-[ext_resource type="Texture2D" path="res://assets/phase4b/direct_art/background_section_two_v1.png" id="3_background_two_texture"]
-[ext_resource type="Texture2D" path="res://assets/phase4b/direct_art/player_avatar_v1.png" id="4_player_texture"]
-[ext_resource type="Texture2D" path="res://assets/phase4b/direct_art/ground_platform_tile_v1.png" id="5_ground_texture"]
-[ext_resource type="Texture2D" path="res://assets/phase4b/direct_art/collectible_progression_item_v1.png" id="6_collectible_texture"]
-[ext_resource type="Texture2D" path="res://assets/phase4b/direct_art/hazard_warning_marker_v1.png" id="7_hazard_texture"]
-[ext_resource type="Texture2D" path="res://assets/phase4b/direct_art/goal_marker_v1.png" id="8_goal_texture"]
-[ext_resource type="Texture2D" path="res://assets/phase4b/direct_art/ui_status_panel_v1.png" id="9_ui_panel_texture"]
+[ext_resource type="Texture2D" path="res://assets/phase4b/direct_art_v2/background_world_layer_v2.png" id="2_background_texture"]
+[ext_resource type="Texture2D" path="res://assets/phase4b/direct_art_v2/player_avatar_v2.png" id="3_player_texture"]
+[ext_resource type="Texture2D" path="res://assets/phase4b/direct_art_v2/goal_marker_v2.png" id="4_goal_texture"]
+[ext_resource type="Texture2D" path="res://assets/phase4b/direct_art_v2/hazard_marker_v2.png" id="5_hazard_texture"]
+[ext_resource type="Texture2D" path="res://assets/phase4b/direct_art_v2/collectible_item_v2.png" id="6_collectible_texture"]
+[ext_resource type="Texture2D" path="res://assets/phase4b/direct_art_v2/safe_platform_tile_v2.png" id="7_ground_texture"]
+[ext_resource type="Texture2D" path="res://assets/phase4b/direct_art_v2/ui_status_panel_v2.png" id="8_ui_panel_texture"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_player"]
-atlas = ExtResource("4_player_texture")
-region = Rect2(354, 130, 548, 1005)
+atlas = ExtResource("3_player_texture")
+region = Rect2(361, 238, 488, 757)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ground_tile"]
-atlas = ExtResource("5_ground_texture")
-region = Rect2(56, 381, 1429, 317)
+atlas = ExtResource("7_ground_texture")
+region = Rect2(143, 241, 1894, 290)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_collectible"]
 atlas = ExtResource("6_collectible_texture")
-region = Rect2(393, 97, 505, 1015)
+region = Rect2(377, 234, 500, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hazard"]
-atlas = ExtResource("7_hazard_texture")
-region = Rect2(301, 65, 934, 880)
+atlas = ExtResource("5_hazard_texture")
+region = Rect2(393, 102, 739, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_goal"]
-atlas = ExtResource("8_goal_texture")
-region = Rect2(198, 67, 627, 1372)
+atlas = ExtResource("4_goal_texture")
+region = Rect2(181, 95, 658, 1324)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ui_panel"]
-atlas = ExtResource("9_ui_panel_texture")
-region = Rect2(77, 95, 1617, 667)
+atlas = ExtResource("8_ui_panel_texture")
+region = Rect2(68, 128, 2033, 453)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
 size = Vector2(32, 48)
@@ -63,35 +62,19 @@ offset_right = 1220.0
 offset_bottom = 360.0
 color = Color(0.075, 0.085, 0.1, 1)
 
-[node name="SectionOneBackdrop" type="TextureRect" parent="."]
+[node name="BackgroundWorldLayer" type="TextureRect" parent="."]
 z_index = -25
-offset_right = 520.0
+offset_right = 1220.0
 offset_bottom = 360.0
-texture = ExtResource("2_background_one_texture")
+texture = ExtResource("2_background_texture")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="SectionTwoBackdrop" type="TextureRect" parent="."]
-z_index = -25
-offset_left = 520.0
+[node name="BackgroundReadabilityWash" type="ColorRect" parent="."]
+z_index = -20
 offset_right = 1220.0
 offset_bottom = 360.0
-texture = ExtResource("3_background_two_texture")
-expand_mode = 1
-stretch_mode = 6
-
-[node name="SectionOneBand" type="ColorRect" parent="."]
-z_index = -20
-offset_right = 520.0
-offset_bottom = 360.0
-color = Color(0.09, 0.12, 0.145, 0.18)
-
-[node name="SectionTwoBand" type="ColorRect" parent="."]
-z_index = -20
-offset_left = 520.0
-offset_right = 1220.0
-offset_bottom = 360.0
-color = Color(0.12, 0.1, 0.095, 0.28)
+color = Color(0.04, 0.055, 0.08, 0.24)
 
 [node name="SectionOneLabel" type="Label" parent="."]
 offset_left = 70.0
@@ -180,8 +163,8 @@ offset_bottom = 340.0
 color = Color(0.72, 0.08, 0.07, 0.82)
 
 [node name="HazardVisual" type="Sprite2D" parent="HazardArea"]
-position = Vector2(620, 312)
-scale = Vector2(0.075, 0.075)
+position = Vector2(620, 306)
+scale = Vector2(0.09, 0.09)
 texture = SubResource("AtlasTexture_hazard")
 
 [node name="HazardLabel" type="Label" parent="HazardArea"]
@@ -199,7 +182,7 @@ shape = SubResource("RectangleShape2D_collectible")
 
 [node name="CollectibleVisual" type="Sprite2D" parent="CollectibleArea"]
 position = Vector2(780, 272)
-scale = Vector2(0.04, 0.04)
+scale = Vector2(0.065, 0.065)
 texture = SubResource("AtlasTexture_collectible")
 
 [node name="CollectibleLabel" type="Label" parent="CollectibleArea"]
@@ -216,8 +199,8 @@ position = Vector2(1060, 284)
 shape = SubResource("RectangleShape2D_goal")
 
 [node name="GoalVisual" type="Sprite2D" parent="GoalArea"]
-position = Vector2(1060, 284)
-scale = Vector2(0.06, 0.06)
+position = Vector2(1060, 282)
+scale = Vector2(0.067, 0.067)
 texture = SubResource("AtlasTexture_goal")
 
 [node name="GoalLabel" type="Label" parent="GoalArea"]
@@ -237,7 +220,7 @@ shape = SubResource("RectangleShape2D_player")
 
 [node name="PlayerVisual" type="Sprite2D" parent="Player"]
 position = Vector2(0, -27)
-scale = Vector2(0.052, 0.052)
+scale = Vector2(0.07, 0.07)
 texture = SubResource("AtlasTexture_player")
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
