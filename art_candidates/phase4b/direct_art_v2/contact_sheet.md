@@ -1,6 +1,6 @@
 # Phase 4B Direct Art v2 — Readability Review Board
 
-Work Package: `WP-2026W28-039`  
+Work Package: `WP-2026W28-039`
 Status: `prototype_only_owner_approved_for_integration_planning` — no production approval
 
 This v2 set responds to the recorded **Visual Readability Fail**. It is one
