@@ -69,6 +69,7 @@
     "runs/RUN-20260710-001.json",
     "game/scenes/main.tscn",
     "game/tests/qa_phase4b_traversal.gd",
+    "game/tests/qa_phase4b_traversal.gd.uid",
     "runs/RUN-20260711-005.json"
   ],
   "commands": [
@@ -115,6 +116,7 @@
       "runs/RUN-20260710-001.json",
       "game/scenes/main.tscn",
       "game/tests/qa_phase4b_traversal.gd",
+      "game/tests/qa_phase4b_traversal.gd.uid",
       "runs/RUN-20260711-005.json"
     ],
     "target_violations": [],

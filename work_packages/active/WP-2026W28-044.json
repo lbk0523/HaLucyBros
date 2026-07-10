@@ -21,6 +21,7 @@
     "runs/RUN-20260710-001.json",
     "game/scenes/main.tscn",
     "game/tests/qa_phase4b_traversal.gd",
+    "game/tests/qa_phase4b_traversal.gd.uid",
     "runs/RUN-20260711-005.json"
   ],
   "forbidden_changes": [
@@ -47,6 +48,7 @@
     "runs/RUN-20260710-001.json",
     "game/scenes/main.tscn",
     "game/tests/qa_phase4b_traversal.gd",
+    "game/tests/qa_phase4b_traversal.gd.uid",
     "runs/RUN-20260711-005.json"
   ],
   "verify": [
@@ -90,7 +92,7 @@
     "A durable Godot QA script drives ui_right and ui_accept from the default start through the actual route without teleporting the player.",
     "The input-driven route crosses the warmup blocker and hazard, collects the item, reaches the goal, and ends in SUCCESS within a bounded frame count.",
     "Configured visual metrics satisfy Player area > Goal area > Hazard area > Item area, while hazard and item have equal rendered height for their equal hierarchy tier.",
-    "Only scene visual scale/position values change; collision, layout, scripts, constants, and asset files remain unchanged.",
+    "Only scene visual scale/position values and the durable traversal test plus its Godot UID metadata are added; collision, layout, gameplay scripts, constants, and asset files remain unchanged.",
     "WP-040 documents that b33cd5a committed the already-approved art baseline as an implementation prerequisite after BK approval, outside WP-039 art-generation execution.",
     "RUN-20260710-001 touched_paths includes its Work Package target so changed-file reporting is internally consistent.",
     "Godot import, smoke, runtime, traversal, schema, hierarchy-metric, and scope checks pass.",
