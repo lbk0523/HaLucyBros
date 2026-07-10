@@ -134,6 +134,7 @@
   "scope_report": {
     "touched_paths": [
       "runs/RUN-20260710-001.json",
+      "work_packages/active/WP-2026W28-039.json",
       "art_candidates/phase4b/direct_art_v2/prompts.json",
       "art_candidates/phase4b/direct_art_v2/manifest.json",
       "art_candidates/phase4b/direct_art_v2/manifest.csv",

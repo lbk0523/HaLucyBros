@@ -160,11 +160,11 @@ offset_left = 576.0
 offset_top = 296.0
 offset_right = 664.0
 offset_bottom = 340.0
-color = Color(0.72, 0.08, 0.07, 0.82)
+color = Color(0.72, 0.08, 0.07, 0.22)
 
 [node name="HazardVisual" type="Sprite2D" parent="HazardArea"]
-position = Vector2(620, 306)
-scale = Vector2(0.09, 0.09)
+position = Vector2(620, 314)
+scale = Vector2(0.065, 0.065)
 texture = SubResource("AtlasTexture_hazard")
 
 [node name="HazardLabel" type="Label" parent="HazardArea"]
@@ -200,7 +200,7 @@ shape = SubResource("RectangleShape2D_goal")
 
 [node name="GoalVisual" type="Sprite2D" parent="GoalArea"]
 position = Vector2(1060, 282)
-scale = Vector2(0.067, 0.067)
+scale = Vector2(0.058, 0.058)
 texture = SubResource("AtlasTexture_goal")
 
 [node name="GoalLabel" type="Label" parent="GoalArea"]
@@ -219,8 +219,8 @@ position = Vector2(0, -24)
 shape = SubResource("RectangleShape2D_player")
 
 [node name="PlayerVisual" type="Sprite2D" parent="Player"]
-position = Vector2(0, -27)
-scale = Vector2(0.07, 0.07)
+position = Vector2(0, -40)
+scale = Vector2(0.105, 0.105)
 texture = SubResource("AtlasTexture_player")
 
 [node name="Camera2D" type="Camera2D" parent="Player"]

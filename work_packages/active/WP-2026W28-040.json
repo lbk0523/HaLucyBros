@@ -123,5 +123,5 @@
     "No production approval, final art direction, push, merge, or deployment occurs."
   ],
   "created_at": "2026-07-11",
-  "notes": "BK approved all seven v2 assets for prototype integration planning on 2026-07-10. This implementation replaces only the scene's visual references and alignment. TDD is not applicable to the resource-only swap because no behavior seam is changed; deterministic runtime state-transition QA is required in the separate QA Work Package."
+  "notes": "BK approved all seven v2 assets for prototype integration planning on 2026-07-10. This implementation replaces only the scene's visual references and alignment. TDD is not applicable to the resource-only swap because no behavior seam is changed; deterministic runtime state-transition QA is required in the separate QA Work Package. Transition authority note: commit b33cd5a occurred after BK approval as the WP-040 implementation prerequisite that made the approved art baseline available to the playable scene. It was not a commit performed during WP-039 art-generation execution and does not weaken WP-039's prohibition on staging or committing before its owner gate."
 }

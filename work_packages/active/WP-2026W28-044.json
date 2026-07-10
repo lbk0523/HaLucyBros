@@ -1,0 +1,101 @@
+{
+  "id": "WP-2026W28-044",
+  "type": "implementation",
+  "status": "active",
+  "goal": "Address final two-axis review findings by proving real input-driven traversal, strengthening configured-scale gameplay hierarchy, and correcting audit metadata for the approved-art-to-implementation transition without changing mechanics, layout, collision, asset files, or production status.",
+  "owner_agent": "implementation",
+  "inputs": [
+    "plans/PHASE4B_SCOPE_AND_GAME_BRIEF.md",
+    "agents/profiles/implementation_agent.yaml",
+    "owner_reviews/OR-2026W28-008-phase4b-direct-art-v2-KR.md",
+    "art_candidates/phase4b/direct_art_v2/manifest.json",
+    "work_packages/active/WP-2026W28-039.json",
+    "work_packages/active/WP-2026W28-040.json",
+    "reviews/RV-20260711-002.json",
+    "game/scenes/main.tscn",
+    "game/scripts/player.gd"
+  ],
+  "targets": [
+    "work_packages/active/WP-2026W28-044.json",
+    "work_packages/active/WP-2026W28-040.json",
+    "runs/RUN-20260710-001.json",
+    "game/scenes/main.tscn",
+    "game/tests/qa_phase4b_traversal.gd",
+    "runs/RUN-20260711-005.json"
+  ],
+  "forbidden_changes": [
+    "game/scripts/**",
+    "game/project.godot",
+    "game/assets/**",
+    "art_candidates/**",
+    "art_notes/**",
+    "owner_reviews/**",
+    "reviews/**",
+    "learning_cards/**",
+    "schemas/**",
+    "agents/**",
+    "movement, jump, hazard, item, goal, timer, retry, collision, or level-layout changes",
+    "asset regeneration or image editing",
+    "final art direction or production asset approval",
+    "QA self-approval",
+    "Work Package lifecycle moves",
+    "push, merge, or deploy"
+  ],
+  "outputs": [
+    "work_packages/active/WP-2026W28-044.json",
+    "work_packages/active/WP-2026W28-040.json",
+    "runs/RUN-20260710-001.json",
+    "game/scenes/main.tscn",
+    "game/tests/qa_phase4b_traversal.gd",
+    "runs/RUN-20260711-005.json"
+  ],
+  "verify": [
+    {
+      "name": "Review rework Work Package validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/work_package.schema.json -d work_packages/active/WP-2026W28-044.json"
+    },
+    {
+      "name": "Input-driven traversal completes",
+      "method": "command",
+      "command": "godot --headless --path game --script res://tests/qa_phase4b_traversal.gd"
+    },
+    {
+      "name": "Visual hierarchy metrics pass",
+      "method": "command",
+      "command": "python3 - <<'PY'\nplayer=(488*.105,757*.105)\ngoal=(658*.058,1324*.058)\nhazard=(739*.065,778*.065)\nitem=(500*.065,778*.065)\nassert player[0]*player[1] > goal[0]*goal[1] > hazard[0]*hazard[1] > item[0]*item[1]\nassert abs(hazard[1]-item[1]) < 0.01\nprint(player, goal, hazard, item)\nPY"
+    },
+    {
+      "name": "Art, script, collision, and project settings remain unchanged",
+      "method": "command",
+      "command": "bash -lc 'test -z \"$(git diff --name-only HEAD -- game/scripts game/assets game/project.godot)\"'"
+    },
+    {
+      "name": "Import, smoke, and runtime remain clean",
+      "method": "command",
+      "command": "godot --headless --path game --import && bash -lc 'out=$(scripts/smoke_test.sh 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR:\" <<< \"$out\"' && bash -lc 'out=$(godot --headless --path game --scene res://scenes/main.tscn --quit-after 3 2>&1); printf \"%s\\n\" \"$out\"; ! grep -E \"SCRIPT ERROR|ERROR|Parse Error|Failed\" <<< \"$out\"'"
+    },
+    {
+      "name": "Review rework Run validates",
+      "method": "command",
+      "command": "npx --yes ajv-cli@5.0.0 validate --spec=draft2020 --strict=false -s schemas/run.schema.json -d runs/RUN-20260711-005.json"
+    }
+  ],
+  "handoff_to": [
+    "qa",
+    "human_creative_owner"
+  ],
+  "human_decision_required": false,
+  "acceptance_criteria": [
+    "A durable Godot QA script drives ui_right and ui_accept from the default start through the actual route without teleporting the player.",
+    "The input-driven route crosses the warmup blocker and hazard, collects the item, reaches the goal, and ends in SUCCESS within a bounded frame count.",
+    "Configured visual metrics satisfy Player area > Goal area > Hazard area > Item area, while hazard and item have equal rendered height for their equal hierarchy tier.",
+    "Only scene visual scale/position values change; collision, layout, scripts, constants, and asset files remain unchanged.",
+    "WP-040 documents that b33cd5a committed the already-approved art baseline as an implementation prerequisite after BK approval, outside WP-039 art-generation execution.",
+    "RUN-20260710-001 touched_paths includes its Work Package target so changed-file reporting is internally consistent.",
+    "Godot import, smoke, runtime, traversal, schema, hierarchy-metric, and scope checks pass.",
+    "Fresh QA independently reruns traversal, state transitions, and rendered readability checks."
+  ],
+  "created_at": "2026-07-11",
+  "notes": "This package is a review-driven implementation correction. It does not rewrite history or weaken WP-039's no-commit rule during art generation; it records that the later WP-040 implementation phase committed the approved baseline as its required input after BK approval."
+}
