@@ -99,12 +99,20 @@ approved in their own WP:
 - `game/scenes/main.tscn`
 - `game/scripts/player.gd`
 - `game/assets/phase4b/**`
+- `game/tests/**` only for bounded, non-shipping QA fixtures explicitly named
+  by a later Phase 4B Work Package; this does not authorize a broad test
+  framework, gameplay implementation, or external testing
 
 `game/.godot/**` remains ignored and must not be evidence. New
 `game/scripts/*.gd.uid` sidecars are not approved by this brief; a later
 Implementation WP must explicitly allow or reject them. `game/assets/**/*.png`
 and matching `.png.import` files are allowed only for approved gameplay-readable
 assets in the relevant Art/Implementation WP.
+
+A `game/tests/*.gd.uid` sidecar may be tracked only when the same approved Work
+Package explicitly names both the bounded QA fixture and its UID metadata as
+targets and verification artifacts. Test UID metadata is repository hygiene,
+not gameplay evidence by itself.
 
 ## Forbidden Gameplay Scope
 
@@ -197,4 +205,3 @@ WP-031 should translate this brief into reference constraints for layout,
 hazard/progression behavior, UI state, camera/readability, and feel. It should
 not start art production, edit Godot files, approve implementation, or decide
 final game direction.
-
