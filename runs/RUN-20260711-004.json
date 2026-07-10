@@ -1,0 +1,114 @@
+{
+  "run_id": "RUN-20260711-004",
+  "work_package_id": "WP-2026W28-043",
+  "agent": "qa",
+  "agent_profile": "agents/profiles/qa_agent.yaml",
+  "started_at": "2026-07-11T07:43:00+09:00",
+  "ended_at": "2026-07-11T07:45:23+09:00",
+  "status": "completed",
+  "tool_calls": [
+    {
+      "tool_name": "Codex independent final QA",
+      "purpose": "Re-run the complete art, scope, runtime, and gameplay verification after the WP-042 rework without modifying implementation files.",
+      "inputs": [
+        "work_packages/active/WP-2026W28-040.json",
+        "reviews/RV-20260711-001.json",
+        "work_packages/active/WP-2026W28-042.json",
+        "runs/RUN-20260711-003.json",
+        "game/scenes/main.tscn",
+        "game/scripts/player.gd",
+        "art_candidates/phase4b/direct_art_v2/manifest.json"
+      ],
+      "outputs": [
+        "reviews/RV-20260711-002.json"
+      ],
+      "evidence": [
+        "All contracts and prior evidence validate.",
+        "All seven v2 assets and single-background requirements pass.",
+        "The prior hazard-retry issue is green under the same live-scene regression suite."
+      ]
+    },
+    {
+      "tool_name": "Godot CLI",
+      "purpose": "Execute final import, smoke, scene runtime, and state-transition verification.",
+      "inputs": [
+        "game/project.godot",
+        "res://scenes/main.tscn",
+        "/private/tmp/halucy_wp041_runtime_qa.gd"
+      ],
+      "outputs": [
+        "Import pass",
+        "Smoke pass",
+        "Headless runtime pass",
+        "Complete state-transition pass"
+      ],
+      "evidence": [
+        "Godot 4.6.3 import exited 0.",
+        "Smoke and headless scene clean-output guards exited 0.",
+        "The runtime script printed PASS for all initial, goal-gate, item, success, reset, hazard, hazard-retry, and timer assertions and exited 0."
+      ]
+    },
+    {
+      "tool_name": "Rendered preview inspection",
+      "purpose": "Confirm configured-scale visual hierarchy using real Godot macOS OpenGL frames captured from the integrated scene.",
+      "inputs": [
+        "/private/tmp/halucy_wp040_preview00000001.png",
+        "/private/tmp/halucy_wp040_right_view.png"
+      ],
+      "outputs": [
+        "Static left/start and right/object-area readability evidence"
+      ],
+      "evidence": [
+        "Player, goal, hazard, item, platform, HUD, and background have distinct shapes and supporting colors at scene scale.",
+        "The one world background remains visibly subordinate to gameplay objects."
+      ]
+    }
+  ],
+  "artifacts": [
+    "work_packages/active/WP-2026W28-043.json",
+    "reviews/RV-20260711-002.json",
+    "runs/RUN-20260711-004.json"
+  ],
+  "commands": [
+    {
+      "command": "Validate WP-040 through WP-043, RUN-20260711-001 through RUN-20260711-003, and RV-20260711-001 with AJV",
+      "exit_code": 0,
+      "notes": "All prior contracts/evidence and the final QA Work Package validate; missing date/date-time format plugin warnings are the repository's expected informational output."
+    },
+    {
+      "command": "Approved art file/reference/no-v1/single-background/manifest-status contract",
+      "exit_code": 0,
+      "notes": "All seven v2 assets pass and remain production_approved=false."
+    },
+    {
+      "command": "godot --headless --path game --import",
+      "exit_code": 0,
+      "notes": "Final import pass."
+    },
+    {
+      "command": "godot --headless --path game --script /private/tmp/halucy_wp041_runtime_qa.gd",
+      "exit_code": 0,
+      "notes": "All live-scene gameplay transition assertions pass, including the prior hazard-retry defect."
+    },
+    {
+      "command": "scripts/smoke_test.sh with clean-output guard",
+      "exit_code": 0,
+      "notes": "Final smoke pass."
+    },
+    {
+      "command": "godot --headless --path game --scene res://scenes/main.tscn --quit-after 3 with clean-output guard",
+      "exit_code": 0,
+      "notes": "Final headless runtime pass."
+    }
+  ],
+  "scope_report": {
+    "touched_paths": [
+      "work_packages/active/WP-2026W28-043.json",
+      "reviews/RV-20260711-002.json",
+      "runs/RUN-20260711-004.json"
+    ],
+    "target_violations": [],
+    "forbidden_change_violations": []
+  },
+  "notes": "Final independent QA passes with no open issue. QA did not modify game or implementation files. The integrated v2 art set, one-world background, runtime states, retry repair, import, smoke, headless runtime, and configured-scale readability are verified. BK direct play/feel review remains a human gate."
+}
